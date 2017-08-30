@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <RadioGroup
+        android:id="@+id/radioGroupLanguage"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <RadioButton
+            android:layout_margin="15dp"
+            android:id="@+id/radioUkrainian"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checked="true"
+            android:theme="@style/FxmRadioButton"
+            android:text="@string/ukrainian" />
+
+        <RadioButton
+            android:layout_margin="15dp"
+            android:id="@+id/radioRussian"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:theme="@style/FxmRadioButton"
+            android:text="@string/russian" />
+
+        <RadioButton
+            android:layout_margin="15dp"
+            android:id="@+id/radioKorean"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:theme="@style/FxmRadioButton"
+            android:text="@string/korean" />
+
+        <RadioButton
+            android:layout_margin="15dp"
+            android:id="@+id/radioEnglish"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:theme="@style/FxmRadioButton"
+            android:text="@string/english" />
+
+    </RadioGroup>
+
+    <Button
+        android:id="@+id/changeLanguageButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        style="@style/Widget.AppCompat.Button.Colored"
+        android:text="@string/change_language" />
+
+</LinearLayout>

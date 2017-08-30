@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "1006302688173",
+    "firebase_url": "https://fxmharmony.firebaseio.com",
+    "project_id": "fxmharmony",
+    "storage_bucket": "fxmharmony.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1006302688173:android:8a0e22bcd264a0ee",
+        "android_client_info": {
+          "package_name": "com.sofac.fxmharmony"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1006302688173-4afaoevvhqv4iaq4qab79gv6774avjn0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDo3KTW5Y_Pb4JeIeVncyO1UnrxX5nGIDI"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

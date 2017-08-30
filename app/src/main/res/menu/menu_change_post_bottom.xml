@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+
+
+    <item
+        android:id="@+id/action_take_photo"
+        android:enabled="true"
+        android:icon="@drawable/camera_symbol"
+        android:title="photo"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/action_take_video"
+        android:enabled="true"
+        android:icon="@drawable/video_symbol"
+        android:title="video" />
+    <item
+        android:id="@+id/action_take_file"
+        android:enabled="true"
+        android:icon="@drawable/file_symbol"
+        android:title="file" />
+
+    <item
+        android:id="@+id/add_files"
+        android:enabled="true"
+        android:icon="@drawable/plus_symbol"
+        android:title="add file" />
+</menu>

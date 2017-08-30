@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/menu_delete_all"
+        android:orderInCategory="10"
+        android:title="@string/menu_delete"
+        android:icon="@drawable/comment_remove_outline"
+        app:showAsAction="ifRoom" />
+<!--    <item
+        android:id="@+id/menu_update"
+        android:orderInCategory="11"
+        android:title="@string/menu_update"
+        android:icon="@android:drawable/stat_notify_sync"
+        app:showAsAction="ifRoom" />-->
+</menu>

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#1d9db4</color>
+    <color name="colorPrimaryDark">#064c58</color>
+    <color name="colorAccent">#0d7689</color>
+    <color name="colorHint">#739297</color>
+    <color name="colorText">#075f6e</color>
+    <color name="colorWhite">#ffffff</color>
+    <color name="colorItemTitle">#0d8ca1</color>
+    <color name="colorItemDate">#9b9b9b</color>
+    <color name="colorItemDateComment">#b9b9b9</color>
+    <color name="colorItemContext">#979797</color>
+    <color name="colorBGItemNoRead">#e6e6e6</color>
+
+    <color name="tabsScrollColor">#004d40</color>
+
+    <color name="transparent">#00000000</color>
+    <color name="colorTextDark">#515151</color>
+    <color name="colorCommentsBackground">#ececec</color>
+    <color name="colorDetailPostBackground">#f5f5f5</color>
+    <color name="colorTextDarkPostDetail">#414141</color>
+    <color name="colorTextDarkPostComment">#787878</color>
+    <color name="colorGroupBackground">#dfdfdf</color>
+
+    <color name="FileName">#9b9b9b</color>
+    <color name="lineView">#e6e6e6</color>
+
+    <color name="black">#000</color>
+
+
+    <color name="commentTranslate">#4682B4</color>
+
+
+
+
+</resources>
