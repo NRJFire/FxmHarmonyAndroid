@@ -14,7 +14,7 @@ import android.widget.LinearLayout;
 import com.bumptech.glide.Glide;
 import com.sofac.fxmharmony.Constants;
 import com.sofac.fxmharmony.R;
-import com.sofac.fxmharmony.data.dto.PostDTO;
+import com.sofac.fxmharmony.dto.PostDTO;
 import com.sofac.fxmharmony.util.AppMethods;
 import com.sofac.fxmharmony.util.ConvertorHTML;
 import java.text.SimpleDateFormat;

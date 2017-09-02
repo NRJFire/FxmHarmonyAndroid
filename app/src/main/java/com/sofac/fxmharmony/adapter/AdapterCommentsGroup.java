@@ -1,7 +1,6 @@
 package com.sofac.fxmharmony.adapter;
 
 import android.content.Context;
-import android.content.res.ColorStateList;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.StrictMode;
@@ -12,16 +11,14 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.google.cloud.translate.Translate;
 import com.google.cloud.translate.TranslateOptions;
 import com.google.cloud.translate.Translation;
-import com.google.type.Color;
 import com.sofac.fxmharmony.Constants;
 import com.sofac.fxmharmony.R;
-import com.sofac.fxmharmony.data.dto.CommentDTO;
+import com.sofac.fxmharmony.dto.CommentDTO;
 import com.sofac.fxmharmony.util.AppMethods;
 
 import java.text.SimpleDateFormat;
@@ -31,8 +28,6 @@ import java.util.Comparator;
 import java.util.Locale;
 
 import jp.wasabeef.glide.transformations.CropCircleTransformation;
-
-import static com.sofac.fxmharmony.view.fragment.GroupFragment.postDTO;
 
 public class AdapterCommentsGroup extends BaseAdapter {
     private ArrayList<CommentDTO> commentDTOArrayList;

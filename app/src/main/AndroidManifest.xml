@@ -26,10 +26,10 @@
 
         <meta-data
             android:name="DATABASE"
-            android:value="fxmharmony.db" />
+            android:value="database.db" />
         <meta-data
             android:name="VERSION"
-            android:value="164" />
+            android:value="4" />
         <meta-data
             android:name="QUERY_LOG"
             android:value="true" />

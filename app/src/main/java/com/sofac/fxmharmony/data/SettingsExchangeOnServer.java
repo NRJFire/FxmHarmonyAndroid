@@ -9,8 +9,9 @@ import android.widget.Toast;
 
 import com.sofac.fxmharmony.Constants;
 import com.sofac.fxmharmony.R;
-import com.sofac.fxmharmony.data.dto.base.ServerRequest;
-import com.sofac.fxmharmony.data.dto.base.ServerResponse;
+import com.sofac.fxmharmony.server.type.ServerRequest;
+import com.sofac.fxmharmony.server.type.ServerResponse;
+
 
 import timber.log.Timber;
 

@@ -1,15 +1,10 @@
 package com.sofac.fxmharmony.util;
 
-import android.widget.LinearLayout;
-
-import com.sofac.fxmharmony.data.dto.PostDTO;
+import com.sofac.fxmharmony.dto.PostDTO;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
-import static com.sofac.fxmharmony.Constants.BASE_URL;
-import static com.sofac.fxmharmony.Constants.GET_POST_FILES_END_URL;
 
 
 public class FxmPostFile {

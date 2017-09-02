@@ -15,7 +15,7 @@ import timber.log.Timber;
 
 /**
  * Created by Maxim on 30.03.2017.
- * Always run when app is start
+ * Always starting when app is start
  */
 
 public class FXMHarmony  extends SugarApp {

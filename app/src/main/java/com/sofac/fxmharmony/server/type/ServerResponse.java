@@ -1,10 +1,13 @@
-package com.sofac.fxmharmony.data.dto.base;
+package com.sofac.fxmharmony.server.type;
 
-
+/**
+ * Created by Maxim on 03.08.2017.
+ */
 
 public class ServerResponse <T> {
 
-    public ServerResponse(){}
+    public ServerResponse() {
+    }
 
     public ServerResponse(String responseStatus, T dataTransferObject) {
         this.responseStatus = responseStatus;

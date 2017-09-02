@@ -9,7 +9,7 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.sofac.fxmharmony.R;
-import com.sofac.fxmharmony.data.dto.PushMessage;
+import com.sofac.fxmharmony.dto.PushMessage;
 
 import java.util.ArrayList;
 import java.util.Collections;

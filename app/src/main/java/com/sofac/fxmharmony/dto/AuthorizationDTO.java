@@ -1,32 +1,27 @@
-package com.sofac.fxmharmony.data.dto;
+package com.sofac.fxmharmony.dto;
 
 
 import java.io.Serializable;
 
-public class Authorization implements Serializable{
+public class AuthorizationDTO implements Serializable {
 
-    public Authorization(){}
-
-    public Authorization(String ssoId, String password, String googleCloudKey) {
-        this.ssoId = ssoId;
+    public AuthorizationDTO(String login, String password, String googleCloudKey) {
+        this.login = login;
         this.password = password;
         this.googleCloudKey = googleCloudKey;
     }
 
-    private String ssoId;
-
+    private String login;
     private String password;
-
     private String googleCloudKey;
 
 
-
-    public String getSsoId() {
-        return ssoId;
+    public String getLogin() {
+        return login;
     }
 
-    public void setSsoId(String ssoId) {
-        this.ssoId = ssoId;
+    public void setLogin(String ssoId) {
+        this.login = ssoId;
     }
 
     public String getPassword() {
@@ -48,8 +43,8 @@ public class Authorization implements Serializable{
 
     @Override
     public String toString() {
-        return "Authorization{" +
-                "ssoId='" + ssoId + '\'' +
+        return "AuthorizationDTO{" +
+                "login='" + login + '\'' +
                 ", password='" + password + '\'' +
                 ", googleCloudKey='" + googleCloudKey + '\'' +
                 '}';

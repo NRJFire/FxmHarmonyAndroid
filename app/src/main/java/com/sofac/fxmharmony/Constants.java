@@ -24,11 +24,12 @@ public class Constants {
 
     public final static String PUSH_MESSAGES_STATE = "PUSH_MESSAGES_STATE";
 
-    public final static String BASE_URL = "http://52.211.242.225:8080/"; // a.sofac.kr
+    //public final static String BASE_URL = "http://52.211.242.225:8080/"; // a.sofac.kr
     //public final static String BASE_URL = "http://52.57.116.160:8080/"; //Test server
-   //public final static String BASE_URL = "http://192.168.5.15:8080/"; //Zegna
+    public final static String BASE_URL = "http://192.168.1.25/"; //Zegna
     //public final static String BASE_URL = "http://192.168.1.2:8080/"; //Maxx
 
+    public final static String PART_URL_PHP = "data/ajax/request.php"; //Part php
 
     //public final static String GET_POST_FILES_END_URL = "get-file/post/";
     public final static String GET_POST_FILES_END_URL = "softwarefactoryadmin/post/";

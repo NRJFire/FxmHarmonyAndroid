@@ -16,8 +16,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ListView;
 import android.widget.Toast;
 
 import com.sofac.fxmharmony.R;
@@ -26,7 +24,9 @@ import com.sofac.fxmharmony.adapter.RecyclerItemClickListener;
 import com.sofac.fxmharmony.data.GroupExchangeOnServer;
 import com.sofac.fxmharmony.data.dto.ManagerInfoDTO;
 import com.sofac.fxmharmony.data.dto.PermissionDTO;
-import com.sofac.fxmharmony.data.dto.PostDTO;
+import com.sofac.fxmharmony.dto.PostDTO;
+import com.sofac.fxmharmony.dto.UserDTO;
+import com.sofac.fxmharmony.util.AppUserID;
 import com.sofac.fxmharmony.view.ChangePost;
 import com.sofac.fxmharmony.view.CreatePost;
 import com.sofac.fxmharmony.view.DetailPostActivity;
@@ -148,8 +148,8 @@ public class GroupFragment extends Fragment implements SwipeRefreshLayout.OnRefr
     }
 
     public void updateViewList(Boolean toDoProgressDialog) {
-        ManagerInfoDTO managerInfoDTO = ManagerInfoDTO.findById(ManagerInfoDTO.class, preferences.getLong(USER_ID_PREF, 1L));
-        Timber.e(managerInfoDTO.toString());
+
+        //UserDTO userDTO = UserDTO.findById(UserDTO.class, new AppUserID(this.getContext()).getID());
 
         new GroupExchangeOnServer<>(stringTypeGroup, toDoProgressDialog, LOAD_ALL_POSTS_REQUEST, getActivity(), new GroupExchangeOnServer.AsyncResponseWithAnswer() {
             @Override

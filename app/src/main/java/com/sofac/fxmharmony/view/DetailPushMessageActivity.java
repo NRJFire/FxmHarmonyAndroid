@@ -14,13 +14,12 @@ import com.google.cloud.translate.TranslateOptions;
 import com.google.cloud.translate.Translation;
 import com.sofac.fxmharmony.Constants;
 import com.sofac.fxmharmony.R;
-import com.sofac.fxmharmony.data.dto.PushMessage;
+import com.sofac.fxmharmony.dto.PushMessage;
 import com.sofac.fxmharmony.util.ConvertorHTML;
 
 import java.util.Locale;
 
 import static com.sofac.fxmharmony.Constants.ONE_PUSH_MESSAGE_DATA;
-import static com.sofac.fxmharmony.view.DetailPostActivity.commentDTO;
 
 public class DetailPushMessageActivity extends BaseActivity {
 

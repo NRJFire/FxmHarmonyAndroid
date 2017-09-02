@@ -26,25 +26,24 @@ public class SplashActivity extends BaseActivity {
 
     public void checkVersion() {
 
-//        new CheckVersionApp(this, new CheckVersionApp.FinishCheckVersion() {
-//            @Override
-//            public void processFinish(Boolean isFinishActivity) {
-//                if (isFinishActivity) {
-//                    finishAffinity();
-//                } else {
-//                    checkAuthorization();
-//                }
-//            }
-//        }).execute();
+        new CheckVersionApp(this, new CheckVersionApp.FinishCheckVersion() {
+            @Override
+            public void processFinish(Boolean isFinishActivity) {
+                if (isFinishActivity) {
+                    finishAffinity();
+                } else {
+                    checkAuthorization();
+                }
+            }
+        });
 
         Timber.e(String.format("Version name = %s \nVersion code = %d", versionName, versionCode));
-        //textViewVersionInfo.setText(String.format("Version name = %s \nVersion code = %d", versionName, versionCode));
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        checkAuthorization();
+        //checkAuthorization();
     }
 
     public void checkAuthorization() {

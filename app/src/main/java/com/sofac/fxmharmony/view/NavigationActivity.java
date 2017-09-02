@@ -1,16 +1,13 @@
 package com.sofac.fxmharmony.view;
 
-import android.support.design.widget.TabLayout;
-import android.support.v4.app.Fragment;
-import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
-
+import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.app.FragmentTabHost;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
@@ -20,13 +17,13 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.TabHost;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.sofac.fxmharmony.R;
-import com.sofac.fxmharmony.data.dto.PermissionDTO;
+import com.sofac.fxmharmony.dto.UserDTO;
 import com.sofac.fxmharmony.util.AppMethods;
+import com.sofac.fxmharmony.util.AppUserID;
 import com.sofac.fxmharmony.view.fragment.ContentFragment;
 import com.sofac.fxmharmony.view.fragment.GroupFragment;
 
@@ -35,6 +32,7 @@ import java.util.List;
 
 import timber.log.Timber;
 
+import static com.orm.SugarRecord.findById;
 import static com.sofac.fxmharmony.Constants.APP_PREFERENCES;
 import static com.sofac.fxmharmony.Constants.IS_AUTHORIZATION;
 import static com.sofac.fxmharmony.Constants.TYPE_GROUP;
@@ -90,7 +88,6 @@ public class NavigationActivity extends BaseActivity implements NavigationView.O
         setupViewPager(viewPager);
 
         tabLayout = (TabLayout) findViewById(R.id.tabs);
-
         tabLayout.setupWithViewPager(viewPager);
 
 
@@ -172,15 +169,14 @@ public class NavigationActivity extends BaseActivity implements NavigationView.O
 
 
     private void setupViewPager(ViewPager viewPager) {
-        SharedPreferences preferences = getSharedPreferences(USER_SERVICE, MODE_PRIVATE);
-        PermissionDTO permissionDTO = PermissionDTO.findById(PermissionDTO.class, preferences.getLong(USER_ID_PREF, 1L));
+        UserDTO userDTO = findById(UserDTO.class, new AppUserID(this).getID());
 
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
         adapter.addFragment(new ContentFragment(), "PUSH");
 
         int selectTab = 0;
 
-        if (permissionDTO.getLeaderGroup()) {
+        if (userDTO.isAccessApplications()) {
             selectTab=1+selectTab;
             tabLeader = selectTab;
             Bundle bundleGroupLeader = new Bundle();
@@ -189,7 +185,7 @@ public class NavigationActivity extends BaseActivity implements NavigationView.O
             groupFragmentLeader.setArguments(bundleGroupLeader);
             adapter.addFragment(groupFragmentLeader, "leader\ngroup");
         }else menu.findItem(idGroupLeader).setVisible(false);
-        if (permissionDTO.getMemberGroup()) {
+        if (userDTO.isAccessApplications()) {
             selectTab=1+selectTab;
             tabMember = selectTab;
             Bundle bundleGroupLeader = new Bundle();
@@ -199,7 +195,7 @@ public class NavigationActivity extends BaseActivity implements NavigationView.O
             adapter.addFragment(groupFragmentLeader, "member\ngroup");
 
         }else menu.findItem(idGroupMember).setVisible(false);
-        if (permissionDTO.getStaffGroup()) {
+        if (userDTO.isAccessApplications()) {
             selectTab=1+selectTab;
             tabStaff = selectTab;
             Bundle bundleGroupLeader = new Bundle();

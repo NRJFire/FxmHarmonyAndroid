@@ -1,11 +1,13 @@
-package com.sofac.fxmharmony.data.dto.base;
+package com.sofac.fxmharmony.server.type;
 
+/**
+ * Created by Maxim on 03.08.2017.
+ */
 
+public class ServerRequest <T> {
 
-
-public class ServerRequest <T>{
-
-    public ServerRequest(){}
+    public ServerRequest() {
+    }
 
     public ServerRequest(String requestType, T dataTransferObject) {
         this.requestType = requestType;

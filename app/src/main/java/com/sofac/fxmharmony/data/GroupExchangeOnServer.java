@@ -10,13 +10,11 @@ import android.widget.Toast;
 
 import com.sofac.fxmharmony.Constants;
 import com.sofac.fxmharmony.R;
-import com.sofac.fxmharmony.data.dto.CommentDTO;
-import com.sofac.fxmharmony.data.dto.PostDTO;
-import com.sofac.fxmharmony.data.dto.base.ServerRequest;
-import com.sofac.fxmharmony.data.dto.base.ServerResponse;
+import com.sofac.fxmharmony.dto.CommentDTO;
+import com.sofac.fxmharmony.dto.PostDTO;
+import com.sofac.fxmharmony.server.type.ServerRequest;
+import com.sofac.fxmharmony.server.type.ServerResponse;
 
-import java.text.NumberFormat;
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 

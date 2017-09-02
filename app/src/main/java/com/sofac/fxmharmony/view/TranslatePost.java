@@ -4,30 +4,20 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
-import android.text.Editable;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.TextureView;
-import android.view.View;
-import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TabHost;
-import android.widget.TabWidget;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.sofac.fxmharmony.R;
 import com.sofac.fxmharmony.data.GroupExchangeOnServer;
-import com.sofac.fxmharmony.data.dto.PostDTO;
+import com.sofac.fxmharmony.dto.PostDTO;
 import com.sofac.fxmharmony.util.ConvertorHTML;
 
 import static com.sofac.fxmharmony.Constants.ONE_POST_DATA;
 import static com.sofac.fxmharmony.Constants.UPDATE_POST_REQUEST;
 import static com.sofac.fxmharmony.Constants.USER_ID_PREF;
-import static com.sofac.fxmharmony.Constants.WRITE_POST_REQUEST;
-import static com.sofac.fxmharmony.R.string.files;
-import static com.sofac.fxmharmony.R.string.videos;
 
 
 public class TranslatePost extends BaseActivity {

@@ -4,31 +4,23 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.text.Editable;
-import android.text.Html;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
-import android.widget.Spinner;
-import android.widget.TabHost;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.sofac.fxmharmony.R;
 import com.sofac.fxmharmony.data.GroupExchangeOnServer;
-import com.sofac.fxmharmony.data.dto.PermissionDTO;
-import com.sofac.fxmharmony.data.dto.PostDTO;
+import com.sofac.fxmharmony.dto.PostDTO;
 import com.sofac.fxmharmony.util.ConvertorHTML;
-import com.sofac.fxmharmony.util.FxmPostFile;
 import com.sofac.fxmharmony.util.PermissionManager;
 import com.sofac.fxmharmony.util.RequestMethods;
 import com.sofac.fxmharmony.view.customView.FileItemWithCancel;
@@ -40,17 +32,12 @@ import java.util.List;
 
 import timber.log.Timber;
 
-import static com.sofac.fxmharmony.Constants.BASE_URL;
-import static com.sofac.fxmharmony.Constants.GET_POST_FILES_END_URL;
-import static com.sofac.fxmharmony.Constants.ONE_POST_DATA;
 import static com.sofac.fxmharmony.Constants.REQUEST_TAKE_FILE;
 import static com.sofac.fxmharmony.Constants.REQUEST_TAKE_GALLERY_VIDEO;
 import static com.sofac.fxmharmony.Constants.REQUEST_TAKE_PHOTO;
 import static com.sofac.fxmharmony.Constants.TYPE_GROUP;
-import static com.sofac.fxmharmony.Constants.UPDATE_POST_REQUEST;
 import static com.sofac.fxmharmony.Constants.USER_ID_PREF;
 import static com.sofac.fxmharmony.Constants.WRITE_POST_REQUEST;
-import static com.sofac.fxmharmony.view.fragment.GroupFragment.postDTO;
 
 
 public class CreatePost extends BaseActivity {

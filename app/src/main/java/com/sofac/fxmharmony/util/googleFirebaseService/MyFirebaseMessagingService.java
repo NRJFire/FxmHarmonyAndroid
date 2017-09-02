@@ -3,34 +3,21 @@ package com.sofac.fxmharmony.util.googleFirebaseService;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.support.v4.app.NotificationCompat;
 import android.text.Html;
-import android.util.Log;
-import android.widget.EditText;
-import android.widget.Toast;
 
 
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.sofac.fxmharmony.Constants;
 import com.sofac.fxmharmony.R;
-import com.sofac.fxmharmony.data.dto.PushMessage;
+import com.sofac.fxmharmony.dto.PushMessage;
 import com.sofac.fxmharmony.view.SplashActivity;
 
 
-import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.List;
 import timber.log.Timber;
-
-import static android.provider.AlarmClock.EXTRA_MESSAGE;
-import static com.sofac.fxmharmony.Constants.APP_PREFERENCES;
-import static com.sofac.fxmharmony.Constants.PUSH_MASSEGES;
 
 
 public class MyFirebaseMessagingService extends FirebaseMessagingService {

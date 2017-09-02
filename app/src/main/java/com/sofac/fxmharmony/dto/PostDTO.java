@@ -1,4 +1,4 @@
-package com.sofac.fxmharmony.data.dto;
+package com.sofac.fxmharmony.dto;
 
 import com.orm.SugarRecord;
 
@@ -28,19 +28,12 @@ public class PostDTO extends SugarRecord implements Serializable {
     }
 
     private transient Long id;
-
     private Long serverID;
-
     private Long userID;
-
     private String userName;
-
     private Date date;
-
     private String postTextOriginal;
-
     private String postTextRu;
-
     private String postTextEn;
 
     private String postTextKo;

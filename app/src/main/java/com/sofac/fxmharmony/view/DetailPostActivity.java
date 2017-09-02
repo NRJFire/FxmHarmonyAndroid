@@ -13,13 +13,11 @@ import android.os.Environment;
 import android.os.Parcelable;
 import android.os.StrictMode;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -32,18 +30,16 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.target.Target;
 import com.google.cloud.translate.Translate;
 import com.google.cloud.translate.TranslateOptions;
 import com.google.cloud.translate.Translation;
 import com.sofac.fxmharmony.Constants;
 import com.sofac.fxmharmony.R;
 import com.sofac.fxmharmony.adapter.AdapterCommentsGroup;
-import com.sofac.fxmharmony.adapter.AdapterGalleryGroup;
-import com.sofac.fxmharmony.data.dto.CommentDTO;
+import com.sofac.fxmharmony.dto.CommentDTO;
 import com.sofac.fxmharmony.data.GroupExchangeOnServer;
 import com.sofac.fxmharmony.data.dto.PermissionDTO;
-import com.sofac.fxmharmony.data.dto.PostDTO;
+import com.sofac.fxmharmony.dto.PostDTO;
 import com.sofac.fxmharmony.util.AppMethods;
 import com.sofac.fxmharmony.util.ConvertorHTML;
 import com.sofac.fxmharmony.util.FileLoadingListener;
@@ -57,9 +53,6 @@ import java.util.Locale;
 import jp.wasabeef.glide.transformations.CropCircleTransformation;
 import timber.log.Timber;
 
-import static android.R.id.content;
-import static android.R.id.message;
-import static android.icu.lang.UCharacter.GraphemeClusterBreak.T;
 import static com.sofac.fxmharmony.Constants.BASE_URL;
 import static com.sofac.fxmharmony.Constants.DELETE_COMMENT_REQUEST;
 import static com.sofac.fxmharmony.Constants.DELETE_POST_REQUEST;
@@ -75,7 +68,6 @@ import static com.sofac.fxmharmony.Constants.PART_URL_FILE_IMAGE_POST;
 import static com.sofac.fxmharmony.Constants.UPDATE_COMMENT_REQUEST;
 import static com.sofac.fxmharmony.Constants.USER_ID_PREF;
 import static com.sofac.fxmharmony.Constants.WRITE_COMMENT_REQUEST;
-import static com.sofac.fxmharmony.R.id.messageTranslatePushMessage;
 
 public class DetailPostActivity extends BaseActivity {
 

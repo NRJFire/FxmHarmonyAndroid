@@ -1,34 +1,23 @@
 package com.sofac.fxmharmony.data;
 
-import android.net.Uri;
-import android.support.annotation.NonNull;
-import android.util.Log;
-
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.sofac.fxmharmony.Constants;
-import com.sofac.fxmharmony.data.dto.AppVersionDTO;
-import com.sofac.fxmharmony.data.dto.CommentDTO;
 import com.sofac.fxmharmony.data.dto.ManagerInfoDTO;
-import com.sofac.fxmharmony.data.dto.PostDTO;
-import com.sofac.fxmharmony.data.dto.base.ServerRequest;
-import com.sofac.fxmharmony.data.dto.base.ServerResponse;
+import com.sofac.fxmharmony.dto.AppVersionDTO;
+import com.sofac.fxmharmony.dto.CommentDTO;
+import com.sofac.fxmharmony.dto.PostDTO;
+import com.sofac.fxmharmony.server.type.ServerRequest;
+import com.sofac.fxmharmony.server.type.ServerResponse;
 
-import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import okhttp3.MediaType;
-import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
-import retrofit2.http.Body;
-import retrofit2.http.PartMap;
 import timber.log.Timber;
 
 public class DataManager {

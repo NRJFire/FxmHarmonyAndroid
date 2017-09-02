@@ -1,7 +1,6 @@
 package com.sofac.fxmharmony.view.fragment;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -13,24 +12,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import com.sofac.fxmharmony.R;
 import com.sofac.fxmharmony.adapter.AdapterPushListView;
-import com.sofac.fxmharmony.data.dto.ManagerInfoDTO;
-import com.sofac.fxmharmony.data.dto.PermissionDTO;
-import com.sofac.fxmharmony.data.dto.PushMessage;
+import com.sofac.fxmharmony.dto.PushMessage;
 import com.sofac.fxmharmony.view.DetailPushMessageActivity;
 
 import java.util.ArrayList;
 
-import timber.log.Timber;
-
-import static android.content.Context.MODE_PRIVATE;
-import static android.content.Context.USER_SERVICE;
 import static com.orm.SugarRecord.listAll;
 import static com.sofac.fxmharmony.Constants.ONE_PUSH_MESSAGE_DATA;
-import static com.sofac.fxmharmony.Constants.USER_ID_PREF;
 
 public class ContentFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
 

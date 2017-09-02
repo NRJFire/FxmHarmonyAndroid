@@ -1,4 +1,4 @@
-package com.sofac.fxmharmony.data.dto;
+package com.sofac.fxmharmony.dto;
 
 import java.util.Date;
 

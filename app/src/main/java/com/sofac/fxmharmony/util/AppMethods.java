@@ -6,16 +6,12 @@ import android.graphics.Bitmap;
 import android.media.MediaMetadataRetriever;
 import android.os.Build;
 import android.os.Environment;
-
 import android.widget.ImageView;
-import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
 import com.bumptech.glide.Glide;
 import com.sofac.fxmharmony.Constants;
 import com.sofac.fxmharmony.R;
 import com.sofac.fxmharmony.data.dto.ManagerInfoDTO;
-
 
 import java.io.File;
 import java.text.SimpleDateFormat;
@@ -23,7 +19,6 @@ import java.util.Date;
 import java.util.HashMap;
 
 import jp.wasabeef.glide.transformations.CropCircleTransformation;
-import timber.log.Timber;
 
 import static android.content.Context.MODE_PRIVATE;
 import static android.content.Context.USER_SERVICE;
