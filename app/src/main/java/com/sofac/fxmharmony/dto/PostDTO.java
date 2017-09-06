@@ -1,187 +1,144 @@
 package com.sofac.fxmharmony.dto;
 
 import com.orm.SugarRecord;
+import com.orm.dsl.Ignore;
 
+import java.io.File;
 import java.io.Serializable;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.Locale;
 
 public class PostDTO extends SugarRecord implements Serializable {
 
     public PostDTO() {
     }
 
-    public PostDTO(Long id, Long serverID, Long userID, String userName, Date date, String postTextOriginal, String postTextRu, String postTextEn, String postTextKo, String linksFile, String linksVideo, String linksImage, String postUserAvatarImage, String groupType) {
-        this.id = id;
-        this.serverID = serverID;
-        this.userID = userID;
-        this.userName = userName;
+    public PostDTO(Long user_id, String name, String date, String body_original, String body_ru, String body_en, String body_ko, String files, String avatar, String type) throws ParseException {
+        setId(user_id);
+        this.name = name;
         this.date = date;
-        this.postTextOriginal = postTextOriginal;
-        this.postTextRu = postTextRu;
-        this.postTextEn = postTextEn;
-        this.postTextKo = postTextKo;
-        this.linksFile = linksFile;
-        this.linksVideo = linksVideo;
-        this.linksImage = linksImage;
-        this.postUserAvatarImage = postUserAvatarImage;
-        this.groupType = groupType;
+        this.body_original = body_original;
+        this.body_ru = body_ru;
+        this.body_en = body_en;
+        this.body_ko = body_ko;
+        this.files = files;
+        this.avatar = avatar;
+        this.type = type;
     }
 
-    private transient Long id;
-    private Long serverID;
-    private Long userID;
-    private String userName;
-    private Date date;
-    private String postTextOriginal;
-    private String postTextRu;
-    private String postTextEn;
+    private Long user_id;
+    private String name;
+    private String date;
+    private String body_original;
+    private String body_ru;
+    private String body_en;
+    private String body_ko;
+    private String files;
+    private String avatar;
+    private String type;
 
-    private String postTextKo;
-
-    private String linksFile;
-
-
-
-    private String linksVideo;
-
-    private String linksImage;
-
-    private String postUserAvatarImage;
-
-    private String groupType;
-
-
-
-    public Long getId() {
-        return id;
+    public Long getUser_id() {
+        return user_id;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setUser_id(Long user_id) {
+        this.user_id = user_id;
     }
 
-    public Long getUserID() {
-        return userID;
+    public String getName() {
+        return name;
     }
 
-    public void setUserID(Long userID) {
-        this.userID = userID;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public Date getDate() {
-        return date;
+        SimpleDateFormat dateParser = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ITALIAN);
+        try {
+            return  dateParser.parse(this.date);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
-    public String getPostTextRu() {
-        return postTextRu;
-    }
-
-    public void setPostTextRu(String postTextRu) {
-        this.postTextRu = postTextRu;
-    }
-
-    public String getPostTextEn() {
-        return postTextEn;
-    }
-
-    public void setPostTextEn(String postTextEn) {
-        this.postTextEn = postTextEn;
-    }
-
-    public String getPostTextKo() {
-        return postTextKo;
-    }
-
-    public void setPostTextKo(String postTextKo) {
-        this.postTextKo = postTextKo;
-    }
-
-    public String getPostTextOriginal() {
-
-        return postTextOriginal;
-    }
-
-    public void setPostTextOriginal(String postTextOriginal) {
-        this.postTextOriginal = postTextOriginal;
-    }
-
-    public void setDate(Date date) {
+    public void setDate(String date) {
         this.date = date;
     }
 
-    public String getUserName() {
-        return userName;
+    public String getBody_original() {
+        return body_original;
     }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
+    public void setBody_original(String body_original) {
+        this.body_original = body_original;
     }
 
-    public Long getServerID() {
-        return serverID;
+    public String getBody_ru() {
+        return body_ru;
     }
 
-    public void setServerID(Long serverID) {
-        this.serverID = serverID;
+    public void setBody_ru(String body_ru) {
+        this.body_ru = body_ru;
     }
 
-    public String getLinksFile() {
-        return linksFile;
+    public String getBody_en() {
+        return body_en;
     }
 
-    public void setLinksFile(String linksFile) {
-        this.linksFile = linksFile;
+    public void setBody_en(String body_en) {
+        this.body_en = body_en;
     }
 
-    public String getLinksImage() {
-        return linksImage;
+    public String getBody_ko() {
+        return body_ko;
     }
 
-    public void setLinksImage(String linksImage) {
-        this.linksImage = linksImage;
+    public void setBody_ko(String body_ko) {
+        this.body_ko = body_ko;
     }
 
-    public String getLinksVideo() {
-        return linksVideo;
+    public String getFiles() {
+        return files;
     }
 
-    public void setLinksVideo(String linksVideo) {
-        this.linksVideo = linksVideo;
+    public void setFiles(String files) {
+        this.files = files;
     }
 
-    public String getPostUserAvatarImage() {
-        return postUserAvatarImage;
+    public String getAvatar() {
+        return avatar;
     }
 
-    public void setPostUserAvatarImage(String postUserAvatarImage) {
-        this.postUserAvatarImage = postUserAvatarImage;
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
     }
 
-    public String getGroupType() {
-        return groupType;
+    public String getType() {
+        return type;
     }
 
-    public void setGroupType(String groupType) {
-        this.groupType = groupType;
+    public void setType(String type) {
+        this.type = type;
     }
 
     @Override
     public String toString() {
         return "PostDTO{" +
-                "id=" + id +
-                ", serverID=" + serverID +
-                ", userID=" + userID +
-                ", userName='" + userName + '\'' +
-                ", date=" + date +
-                ", postTextOriginal='" + postTextOriginal + '\'' +
-                ", postTextRu='" + postTextRu + '\'' +
-                ", postTextEn='" + postTextEn + '\'' +
-                ", postTextKo='" + postTextKo + '\'' +
-                ", linksFile='" + linksFile + '\'' +
-                ", linksImage='" + linksImage + '\'' +
-                ", linksVideo='" + linksVideo + '\'' +
-                ", postUserAvatarImage='" + postUserAvatarImage + '\'' +
-                ", groupType='" + groupType + '\'' +
+                "user_id=" + user_id +
+                ", name='" + name + '\'' +
+                ", date='" + date + '\'' +
+                ", body_original='" + body_original + '\'' +
+                ", body_ru='" + body_ru + '\'' +
+                ", body_en='" + body_en + '\'' +
+                ", body_ko='" + body_ko + '\'' +
+                ", files=" + files +
+                ", avatar='" + avatar + '\'' +
+                ", type='" + type + '\'' +
                 '}';
     }
 }

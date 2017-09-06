@@ -22,23 +22,17 @@ import com.sofac.fxmharmony.R;
 import com.sofac.fxmharmony.adapter.AdapterPostGroup;
 import com.sofac.fxmharmony.adapter.RecyclerItemClickListener;
 import com.sofac.fxmharmony.data.GroupExchangeOnServer;
-import com.sofac.fxmharmony.data.dto.ManagerInfoDTO;
 import com.sofac.fxmharmony.data.dto.PermissionDTO;
 import com.sofac.fxmharmony.dto.PostDTO;
-import com.sofac.fxmharmony.dto.UserDTO;
-import com.sofac.fxmharmony.util.AppUserID;
+import com.sofac.fxmharmony.server.Server;
+import com.sofac.fxmharmony.server.type.ServerResponse;
 import com.sofac.fxmharmony.view.ChangePost;
 import com.sofac.fxmharmony.view.CreatePost;
 import com.sofac.fxmharmony.view.DetailPostActivity;
-
 import java.util.ArrayList;
-
-import timber.log.Timber;
-
 import static android.content.Context.MODE_PRIVATE;
 import static android.content.Context.USER_SERVICE;
 import static com.sofac.fxmharmony.Constants.DELETE_POST_REQUEST;
-import static com.sofac.fxmharmony.Constants.LOAD_ALL_POSTS_REQUEST;
 import static com.sofac.fxmharmony.Constants.ONE_POST_DATA;
 import static com.sofac.fxmharmony.Constants.TYPE_GROUP;
 import static com.sofac.fxmharmony.Constants.USER_ID_PREF;
@@ -64,7 +58,7 @@ public class GroupFragment extends Fragment implements SwipeRefreshLayout.OnRefr
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        intentDetailPostActivity = new Intent(this.getActivity(), DetailPostActivity.class);
+        intentDetailPostActivity = new Intent(this.getContext(), DetailPostActivity.class);
         intentChangePost = new Intent(this.getActivity(), ChangePost.class);
         preferences = getActivity().getSharedPreferences(USER_SERVICE, MODE_PRIVATE);
 
@@ -73,18 +67,15 @@ public class GroupFragment extends Fragment implements SwipeRefreshLayout.OnRefr
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        Bundle groupType =getArguments();
+        Bundle groupType = getArguments();
         stringTypeGroup = groupType.getString(TYPE_GROUP);
 
         View rootView = inflater.inflate(R.layout.fragment_group, container, false);
-
         mLayoutManager = new LinearLayoutManager(getContext());
 
         recyclerViewPost = (RecyclerView) rootView.findViewById(R.id.idListGroup);
         recyclerViewPost.setHasFixedSize(true);
         recyclerViewPost.setLayoutManager(mLayoutManager);
-
-
 
         groupSwipeRefreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.refresh);
         groupSwipeRefreshLayout.setOnRefreshListener(this);
@@ -113,24 +104,24 @@ public class GroupFragment extends Fragment implements SwipeRefreshLayout.OnRefr
             @Override
             public void onLongItemClick(View view, int position) {
                 postDTO = postDTOs.get(position);
-                GroupFragment.idPost = postDTOs.get(position).getServerID();
+                GroupFragment.idPost = postDTOs.get(position).getId();
                 PermissionDTO permissionDTO = PermissionDTO.findById(PermissionDTO.class, preferences.getLong(USER_ID_PREF, 1L));
 
-                if (postDTO.getUserID() == preferences.getLong(USER_ID_PREF, 0L) || permissionDTO.getSuperAdminPermission()) {
+                if (postDTO.getUser_id() == preferences.getLong(USER_ID_PREF, 0L) || permissionDTO.getSuperAdminPermission()) {
                     AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
                     builder.setItems(R.array.choice_double_click_post, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             switch (which) {
                                 case 0: //Edit
-                                    writePost();
+                                    ChangePost();
                                     break;
                                 case 1: //Delete
                                     new GroupExchangeOnServer<>(GroupFragment.idPost, true, DELETE_POST_REQUEST, getActivity(), new GroupExchangeOnServer.AsyncResponseWithAnswer() {
                                         @Override
                                         public void processFinish(Boolean isSuccess, String answer) {
                                             if (isSuccess) {
-                                                updateViewList(true);
+                                                loadUpdate();
                                                 Toast.makeText(getActivity(), "Post was delete!", Toast.LENGTH_SHORT).show();
                                             }
                                         }
@@ -143,41 +134,35 @@ public class GroupFragment extends Fragment implements SwipeRefreshLayout.OnRefr
                 }
             }
         }));
+        postDTOs = (ArrayList<PostDTO>) PostDTO.find(PostDTO.class, "type = ?", stringTypeGroup);
+        adapterPostGroup = new AdapterPostGroup(getActivity(), postDTOs);
+        recyclerViewPost.setAdapter(adapterPostGroup);
 
         return rootView;
     }
 
-    public void updateViewList(Boolean toDoProgressDialog) {
-
-        //UserDTO userDTO = UserDTO.findById(UserDTO.class, new AppUserID(this.getContext()).getID());
-
-        new GroupExchangeOnServer<>(stringTypeGroup, toDoProgressDialog, LOAD_ALL_POSTS_REQUEST, getActivity(), new GroupExchangeOnServer.AsyncResponseWithAnswer() {
+    public void loadUpdate() {
+        PostDTO.deleteAll(PostDTO.class, "type = ?", stringTypeGroup);
+        new Server<ArrayList<PostDTO>>().getListPosts(stringTypeGroup, new Server.AnswerServerResponse<ArrayList<PostDTO>>() {
             @Override
-            public void processFinish(Boolean isSuccess, String answer) {
-                if (isSuccess) {
-
-                    postDTOs = (ArrayList<PostDTO>) PostDTO.listAll(PostDTO.class);
-
-                    if (postDTOs != null) {
-                        adapterPostGroup = new AdapterPostGroup(getActivity(), postDTOs);
-                        recyclerViewPost.setAdapter(adapterPostGroup);
-                        recyclerViewPost.setHasFixedSize(true);
-                        adapterPostGroup.notifyDataSetChanged();
-                    }
+            public void processFinish(Boolean isSuccess, ServerResponse<ArrayList<PostDTO>> answerServerResponse) {
+                if (answerServerResponse != null) {
+                    PostDTO.saveInTx(answerServerResponse.getDataTransferObject());
+                    groupSwipeRefreshLayout.setRefreshing(false);
+                    refreshRecyclerView();
                 }
             }
-        }).execute();
-
-
+        });
     }
 
-    @Override
-    public void onResume() {
-        updateViewList(true);
-        super.onResume();
+    public void refreshRecyclerView(){
+        postDTOs.clear();
+        postDTOs.addAll(PostDTO.find(PostDTO.class, "type = ?", stringTypeGroup));
+        adapterPostGroup.notifyDataSetChanged();
     }
 
-    public void writePost() {
+
+    public void ChangePost() {
         intentChangePost.putExtra(ONE_POST_DATA, postDTO);
         startActivityForResult(intentChangePost, 1);
 
@@ -185,20 +170,17 @@ public class GroupFragment extends Fragment implements SwipeRefreshLayout.OnRefr
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-
         if (resultCode == 2) {
             intentDetailPostActivity.putExtra(ONE_POST_DATA, (PostDTO) data.getSerializableExtra(ONE_POST_DATA));
             startActivity(intentDetailPostActivity);
         }
         super.onActivityResult(requestCode, resultCode, data);
-
     }
 
     @Override
     public void onRefresh() {
         groupSwipeRefreshLayout.setRefreshing(true);
-        updateViewList(false);
-        groupSwipeRefreshLayout.setRefreshing(false);
+        loadUpdate();
     }
 
     @Override
@@ -211,7 +193,7 @@ public class GroupFragment extends Fragment implements SwipeRefreshLayout.OnRefr
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_update_list_post:
-                updateViewList(true);
+                loadUpdate();
                 break;
             case R.id.menu_write_post:
                 startActivityForResult(new Intent(GroupFragment.this.getActivity(), CreatePost.class), 1);

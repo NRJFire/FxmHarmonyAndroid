@@ -3,23 +3,9 @@
 
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/idPushItem"
+            android:id="@+id/idNotification"
             android:icon="@drawable/receipt"
-            android:title="@string/push_menu" />
-        <item
-            android:id="@+id/idGroupLeader"
-            android:icon="@drawable/account_multiple"
-            android:title="@string/leader_group" />
-        <item
-            android:id="@+id/idGroupMember"
-            android:icon="@drawable/account_multiple"
-            android:title="@string/member_group" />
-
-        <item
-            android:id="@+id/idGroupStaff"
-            android:icon="@drawable/account_multiple"
-            android:title="@string/staff_group" />
-
+            android:title="Notification" />
     </group>
 
     <item android:title="@string/configuration">

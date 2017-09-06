@@ -6,6 +6,7 @@ import retrofit2.http.POST;
 import retrofit2.Call;
 import retrofit2.http.Body;
 
+import static com.sofac.fxmharmony.Constants.PART_CONTROLLER;
 import static com.sofac.fxmharmony.Constants.PART_URL_PHP;
 
 
@@ -15,6 +16,6 @@ import static com.sofac.fxmharmony.Constants.PART_URL_PHP;
 
 public interface ServiceRetrofit {
 
-    @POST(PART_URL_PHP)
+    @POST(PART_CONTROLLER)
     Call<ResponseBody> getData(@Body ServerRequest serverRequest);
 }

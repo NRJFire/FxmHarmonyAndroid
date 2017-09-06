@@ -21,7 +21,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.sofac.fxmharmony.R;
+import com.sofac.fxmharmony.dto.PostDTO;
 import com.sofac.fxmharmony.dto.UserDTO;
+import com.sofac.fxmharmony.server.Server;
+import com.sofac.fxmharmony.server.type.ServerResponse;
 import com.sofac.fxmharmony.util.AppMethods;
 import com.sofac.fxmharmony.util.AppUserID;
 import com.sofac.fxmharmony.view.fragment.ContentFragment;
@@ -32,15 +35,11 @@ import java.util.List;
 
 import timber.log.Timber;
 
+import static android.R.attr.data;
 import static com.orm.SugarRecord.findById;
 import static com.sofac.fxmharmony.Constants.APP_PREFERENCES;
 import static com.sofac.fxmharmony.Constants.IS_AUTHORIZATION;
 import static com.sofac.fxmharmony.Constants.TYPE_GROUP;
-import static com.sofac.fxmharmony.Constants.USER_ID_PREF;
-import static com.sofac.fxmharmony.R.id.idGroupLeader;
-import static com.sofac.fxmharmony.R.id.idGroupMember;
-import static com.sofac.fxmharmony.R.id.idGroupStaff;
-
 
 public class NavigationActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -48,14 +47,9 @@ public class NavigationActivity extends BaseActivity implements NavigationView.O
     private static long backPressed;
     private ImageView avatarImage;
     private TextView userName;
-    //private FragmentTabHost mTabHost;
 
     private TabLayout tabLayout;
     private ViewPager viewPager;
-
-    int tabLeader = 0;
-    int tabMember = 0;
-    int tabStaff = 0;
 
     Menu menu;
 
@@ -64,7 +58,6 @@ public class NavigationActivity extends BaseActivity implements NavigationView.O
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_navigation);
         setTitle(getString(R.string.app_name));
-
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -90,126 +83,70 @@ public class NavigationActivity extends BaseActivity implements NavigationView.O
         tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(viewPager);
 
+        new Server<ArrayList<PostDTO>>().getListPosts("", new Server.AnswerServerResponse<ArrayList<PostDTO>>() {
+            @Override
+            public void processFinish(Boolean isSuccess, ServerResponse<ArrayList<PostDTO>> answerServerResponse) {
+                if(isSuccess) {
+                    if (answerServerResponse.getDataTransferObject() != null) {
+                        PostDTO.saveInTx(answerServerResponse.getDataTransferObject());
+                    }
+                } else {
+                    Toast.makeText(NavigationActivity.this, "Connection error", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
 
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-
         AppMethods.putAvatarIntoImageView(this, avatarImage);
         //userName.setText(AppMethods.getUserName(this));
-
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (data == null) {
-            Timber.e("!!!!!!");
-        }
-    }
-
-    @SuppressWarnings("StatementWithEmptyBody")
-    @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
-
-        switch (item.getItemId()) {
-            case R.id.idPushItem:
-                tabLayout.getTabAt(0).select();
-                item.setChecked(true);
-                break;
-            case idGroupLeader:
-                tabLayout.getTabAt(tabLeader).select();
-                item.setChecked(true);
-                break;
-            case R.id.idGroupMember:
-                tabLayout.getTabAt(tabMember).select();
-                item.setChecked(true);
-                break;
-            case R.id.idGroupStaff:
-                tabLayout.getTabAt(tabStaff).select();
-                item.setChecked(true);
-                break;
-            case R.id.idSettingItem:
-                Intent intentSettings = new Intent(NavigationActivity.this, SettingsActivity.class);
-                startActivity(intentSettings);
-                break;
-            case R.id.idExitItem:
-                Intent intentSplashActivity = new Intent(this, SplashActivity.class);
-                SharedPreferences preferences = getSharedPreferences(APP_PREFERENCES, MODE_PRIVATE);
-                SharedPreferences.Editor editor = preferences.edit();
-                editor.putBoolean(IS_AUTHORIZATION, false);
-                editor.apply();
-                intentSplashActivity.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                editor.commit();
-                startActivity(intentSplashActivity);
-                break;
-        }
-
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        drawer.closeDrawer(GravityCompat.START);
-        return true;
-    }
-
-    @Override
-    public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
-        } else {
-            if (backPressed + 2000 > System.currentTimeMillis()) {
-                super.onBackPressed();
-                finishAffinity();
-            } else {
-                Toast.makeText(getBaseContext(), getString(R.string.ToastLogOut), Toast.LENGTH_SHORT).show();
-            }
-            backPressed = System.currentTimeMillis();
+            Timber.e("!!!!!! onActivityResult");
         }
     }
 
 
-    private void setupViewPager(ViewPager viewPager) {
+    private void setupViewPager(ViewPager viewPager) { // Заполнение ViewPager
         UserDTO userDTO = findById(UserDTO.class, new AppUserID(this).getID());
 
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
         adapter.addFragment(new ContentFragment(), "PUSH");
 
-        int selectTab = 0;
-
-        if (userDTO.isAccessApplications()) {
-            selectTab=1+selectTab;
-            tabLeader = selectTab;
+        if (userDTO.isAdmin() || userDTO.isAccessLeaderGroup()) {
             Bundle bundleGroupLeader = new Bundle();
-            bundleGroupLeader.putString(TYPE_GROUP, "leader");
+            bundleGroupLeader.putString(TYPE_GROUP, "leadergroup");
             GroupFragment groupFragmentLeader = new GroupFragment();
             groupFragmentLeader.setArguments(bundleGroupLeader);
             adapter.addFragment(groupFragmentLeader, "leader\ngroup");
-        }else menu.findItem(idGroupLeader).setVisible(false);
-        if (userDTO.isAccessApplications()) {
-            selectTab=1+selectTab;
-            tabMember = selectTab;
+        }
+        if (userDTO.isAdmin() || userDTO.isAccessMemberGroup()) {
             Bundle bundleGroupLeader = new Bundle();
-            bundleGroupLeader.putString(TYPE_GROUP, "member");
-            GroupFragment groupFragmentLeader = new GroupFragment();
-            groupFragmentLeader.setArguments(bundleGroupLeader);
-            adapter.addFragment(groupFragmentLeader, "member\ngroup");
-
-        }else menu.findItem(idGroupMember).setVisible(false);
-        if (userDTO.isAccessApplications()) {
-            selectTab=1+selectTab;
-            tabStaff = selectTab;
+            bundleGroupLeader.putString(TYPE_GROUP, "membergroup");
+            GroupFragment groupFragmentMember = new GroupFragment();
+            groupFragmentMember.setArguments(bundleGroupLeader);
+            adapter.addFragment(groupFragmentMember, "member\ngroup");
+        }
+        if (userDTO.isAdmin() || userDTO.isAccessStaffGroup()) {
             Bundle bundleGroupLeader = new Bundle();
-            bundleGroupLeader.putString(TYPE_GROUP, "staff");
+            bundleGroupLeader.putString(TYPE_GROUP, "staffgroup");
             GroupFragment groupFragmentStaff = new GroupFragment();
             groupFragmentStaff.setArguments(bundleGroupLeader);
             adapter.addFragment(groupFragmentStaff, "staff\ngroup");
-        }else menu.findItem(idGroupStaff).setVisible(false);
-
+        }
 
         viewPager.setAdapter(adapter);
     }
 
-    class ViewPagerAdapter extends FragmentPagerAdapter {
+
+    //
+    private class ViewPagerAdapter extends FragmentPagerAdapter {
         private final List<Fragment> mFragmentList = new ArrayList<>();
         private final List<String> mFragmentTitleList = new ArrayList<>();
 
@@ -235,6 +172,54 @@ public class NavigationActivity extends BaseActivity implements NavigationView.O
         @Override
         public CharSequence getPageTitle(int position) {
             return mFragmentTitleList.get(position);
+        }
+    }
+
+
+    @SuppressWarnings("StatementWithEmptyBody")
+    @Override
+    public boolean onNavigationItemSelected(MenuItem item) {
+
+        switch (item.getItemId()) {
+            case R.id.idNotification:
+                tabLayout.getTabAt(0).select();
+                item.setChecked(true);
+                break;
+            case R.id.idSettingItem:
+                Intent intentSettings = new Intent(NavigationActivity.this, SettingsActivity.class);
+                startActivity(intentSettings);
+                break;
+            case R.id.idExitItem:
+                Intent intentSplashActivity = new Intent(this, SplashActivity.class);
+                SharedPreferences preferences = getSharedPreferences(APP_PREFERENCES, MODE_PRIVATE);
+                SharedPreferences.Editor editor = preferences.edit();
+                editor.putBoolean(IS_AUTHORIZATION, false);
+                editor.apply();
+                intentSplashActivity.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                editor.commit();
+                startActivity(intentSplashActivity);
+                break;
+        }
+
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer.closeDrawer(GravityCompat.START);
+        return true;
+    }
+
+
+    @Override
+    public void onBackPressed() {
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START);
+        } else {
+            if (backPressed + 2000 > System.currentTimeMillis()) {
+                super.onBackPressed();
+                finishAffinity();
+            } else {
+                Toast.makeText(getBaseContext(), getString(R.string.ToastLogOut), Toast.LENGTH_SHORT).show();
+            }
+            backPressed = System.currentTimeMillis();
         }
     }
 

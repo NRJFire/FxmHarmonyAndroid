@@ -20,6 +20,7 @@ import com.sofac.fxmharmony.dto.UserDTO;
 import com.sofac.fxmharmony.server.Server;
 import com.sofac.fxmharmony.server.type.ServerResponse;
 import com.sofac.fxmharmony.util.AppUserID;
+import com.sofac.fxmharmony.util.ProgressBar;
 
 import timber.log.Timber;
 
@@ -37,6 +38,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
     private static long backPressed;
     EditText editPassword, editLogin;
     Button buttonLogin;
+    ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +48,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         initUI();
         buttonLogin.setOnClickListener(this);
         intent = new Intent(this, NavigationActivity.class);
+        progressBar = new ProgressBar(LoginActivity.this);
 
         try {
             ManagerDTO.deleteAll(UserDTO.class);
@@ -67,6 +70,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
 
     @Override
     public void onClick(View v) {
+        progressBar.showView();
 
         String password = editPassword.getText().toString();
         String login = editLogin.getText().toString();
@@ -92,15 +96,13 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
 
                         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         startActivity(intent);
+                        progressBar.dismissView();
                     }else{
+                        progressBar.dismissView();
                         Toast.makeText(LoginActivity.this, R.string.errorConnection, Toast.LENGTH_SHORT).show();
                     }
                 }
             });
-
-
-
-
         }
     }
 

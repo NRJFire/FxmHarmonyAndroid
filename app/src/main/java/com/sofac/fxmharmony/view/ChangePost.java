@@ -74,9 +74,9 @@ public class ChangePost extends BaseActivity {
         fxmPostFile = new FxmPostFile(postDTO);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            postTextInput.setText(Html.fromHtml(postDTO.getPostTextOriginal() , Html.FROM_HTML_MODE_LEGACY));
+            postTextInput.setText(Html.fromHtml(postDTO.getBody_original() , Html.FROM_HTML_MODE_LEGACY));
         } else {
-            postTextInput.setText(Html.fromHtml(postDTO.getPostTextOriginal()));
+            postTextInput.setText(Html.fromHtml(postDTO.getBody_original()));
         }
 
 
@@ -225,7 +225,7 @@ public class ChangePost extends BaseActivity {
             case R.id.send_post_button:
                 if (!postTextInput.getText().toString().equals("")) {
 
-                    postDTO.setPostTextOriginal(postTextInput.getText().toString());
+                    postDTO.setBody_original(postTextInput.getText().toString());
 
                     String images = "";
                     String videos = "";
@@ -242,57 +242,57 @@ public class ChangePost extends BaseActivity {
                     }
 
 
-                    final PostDTO postDTOtoSend =
-                            new PostDTO(
-                                    postDTO.getId(),
-                                    postDTO.getServerID(),
-                                    preferences.getLong(USER_ID_PREF, 0L),
-                                    postDTO.getUserName(),
-                                    postDTO.getDate(),
-                                    ConvertorHTML.toHTML(postDTO.getPostTextOriginal()),
-                                    ConvertorHTML.toHTML(postDTO.getPostTextRu()),
-                                    ConvertorHTML.toHTML(postDTO.getPostTextEn()),
-                                    ConvertorHTML.toHTML(postDTO.getPostTextKo()),
-                                    files,
-                                    videos,
-                                    images,
-                                    postDTO.getPostUserAvatarImage(),
-                                    postDTO.getGroupType());
-                    new GroupExchangeOnServer<PostDTO>(
-                            new PostDTO(
-                                    postDTO.getId(),
-                                    postDTO.getServerID(),
-                                    preferences.getLong(USER_ID_PREF, 0L),
-                                    postDTO.getUserName(),
-                                    null,
-                                    ConvertorHTML.toHTML(postDTO.getPostTextOriginal()),
-                                    ConvertorHTML.toHTML(postDTO.getPostTextRu()),
-                                    ConvertorHTML.toHTML(postDTO.getPostTextEn()),
-                                    ConvertorHTML.toHTML(postDTO.getPostTextKo()),
-                                    files,
-                                    videos,
-                                    images,
-                                    null,
-                                    postDTO.getGroupType()),
-                            true,
-                            UPDATE_POST_REQUEST,
-                            this,
-                            new GroupExchangeOnServer.AsyncResponseWithAnswer() {
-                        @Override
-                        public void processFinish(Boolean isSuccess , String answer) {
-                            if (isSuccess) {
-                                if (fileListToSend.size() > 0) {
-                                    RequestMethods.startServiceAttachLoadFilesToPost(ChangePost.this, (ArrayList<Uri>) fileListToSend, postDTO.getServerID());
-                                }
-
-                                Intent intentDetailPost = new Intent(ChangePost.this, DetailPostActivity.class);
-                                intentDetailPost.putExtra(ONE_POST_DATA, postDTOtoSend);
-
-                                setResult(2, intentDetailPost);
-                                finish();
-                            }
-                        }
-                    }).execute();
+//                    final PostDTO postDTOtoSend =
+//                            new PostDTO(
+//                                    postDTO.getId(),
+//                                    postDTO.getServerID(),
+//                                    preferences.getLong(USER_ID_PREF, 0L),
+//                                    postDTO.getUserName(),
+//                                    postDTO.getDate(),
+//                                    ConvertorHTML.toHTML(postDTO.getPostTextOriginal()),
+//                                    ConvertorHTML.toHTML(postDTO.getPostTextRu()),
+//                                    ConvertorHTML.toHTML(postDTO.getPostTextEn()),
+//                                    ConvertorHTML.toHTML(postDTO.getPostTextKo()),
+//                                    files,
+//                                    videos,
+//                                    images,
+//                                    postDTO.getPostUserAvatarImage(),
+//                                    postDTO.getGroupType());
+//                    new GroupExchangeOnServer<PostDTO>(
+//                            new PostDTO(
+//                                    postDTO.getId(),
+//                                    postDTO.getServerID(),
+//                                    preferences.getLong(USER_ID_PREF, 0L),
+//                                    postDTO.getUserName(),
+//                                    null,
+//                                    ConvertorHTML.toHTML(postDTO.getPostTextOriginal()),
+//                                    ConvertorHTML.toHTML(postDTO.getPostTextRu()),
+//                                    ConvertorHTML.toHTML(postDTO.getPostTextEn()),
+//                                    ConvertorHTML.toHTML(postDTO.getPostTextKo()),
+//                                    files,
+//                                    videos,
+//                                    images,
+//                                    null,
+//                                    postDTO.getGroupType()),
+//                            true,
+//                            UPDATE_POST_REQUEST,
+//                            this,
+//                            new GroupExchangeOnServer.AsyncResponseWithAnswer() {
+//                        @Override
+//                        public void processFinish(Boolean isSuccess , String answer) {
+//                            if (isSuccess) {
+//                                if (fileListToSend.size() > 0) {
+//                                    RequestMethods.startServiceAttachLoadFilesToPost(ChangePost.this, (ArrayList<Uri>) fileListToSend, postDTO.getServerID());
+//                                }
+//
+//                                Intent intentDetailPost = new Intent(ChangePost.this, DetailPostActivity.class);
+//                                intentDetailPost.putExtra(ONE_POST_DATA, postDTOtoSend);
+//
+//                                setResult(2, intentDetailPost);
+//                                finish();
+//                            }
+//                        }
+//                    }).execute();
 
 
                 } else {

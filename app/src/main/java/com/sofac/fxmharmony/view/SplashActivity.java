@@ -5,6 +5,8 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import com.sofac.fxmharmony.R;
 import com.sofac.fxmharmony.util.CheckVersionApp;
+import com.sofac.fxmharmony.util.ProgressBar;
+
 import timber.log.Timber;
 import static android.R.attr.versionCode;
 import static android.R.attr.versionName;
@@ -14,6 +16,7 @@ import static com.sofac.fxmharmony.Constants.IS_AUTHORIZATION;
 public class SplashActivity extends BaseActivity {
     public static SharedPreferences preferences;
     Intent intent;
+    ProgressBar progressBar;
 
 
     @Override

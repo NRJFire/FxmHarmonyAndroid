@@ -2,6 +2,8 @@ package com.sofac.fxmharmony.dto;
 import com.orm.SugarRecord;
 import java.io.Serializable;
 
+import static android.R.attr.type;
+
 /**
  * Created by Maxim on 02.09.2017.
  */
@@ -16,7 +18,8 @@ public class UserDTO extends SugarRecord implements Serializable {
 
     public UserDTO(){}
 
-    public UserDTO(Long id, String login, String password, String role, Boolean visible, String access) {
+    public UserDTO (Long id, String login, String password, String role, Boolean visible, String access) {
+
         setId(id);
         this.login = login;
         this.password = password;
@@ -67,48 +70,55 @@ public class UserDTO extends SugarRecord implements Serializable {
     }
 
     public Boolean isAccessEstimations() {
-        if (getAccess().contains("estimations")) return true;
-        else return false;
+        return getAccess().contains("estimations");
     }
 
     public Boolean isAccessProjects() {
-        if (getAccess().contains("projects")) return true;
-        else return false;
+        return getAccess().contains("projects");
     }
 
     public Boolean isAccessCases() {
-        if (getAccess().contains("cases")) return true;
-        else return false;
+        return getAccess().contains("cases");
     }
 
     public Boolean isAccessPages() {
-        if (getAccess().contains("pages")) return true;
-        else return false;
+        return getAccess().contains("pages");
     }
 
     public Boolean isAccessCustomers() {
-        if (getAccess().contains("customers")) return true;
-        else return false;
+        return getAccess().contains("customers");
     }
 
     public Boolean isAccessManagers() {
-        if (getAccess().contains("managers")) return true;
-        else return false;
+        return getAccess().contains("managers");
     }
 
     public Boolean isAccessNotices() {
-        if (getAccess().contains("notices")) return true;
-        else return false;
+        return getAccess().contains("notices");
     }
 
     public Boolean isAccessDashboard() {
-        if (getAccess().contains("dashboard")) return true;
-        else return false;
+        return getAccess().contains("dashboard");
     }
 
     public Boolean isAccessApplications() {
-        if (getAccess().contains("applications")) return true;
-        else return false;
+        return getAccess().contains("applications");
+    }
+
+    public Boolean isAccessLeaderGroup() {
+        return getAccess().contains("leadergroup");
+    }
+
+    public Boolean isAccessMemberGroup() {
+        return getAccess().contains("membergroup");
+    }
+
+    public Boolean isAccessStaffGroup() {
+        return getAccess().contains("staffgroup");
+    }
+
+    public Boolean isAdmin() {
+        return getRole().contains("admin");
     }
 
     @Override

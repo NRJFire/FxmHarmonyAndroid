@@ -1,46 +1,28 @@
 package com.sofac.fxmharmony.dto;
 
-import java.util.Date;
+import com.orm.SugarRecord;
+import java.io.Serializable;
 
 /**
  * Created by Maxim on 17.08.2017.
  */
 
-public class AppVersionDTO {
-    private Long id;
-    private Long serverID;
+public class AppVersionDTO extends SugarRecord implements Serializable {
     private String title;
-    private String description;
-    private Date date;
-    private Boolean isImportant;
-    private String versionName;
-    private Integer versionCode;
+    private String body;
+    private String date;
+    private String important;
+    private String version_name;
+    private Integer version_code;
 
-    public AppVersionDTO(Long id, Long serverID, String title, String description, Date date, Boolean isImportant, String versionName, Integer versionCode) {
-        this.id = id;
-        this.serverID = serverID;
+    public AppVersionDTO(Long id, String title, String body, String date, String important, String version_name, Integer version_code) {
+        setId(id);
         this.title = title;
-        this.description = description;
+        this.body = body;
         this.date = date;
-        this.isImportant = isImportant;
-        this.versionName = versionName;
-        this.versionCode = versionCode;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public Long getServerID() {
-        return serverID;
-    }
-
-    public void setServerID(Long serverID) {
-        this.serverID = serverID;
+        this.important = important;
+        this.version_name = version_name;
+        this.version_code = version_code;
     }
 
     public String getTitle() {
@@ -51,57 +33,56 @@ public class AppVersionDTO {
         this.title = title;
     }
 
-    public String getDescription() {
-        return description;
+    public String getBody() {
+        return body;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setBody(String body) {
+        this.body = body;
     }
 
-    public Date getDate() {
+    public String getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(String date) {
         this.date = date;
     }
 
     public Boolean getImportant() {
-        return isImportant;
+        return important.equals("1");
     }
 
     public void setImportant(Boolean important) {
-        isImportant = important;
+        if(important) this.important = "1";
+        else this.important = "0";
     }
 
-    public String getVersionName() {
-        return versionName;
+    public String getVersion_name() {
+        return version_name;
     }
 
-    public void setVersionName(String versionName) {
-        this.versionName = versionName;
+    public void setVersion_name(String version_name) {
+        this.version_name = version_name;
     }
 
-    public Integer getVersionCode() {
-        return versionCode;
+    public Integer getVersion_code() {
+        return version_code;
     }
 
-    public void setVersionCode(Integer versionCode) {
-        this.versionCode = versionCode;
+    public void setVersion_code(Integer version_code) {
+        this.version_code = version_code;
     }
 
     @Override
     public String toString() {
         return "AppVersionDTO{" +
-                "id=" + id +
-                ", serverID=" + serverID +
-                ", title='" + title + '\'' +
-                ", description='" + description + '\'' +
+                "title='" + title + '\'' +
+                ", body='" + body + '\'' +
                 ", date=" + date +
-                ", isImportant=" + isImportant +
-                ", versionName='" + versionName + '\'' +
-                ", versionCode=" + versionCode +
+                ", important=" + important +
+                ", version_name='" + version_name + '\'' +
+                ", version_code=" + version_code +
                 '}';
     }
 }

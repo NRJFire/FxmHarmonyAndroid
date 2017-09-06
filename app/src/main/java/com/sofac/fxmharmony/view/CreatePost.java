@@ -196,47 +196,41 @@ public class CreatePost extends BaseActivity {
                     Editable postText = postTextInput.getText();
 
 
-                    new GroupExchangeOnServer<PostDTO>(
-                            new PostDTO(
-                                    1L,
-                                    1L,
-                                    preferences.getLong(USER_ID_PREF, 0L),
-                                    "",
-                                    null,
-                                    ConvertorHTML.toHTML(postText.toString()),
-                                    "",
-                                    "",
-                                    "",
-                                    null,
-                                    null,
-                                    null,
-                                    null,
-                                    stringTypeGroup),
-                            true,
-                            WRITE_POST_REQUEST, this, new GroupExchangeOnServer.AsyncResponseWithAnswer() {
-                        @Override
-                        public void processFinish(Boolean isSuccess, String answer) {
-                            if (isSuccess) {
-
-                                Timber.e("answer!!!!!!!!!! " + answer);
-                                Long postID = Long.valueOf(answer);
-
-                                if (fileListToSend.size() > 0) {
-                                    RequestMethods.startServiceAttachLoadFilesToPost(CreatePost.this, (ArrayList<Uri>) fileListToSend, postID);
-                                }
-
-//                                Intent intentPost = new Intent(CreatePost.this, NavigationActivity.class);
-//                                intentDetailPost.putExtra(ONE_POST_DATA, postDTOtoSend);
+//                    new GroupExchangeOnServer<PostDTO>(
+//                            new PostDTO(
+//                                    1L,
+//                                    1L,
+//                                    preferences.getLong(USER_ID_PREF, 0L),
+//                                    "",
+//                                    null,
+//                                    ConvertorHTML.toHTML(postText.toString()),
+//                                    "",
+//                                    "",
+//                                    "",
+//                                    null,
+//                                    null,
+//                                    null,
+//                                    null,
+//                                    stringTypeGroup),
+//                            true,
+//                            WRITE_POST_REQUEST, this, new GroupExchangeOnServer.AsyncResponseWithAnswer() {
+//                        @Override
+//                        public void processFinish(Boolean isSuccess, String answer) {
+//                            if (isSuccess) {
 //
-//                                setResult(2, intentDetailPost);
+//                                Timber.e("answer!!!!!!!!!! " + answer);
+//                                Long postID = Long.valueOf(answer);
+//
+//                                if (fileListToSend.size() > 0) {
+//                                    RequestMethods.startServiceAttachLoadFilesToPost(CreatePost.this, (ArrayList<Uri>) fileListToSend, postID);
+//                                }
+//
+//                                Intent intent = new Intent(CreatePost.this, NavigationActivity.class);
+//                                setResult(2, intent);
 //                                finish();
-
-                                Intent intent = new Intent(CreatePost.this, NavigationActivity.class);
-                                setResult(2, intent);
-                                finish();
-                            }
-                        }
-                    }).execute();
+//                            }
+//                        }
+//                    }).execute();
 
                 } else {
                     Toast.makeText(this, "Please input text post", Toast.LENGTH_SHORT).show();

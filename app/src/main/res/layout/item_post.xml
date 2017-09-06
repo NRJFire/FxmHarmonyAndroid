@@ -50,7 +50,6 @@
                         android:id="@+id/idTitleItemPost"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
                         android:ellipsize="end"
                         android:maxLines="1"
                         android:text="Title"
@@ -100,7 +99,7 @@
                 android:id="@+id/idImageCarousel"
                 android:layout_width="match_parent"
                 android:layout_height="160dp"
-                android:visibility="visible"/>
+                android:visibility="gone"/>
             <Space
                 android:layout_width="match_parent"
                 android:layout_height="20dp" />

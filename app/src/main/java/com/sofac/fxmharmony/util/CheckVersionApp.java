@@ -17,16 +17,14 @@ import com.sofac.fxmharmony.server.type.ServerResponse;
 
 import java.util.List;
 
-/**
- * Created by Maxim on 21.08.2017.
- */
+/** Created by Maxim on 21.08.2017. */
 
 public class CheckVersionApp {
 
-    Context context;
-    String versionName = "";
-    int versionCode = -1;
-    AlertDialog.Builder builder;
+    private Context context;
+    private String versionName = "";
+    private int versionCode = -1;
+    private AlertDialog.Builder builder;
     private FinishCheckVersion myFinishCheckVersion = null;
 
     public interface FinishCheckVersion {
@@ -50,13 +48,12 @@ public class CheckVersionApp {
             @Override
             public void processFinish(Boolean isSuccess, ServerResponse<AppVersionDTO> serverResponse) {
                 if (isSuccess) {
-                    serverResponse.getDataTransferObject().setImportant(false);
-                    if (versionCode < serverResponse.getDataTransferObject().getVersionCode()) {
+                    if (versionCode < serverResponse.getDataTransferObject().getVersion_code()) {
                         if (serverResponse.getDataTransferObject().getImportant()) { // Important
                             builder.setCancelable(false);
                             builder.setOnCancelListener(null);
                             builder.setTitle("Check version");
-                            builder.setMessage("This is very important version and you can't use this app. Please update your application from PlayMarket.\n \nNew version: " + serverResponse.getDataTransferObject().getVersionName() + "\nYour version: " + versionName);
+                            builder.setMessage("This is very important version and you can't use this app. Please update your application from PlayMarket.\n \nNew version: " + serverResponse.getDataTransferObject().getVersion_name() + "\nYour version: " + versionName);
                             builder.setPositiveButton("Update from PlayMarket", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
@@ -74,7 +71,7 @@ public class CheckVersionApp {
                                 }
                             });
                             builder.setTitle("Check version");
-                            builder.setMessage("Please update your application from PlayMarket. \n \nNew version: " + serverResponse.getDataTransferObject().getVersionName() + "\nYour version: " + versionName);
+                            builder.setMessage("Please update your application from PlayMarket. \n \nNew version: " + serverResponse.getDataTransferObject().getVersion_name() + "\nYour version: " + versionName);
                             builder.setPositiveButton("Update from PlayMarket", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
@@ -100,11 +97,11 @@ public class CheckVersionApp {
         });
     }
 
-    public void toastConnectionError(){
+    private void toastConnectionError(){
         Toast.makeText(context, "Please check internet connection", Toast.LENGTH_SHORT).show();
     }
 
-    public void openAppRating() {
+    private void openAppRating() {
         // you can also use BuildConfig.APPLICATION_ID
         String appId = context.getPackageName();
         Intent rateIntent = new Intent(Intent.ACTION_VIEW,

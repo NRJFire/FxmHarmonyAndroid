@@ -12,7 +12,6 @@ public class CommentDTO extends SugarRecord implements Serializable {
 
     public CommentDTO(Long id, Long serverID, Long userID, String userName, Date date, String commentText, Long postID,  String commentUserAvatarImage) {
         this.id = id;
-        this.serverID = serverID;
         this.userID = userID;
         this.userName = userName;
         this.date = date;

@@ -3,18 +3,15 @@ package com.sofac.fxmharmony;
 public class Constants {
 
     public static final String MULTIPART_FORM_DATA = "multipart/form-data";
-
     public static final String CLOUD_API_KEY = "AIzaSyDZJmgv9fvQnQkc5vvCx8bPFcUqSYDVhnM";
 
     /*Имя хранения preference*/
-    public final static String IS_AUTHORIZATION = "IS_AUTHORIZATION";
-    public final static String PUSH_MASSEGES = "PUSH_MASSEGES";
+    public final static String IS_AUTHORIZATION = "IS_AUTHORIZATION";;
 
     public final static String GOOGLE_CLOUD_PREFERENCE = "GOOGLE_CLOUD_PREFERENCE";
     public static final String APP_PREFERENCES = "APP_PREFERENCES";
 
     public final static String SERVER_REQUEST_ERROR = "SERVER_REQUEST_ERROR";
-    public final static String AUTHORIZATION_REQUEST = "AUTHORIZATION_REQUEST";
 
     public final static String REQUEST_SUCCESS = "REQUEST_SUCCESS";
     public final static String USER_ID_PREF = "USER_ID_PREF";
@@ -29,15 +26,19 @@ public class Constants {
     public final static String BASE_URL = "http://192.168.1.25/"; //Zegna
     //public final static String BASE_URL = "http://192.168.1.2:8080/"; //Maxx
 
-    public final static String PART_URL_PHP = "data/ajax/request.php"; //Part php
+    public final static String PART_CONTROLLER = "data/ajax/request.php"; //Part app controller php
 
-    //public final static String GET_POST_FILES_END_URL = "get-file/post/";
+    //File path
+    public final static String PART_ESTIMATE = "/data/files/estimate/"; //Part estimate
+    public final static String PART_MESSAGE = "/data/files/message/"; //Part message
+    public final static String PART_POST = "/data/files/post/"; //Part post
+    public final static String PART_TOSS = "/data/files/toss/"; //Part toss
+
     public final static String GET_POST_FILES_END_URL = "softwarefactoryadmin/post/";
 
     public final static String GET_POST_thumbnails_END_URL = "get-file/thumbnails/";
     public final static String POINT_PNG = ".png";
     public final static String PART_URL_FILE_AVATAR = "get-file/avatar/";
-    public final static String PART_URL_FILE_IMAGE_POST = GET_POST_FILES_END_URL;
 
     //PreviewPhotoActivity
     public final static String LINK_IMAGE = "LINK_IMAGE";
@@ -48,9 +49,6 @@ public class Constants {
 
     //NavActivity
     public final static String TYPE_GROUP = "TYPE_GROUP";
-
-    //SplashActivity
-    public final static String CHECK_VERSION = "CHECK_VERSION";
 
     //Group requests
     public final static String LOAD_ALL_POSTS_REQUEST = "LOAD_ALL_POSTS_REQUEST";
@@ -77,7 +75,6 @@ public class Constants {
     public final static String UPLOAD_MULTI_FILE_EXCHANGE = "UPLOAD_MULTI_FILE_EXCHANGE";
 
     // Push message types
-    public final static String ESTIMATE_CASE_PUSH_TYPE = "ESTIMATE_CASE_PUSH_TYPE";
     public final static String GROUP_PUSH_TYPE = "GROUP_PUSH_TYPE";
 
     // Push message state

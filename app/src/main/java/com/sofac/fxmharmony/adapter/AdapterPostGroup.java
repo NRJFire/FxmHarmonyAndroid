@@ -1,31 +1,33 @@
 package com.sofac.fxmharmony.adapter;
 
 
+import android.content.Context;
+import android.net.Uri;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
-import android.content.Context;
-import android.net.Uri;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
+
 import com.bumptech.glide.Glide;
 import com.sofac.fxmharmony.Constants;
 import com.sofac.fxmharmony.R;
 import com.sofac.fxmharmony.dto.PostDTO;
 import com.sofac.fxmharmony.util.AppMethods;
 import com.sofac.fxmharmony.util.ConvertorHTML;
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Locale;
-import jp.wasabeef.glide.transformations.CropCircleTransformation;
-import static com.sofac.fxmharmony.Constants.BASE_URL;
-import static com.sofac.fxmharmony.Constants.PART_URL_FILE_IMAGE_POST;
 
+import jp.wasabeef.glide.transformations.CropCircleTransformation;
+
+import static com.sofac.fxmharmony.Constants.BASE_URL;
 
 public class AdapterPostGroup extends RecyclerView.Adapter<AdapterPostGroup.ViewHolder> {
     private ArrayList<PostDTO> postDTOArrayList;
@@ -62,7 +64,7 @@ public class AdapterPostGroup extends RecyclerView.Adapter<AdapterPostGroup.View
 
         LinearLayout.LayoutParams lParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);///////////////
 
-        Uri uri = Uri.parse(BASE_URL + Constants.PART_URL_FILE_AVATAR + postDTO.getPostUserAvatarImage());
+        Uri uri = Uri.parse(BASE_URL + Constants.PART_URL_FILE_AVATAR + postDTO.getAvatar());
 
         Glide.with(ctx)
                 .load(uri)
@@ -73,35 +75,36 @@ public class AdapterPostGroup extends RecyclerView.Adapter<AdapterPostGroup.View
                 .into(view.avatar);
 
 
-        view.titleItemPost.setText(postDTO.getUserName());
+        view.titleItemPost.setText(postDTO.getName());
+        view.dateItemPost.setText(postDTO.getDate().toString());
         view.dateItemPost.setText(new SimpleDateFormat("d MMM yyyy", Locale.GERMAN).format(postDTO.getDate())); //"d MMM yyyy HH:mm:ss"
-        if (postDTO.getPostTextOriginal() != null)  view.messageItemPost.setText(ConvertorHTML.fromHTML(postDTO.getPostTextOriginal()));
+        if (postDTO.getBody_original() != null)  view.messageItemPost.setText(ConvertorHTML.fromHTML(postDTO.getBody_original()));
 
-        if (null != postDTO.getLinksFile() && !"".equals(postDTO.getLinksFile()) && postDTO.getLinksFile().length() > 5) {
-            view.linearLayoutFiles.setVisibility(View.VISIBLE);
-            for (final String imageName : postDTO.getLinksFile().split(";#")) {
-
-                View fileItemView = inflater.inflate(R.layout.item_preview_post_file, null);
-                TextView textView = (TextView) fileItemView.findViewById(R.id.idNameFile);
-                textView.setText(imageName);
-                view.linearLayoutFiles.addView(fileItemView, lParams);
-            }
-
-        } else {
-            view.linearLayoutFiles.setVisibility(View.INVISIBLE);
-        }
+//        if (null != postDTO.getLinksFile() && !"".equals(postDTO.getLinksFile()) && postDTO.getLinksFile().length() > 5) {
+//            view.linearLayoutFiles.setVisibility(View.VISIBLE);
+//            for (final String imageName : postDTO.getLinksFile().split(";#")) {
+//
+//                View fileItemView = inflater.inflate(R.layout.item_preview_post_file, null);
+//                TextView textView = (TextView) fileItemView.findViewById(R.id.idNameFile);
+//                textView.setText(imageName);
+//                view.linearLayoutFiles.addView(fileItemView, lParams);
+//            }
+//
+//        } else {
+//            view.linearLayoutFiles.setVisibility(View.INVISIBLE);
+//        }
 
         view.recyclerView.setLayoutManager(new LinearLayoutManager(ctx, LinearLayoutManager.HORIZONTAL,false));
 
-        if (null != postDTO.getLinksImage() && !"".equals(postDTO.getLinksImage()) && postDTO.getLinksImage().length() > 5) {
-            view.recyclerView.setVisibility(View.VISIBLE);
-            for (String imageName : postDTO.getLinksImage().split(";#")) {
-                listImage.add(BASE_URL + PART_URL_FILE_IMAGE_POST + imageName);
-            }
-            view.recyclerView.setAdapter(new AdapterGalleryGroup(listImage));
-        } else {
-            view.recyclerView.setVisibility(View.GONE);
-        }
+//        if (null != postDTO.getLinksImage() && !"".equals(postDTO.getLinksImage()) && postDTO.getLinksImage().length() > 5) {
+//            view.recyclerView.setVisibility(View.VISIBLE);
+//            for (String imageName : postDTO.getLinksImage().split(";#")) {
+//                listImage.add(BASE_URL + PART_URL_FILE_IMAGE_POST + imageName);
+//            }
+//            view.recyclerView.setAdapter(new AdapterGalleryGroup(listImage));
+//        } else {
+//            view.recyclerView.setVisibility(View.GONE);
+//        }
 
     }
 
@@ -128,12 +131,10 @@ public class AdapterPostGroup extends RecyclerView.Adapter<AdapterPostGroup.View
         TextView titleItemPost;
         TextView dateItemPost;
         TextView messageItemPost;
-        //DiscreteScrollView discreteScrollView;
         RecyclerView recyclerView;
 
         public ViewHolder(View view) {
             super(view);
-            //discreteScrollView = (DiscreteScrollView) view.findViewById(R.id.idImageCarousel);
             recyclerView = (RecyclerView) view.findViewById(R.id.idImageCarousel);
             avatar = (ImageView) view.findViewById(R.id.idAvatarPostItem);
             linearLayoutFiles = (LinearLayout) view.findViewById(R.id.idListFilesPostItem);

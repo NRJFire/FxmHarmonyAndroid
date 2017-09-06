@@ -16,9 +16,9 @@ public class FxmPostFile {
 
     public FxmPostFile(PostDTO fxmPost) {
         this.fxmPost = fxmPost;
-        this.videoList = parserPathFile(fxmPost.getLinksVideo());
-        this.imageList = parserPathFile(fxmPost.getLinksImage());
-        this.fileList = parserPathFile(fxmPost.getLinksFile());
+//        this.videoList = parserPathFile(fxmPost.getLinksVideo());
+//        this.imageList = parserPathFile(fxmPost.getLinksImage());
+//        this.fileList = parserPathFile(fxmPost.getLinksFile());
 
     }
 

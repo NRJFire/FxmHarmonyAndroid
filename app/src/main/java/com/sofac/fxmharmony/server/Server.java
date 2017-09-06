@@ -1,6 +1,7 @@
 package com.sofac.fxmharmony.server;
 
 import java.lang.reflect.Type;
+import java.util.List;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
@@ -8,6 +9,7 @@ import com.google.gson.reflect.TypeToken;
 import com.sofac.fxmharmony.dto.AppVersionDTO;
 import com.sofac.fxmharmony.data.dto.ManagerInfoDTO;
 import com.sofac.fxmharmony.dto.AuthorizationDTO;
+import com.sofac.fxmharmony.dto.PostDTO;
 import com.sofac.fxmharmony.dto.UserDTO;
 import com.sofac.fxmharmony.server.retrofit.ManagerRetrofit;
 import com.sofac.fxmharmony.server.type.ServerResponse;
@@ -41,7 +43,7 @@ public class Server<T> {
                     Type typeAnswer = new TypeToken<ServerResponse<UserDTO>>() { //Change type response
                     }.getType();
                     answerServerResponse.processFinish(true, getObjectTransferFromJSON(answerString, typeAnswer));
-                }else {
+                } else {
                     answerServerResponse.processFinish(false, null);
                 }
             }
@@ -63,7 +65,7 @@ public class Server<T> {
                     Type typeAnswer = new TypeToken<ServerResponse<AppVersionDTO>>() { //Change type response
                     }.getType();
                     answerServerResponse.processFinish(true, getObjectTransferFromJSON(answerString, typeAnswer));
-                }else {
+                } else {
                     answerServerResponse.processFinish(false, null);
                 }
             }
@@ -73,26 +75,26 @@ public class Server<T> {
     /**
      * Get List VERSIONS history from Server
      */
-    public void getVersionsHistory(AnswerServerResponse async) {
+    public void getVersionsHistory(AnswerServerResponse<T> async) {
 
     }
 
     /**
      * Get MANAGER info from server
      */
-    public void getManagerInfo(Long idManager, AnswerServerResponse async) {
+    public void getManagerInfo(Long idManager, AnswerServerResponse<T> async) {
     }
 
     /**
      * Get CUSTOMER info from server
      */
-    public void getCustomerInfo(Long idCustomer, AnswerServerResponse async) {
+    public void getCustomerInfo(Long idCustomer, AnswerServerResponse<T> async) {
     }
 
     /**
      * Get STAFF info from server
      */
-    public void getStaffInfo(Long idStaff, AnswerServerResponse async) {
+    public void getStaffInfo(Long idStaff, AnswerServerResponse<T> async) {
     }
 
 
@@ -106,24 +108,28 @@ public class Server<T> {
     /**
      * Get ONE POST from Server
      */
-    public void getPost(ManagerInfoDTO managerDTO, AnswerServerResponse async) {
-    }
-
-    /**
-     * Get ONE COMMENT from Server
-     */
-    public void getComment(ManagerInfoDTO managerDTO, AnswerServerResponse async) {
-    }
-
-
-    /**   */
-    public void getListPosts() {
+    public void getPost(ManagerInfoDTO managerDTO, AnswerServerResponse<T> async) {
     }
 
     /**   */
-    public void getListComments() {
-    }
+    public void getListPosts(String stringTypeGroup, AnswerServerResponse<T> async) {
+        answerServerResponse = async;
+        String requestType = new Object() {
+        }.getClass().getEnclosingMethod().getName();
 
+        new ManagerRetrofit<String>().sendRequest(stringTypeGroup, requestType, new ManagerRetrofit.AsyncAnswerString() { // Change type Object sending / Change data
+            @Override
+            public void processFinish(Boolean isSuccess, String answerString) {
+                if (isSuccess) {
+                    Type typeAnswer = new TypeToken<ServerResponse<List<PostDTO>>>() { //Change type response
+                    }.getType();
+                    answerServerResponse.processFinish(true, getObjectTransferFromJSON(answerString, typeAnswer));
+                } else {
+                    answerServerResponse.processFinish(false, null);
+                }
+            }
+        });
+    }
 
     /**   */
     public void createPost() {

@@ -41,22 +41,22 @@ public class TranslatePost extends BaseActivity {
         preferences = getSharedPreferences(USER_SERVICE, MODE_PRIVATE);
 
         //TextView
-        postTextOrig = (TextView) findViewById(R.id.id_text_orig);
-        if (postDTO.getPostTextOriginal() != null && !"".equals(postDTO.getPostTextOriginal()))
-            postTextOrig.setText(ConvertorHTML.fromHTML(postDTO.getPostTextOriginal()));
-
-        //EditText
-        postTextEng = (EditText) findViewById(R.id.id_text_eng);
-        if (postDTO.getPostTextEn() != null && !"".equals(postDTO.getPostTextEn()))
-            postTextEng.setText(ConvertorHTML.fromHTML(postDTO.getPostTextEn()));
-
-        postTextKor = (EditText) findViewById(R.id.id_text_kor);
-        if (postDTO.getPostTextKo() != null && !"".equals(postDTO.getPostTextKo()))
-            postTextKor.setText(ConvertorHTML.fromHTML(postDTO.getPostTextKo()));
-
-        postTextRus = (EditText) findViewById(R.id.id_text_rus);
-        if (postDTO.getPostTextRu() != null && !"".equals(postDTO.getPostTextRu()))
-            postTextRus.setText(ConvertorHTML.fromHTML(postDTO.getPostTextRu()));
+//        postTextOrig = (TextView) findViewById(R.id.id_text_orig);
+//        if (postDTO.getPostTextOriginal() != null && !"".equals(postDTO.getPostTextOriginal()))
+//            postTextOrig.setText(ConvertorHTML.fromHTML(postDTO.getPostTextOriginal()));
+//
+//        //EditText
+//        postTextEng = (EditText) findViewById(R.id.id_text_eng);
+//        if (postDTO.getPostTextEn() != null && !"".equals(postDTO.getPostTextEn()))
+//            postTextEng.setText(ConvertorHTML.fromHTML(postDTO.getPostTextEn()));
+//
+//        postTextKor = (EditText) findViewById(R.id.id_text_kor);
+//        if (postDTO.getPostTextKo() != null && !"".equals(postDTO.getPostTextKo()))
+//            postTextKor.setText(ConvertorHTML.fromHTML(postDTO.getPostTextKo()));
+//
+//        postTextRus = (EditText) findViewById(R.id.id_text_rus);
+//        if (postDTO.getPostTextRu() != null && !"".equals(postDTO.getPostTextRu()))
+//            postTextRus.setText(ConvertorHTML.fromHTML(postDTO.getPostTextRu()));
 
         TabHost tabHost = (TabHost) findViewById(android.R.id.tabhost);
 
@@ -104,36 +104,36 @@ public class TranslatePost extends BaseActivity {
         switch (item.getItemId()) {
             case R.id.send_post_button:
 
-                postDTO.setPostTextRu(postTextRus.getText().toString());
-                postDTO.setPostTextEn(postTextEng.getText().toString());
-                postDTO.setPostTextKo(postTextKor.getText().toString());
-
-                PostDTO changePostDTO =
-                        new PostDTO(
-                                postDTO.getId(),
-                                postDTO.getServerID(),
-                                preferences.getLong(USER_ID_PREF, 0L),
-                                postDTO.getUserName(),
-                                null,
-                                postDTO.getPostTextOriginal(),
-                                ConvertorHTML.toHTML(postTextRus.getText().toString()),
-                                ConvertorHTML.toHTML(postTextEng.getText().toString()),
-                                ConvertorHTML.toHTML(postTextKor.getText().toString()) ,
-                                postDTO.getLinksFile() ,
-                                postDTO.getLinksVideo() ,
-                                postDTO.getLinksImage() ,
-                                postDTO.getPostUserAvatarImage(),
-                                postDTO.getGroupType());
-
-                new GroupExchangeOnServer<PostDTO>(changePostDTO, true, UPDATE_POST_REQUEST, this, new GroupExchangeOnServer.AsyncResponseWithAnswer() {
-                    @Override
-                    public void processFinish(Boolean isSuccess , String answer) {
-                        Intent intent = new Intent(TranslatePost.this, DetailPostActivity.class);
-                        intent.putExtra(ONE_POST_DATA, postDTO);
-                        setResult(2, intent);
-                        finish();
-                    }
-                }).execute();
+//                postDTO.setPostTextRu(postTextRus.getText().toString());
+//                postDTO.setPostTextEn(postTextEng.getText().toString());
+//                postDTO.setPostTextKo(postTextKor.getText().toString());
+//
+//                PostDTO changePostDTO =
+//                        new PostDTO(
+//                                postDTO.getId(),
+//                                postDTO.getServerID(),
+//                                preferences.getLong(USER_ID_PREF, 0L),
+//                                postDTO.getUserName(),
+//                                null,
+//                                postDTO.getPostTextOriginal(),
+//                                ConvertorHTML.toHTML(postTextRus.getText().toString()),
+//                                ConvertorHTML.toHTML(postTextEng.getText().toString()),
+//                                ConvertorHTML.toHTML(postTextKor.getText().toString()) ,
+//                                postDTO.getLinksFile() ,
+//                                postDTO.getLinksVideo() ,
+//                                postDTO.getLinksImage() ,
+//                                postDTO.getPostUserAvatarImage(),
+//                                postDTO.getGroupType());
+//
+//                new GroupExchangeOnServer<PostDTO>(changePostDTO, true, UPDATE_POST_REQUEST, this, new GroupExchangeOnServer.AsyncResponseWithAnswer() {
+//                    @Override
+//                    public void processFinish(Boolean isSuccess , String answer) {
+//                        Intent intent = new Intent(TranslatePost.this, DetailPostActivity.class);
+//                        intent.putExtra(ONE_POST_DATA, postDTO);
+//                        setResult(2, intent);
+//                        finish();
+//                    }
+//                }).execute();
 
                 return true;
             default:
