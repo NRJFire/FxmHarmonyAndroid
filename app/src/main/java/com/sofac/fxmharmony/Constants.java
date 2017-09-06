@@ -33,6 +33,7 @@ public class Constants {
     public final static String PART_MESSAGE = "/data/files/message/"; //Part message
     public final static String PART_POST = "/data/files/post/"; //Part post
     public final static String PART_TOSS = "/data/files/toss/"; //Part toss
+    public final static String PART_AVATAR = "/data/files/avatar/"; //Part toss
 
     public final static String GET_POST_FILES_END_URL = "softwarefactoryadmin/post/";
 

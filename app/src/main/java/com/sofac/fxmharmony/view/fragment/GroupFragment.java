@@ -30,6 +30,9 @@ import com.sofac.fxmharmony.view.ChangePost;
 import com.sofac.fxmharmony.view.CreatePost;
 import com.sofac.fxmharmony.view.DetailPostActivity;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+
 import static android.content.Context.MODE_PRIVATE;
 import static android.content.Context.USER_SERVICE;
 import static com.sofac.fxmharmony.Constants.DELETE_POST_REQUEST;
@@ -135,6 +138,11 @@ public class GroupFragment extends Fragment implements SwipeRefreshLayout.OnRefr
             }
         }));
         postDTOs = (ArrayList<PostDTO>) PostDTO.find(PostDTO.class, "type = ?", stringTypeGroup);
+        Collections.sort(postDTOs, new Comparator<PostDTO>() {
+            public int compare(PostDTO o1, PostDTO o2) {
+                return o2.getDate().compareTo(o1.getDate());
+            }
+        });
         adapterPostGroup = new AdapterPostGroup(getActivity(), postDTOs);
         recyclerViewPost.setAdapter(adapterPostGroup);
 
@@ -158,6 +166,11 @@ public class GroupFragment extends Fragment implements SwipeRefreshLayout.OnRefr
     public void refreshRecyclerView(){
         postDTOs.clear();
         postDTOs.addAll(PostDTO.find(PostDTO.class, "type = ?", stringTypeGroup));
+        Collections.sort(postDTOs, new Comparator<PostDTO>() {
+            public int compare(PostDTO o1, PostDTO o2) {
+                return o2.getDate().compareTo(o1.getDate());
+            }
+        });
         adapterPostGroup.notifyDataSetChanged();
     }
 

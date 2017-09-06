@@ -36,11 +36,6 @@ public class AdapterPostGroup extends RecyclerView.Adapter<AdapterPostGroup.View
 
 
     public AdapterPostGroup(Context context, ArrayList<PostDTO> postDTOArrayList) {
-        Collections.sort(postDTOArrayList, new Comparator<PostDTO>() {
-            public int compare(PostDTO o1, PostDTO o2) {
-                return o2.getDate().compareTo(o1.getDate());
-            }
-        });
         this.postDTOArrayList = postDTOArrayList;
         this.ctx = context;
         this.inflater = (LayoutInflater) ctx.getSystemService(Context.LAYOUT_INFLATER_SERVICE);

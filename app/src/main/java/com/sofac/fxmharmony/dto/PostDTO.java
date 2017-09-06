@@ -1,13 +1,10 @@
 package com.sofac.fxmharmony.dto;
 
 import com.orm.SugarRecord;
-import com.orm.dsl.Ignore;
 
-import java.io.File;
 import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
 

@@ -7,8 +7,6 @@ import retrofit2.Call;
 import retrofit2.http.Body;
 
 import static com.sofac.fxmharmony.Constants.PART_CONTROLLER;
-import static com.sofac.fxmharmony.Constants.PART_URL_PHP;
-
 
 /**
  * Created by Maxim on 03.08.2017.

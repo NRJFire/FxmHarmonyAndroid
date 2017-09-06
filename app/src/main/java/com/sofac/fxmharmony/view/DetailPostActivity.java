@@ -38,6 +38,8 @@ import com.sofac.fxmharmony.data.GroupExchangeOnServer;
 import com.sofac.fxmharmony.dto.CommentDTO;
 import com.sofac.fxmharmony.dto.PostDTO;
 import com.sofac.fxmharmony.dto.UserDTO;
+import com.sofac.fxmharmony.server.Server;
+import com.sofac.fxmharmony.server.type.ServerResponse;
 import com.sofac.fxmharmony.util.AppMethods;
 import com.sofac.fxmharmony.util.AppUserID;
 import com.sofac.fxmharmony.util.ConvertorHTML;
@@ -54,6 +56,7 @@ import static com.sofac.fxmharmony.Constants.DELETE_COMMENT_REQUEST;
 import static com.sofac.fxmharmony.Constants.DELETE_POST_REQUEST;
 import static com.sofac.fxmharmony.Constants.LOAD_COMMENTS_REQUEST;
 import static com.sofac.fxmharmony.Constants.ONE_POST_DATA;
+import static com.sofac.fxmharmony.Constants.PART_AVATAR;
 import static com.sofac.fxmharmony.Constants.UPDATE_COMMENT_REQUEST;
 import static com.sofac.fxmharmony.Constants.USER_ID_PREF;
 import static com.sofac.fxmharmony.Constants.WRITE_COMMENT_REQUEST;
@@ -93,7 +96,6 @@ public class DetailPostActivity extends BaseActivity {
 
         preferences = getSharedPreferences(USER_SERVICE, MODE_PRIVATE);
         linearLayout = new LinearLayout(this);
-
 
         //ActionBar
         ActionBar actionBar = getSupportActionBar();
@@ -263,7 +265,7 @@ public class DetailPostActivity extends BaseActivity {
         View v = getLayoutInflater().inflate(R.layout.post_view_detail, null);
 
         // START AVATAR
-        Uri uri = Uri.parse(BASE_URL + Constants.PART_URL_FILE_AVATAR + postDTO.getAvatar());
+        Uri uri = Uri.parse(BASE_URL + PART_AVATAR + postDTO.getAvatar());
         ImageView avatar = (ImageView) v.findViewById(R.id.idAvatarPost);
         Glide.with(this)
                 .load(uri)
@@ -280,7 +282,7 @@ public class DetailPostActivity extends BaseActivity {
         buttonTranslatePushMessage = (TextView) v.findViewById(R.id.idTranslatePush);
         messageTranslatePushMessage = (TextView) v.findViewById(R.id.messageTranslatePushMessage);
 
-        // START IMAGE
+        // START LIST IMAGE
         LinearLayout linearLayoutPhotos = (LinearLayout) v.findViewById(R.id.idListPhotos);
 
 //        if (null != postDTO.getLinksImage() && !"".equals(postDTO.getLinksImage()) && postDTO.getLinksImage().length() > 5) {
@@ -310,7 +312,7 @@ public class DetailPostActivity extends BaseActivity {
 //        } else {
 //            linearLayoutPhotos.setVisibility(View.INVISIBLE);
 //        }
-        // END IMAGE
+        // START LIST IMAGE
 
 
 //        // START VIDEO
@@ -397,7 +399,7 @@ public class DetailPostActivity extends BaseActivity {
         messageTextView.setText(ConvertorHTML.fromHTML(message));
         clipboardManager = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
 
-                /* Translate */
+        /* Translate */
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
         TranslateOptions options = TranslateOptions.newBuilder().setApiKey(Constants.CLOUD_API_KEY).build();
@@ -432,21 +434,23 @@ public class DetailPostActivity extends BaseActivity {
 
     @Override
     protected void onResume() {
-
         super.onResume();
     }
 
     public void updateListView() {
-        new GroupExchangeOnServer<>(postDTO.getId(), true, LOAD_COMMENTS_REQUEST, this, new GroupExchangeOnServer.AsyncResponseWithAnswer() {
+        new Server<ArrayList<CommentDTO>>().getListComments(postDTO.getId(), new Server.AnswerServerResponse<ArrayList<CommentDTO>>() {
             @Override
-            public void processFinish(Boolean output, String answer) {
-                arrayListComments = (ArrayList<CommentDTO>) CommentDTO.listAll(CommentDTO.class);
-                adapterCommentsGroup = new AdapterCommentsGroup(DetailPostActivity.this, arrayListComments);
-
-                listViewComments.setAdapter(adapterCommentsGroup);
-                adapterCommentsGroup.notifyDataSetChanged();
+            public void processFinish(Boolean isSuccess, ServerResponse<ArrayList<CommentDTO>> answerServerResponse) {
+                if(isSuccess){
+                    arrayListComments = (ArrayList<CommentDTO>) CommentDTO.listAll(CommentDTO.class);
+                    adapterCommentsGroup = new AdapterCommentsGroup(DetailPostActivity.this, arrayListComments);
+                    listViewComments.setAdapter(adapterCommentsGroup);
+                    adapterCommentsGroup.notifyDataSetChanged();
+                }else{
+                    Toast.makeText(DetailPostActivity.this, getString(R.string.errorConnection), Toast.LENGTH_SHORT).show();
+                }
             }
-        }).execute();
+        });
     }
 
 
@@ -454,17 +458,14 @@ public class DetailPostActivity extends BaseActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_detail_post_update, menu);
         UserDTO userDTO = UserDTO.findById(UserDTO.class, new AppUserID(DetailPostActivity.this).getID());
-        //PermissionDTO permissionDTO = PermissionDTO.findById(PermissionDTO.class, getSharedPreferences(USER_SERVICE, MODE_PRIVATE).getLong(USER_ID_PREF, 1L));
-
-        //Timber.e("!!!!!!! permissionDTO !!!!!!! "+permissionDTO);
 
         if (userDTO.isAdmin() || postDTO.getUser_id().equals(new AppUserID(DetailPostActivity.this).getID())) {
             getMenuInflater().inflate(R.menu.menu_detail_post, menu);
         }
 
-//        if (permissionDTO.getTranslatePermission() != null && permissionDTO.getTranslatePermission()) {
-//            getMenuInflater().inflate(R.menu.menu_detail_post_translation, menu);
-//        }
+        if (userDTO.isAccessTranslate()) {
+            getMenuInflater().inflate(R.menu.menu_detail_post_translation, menu);
+        }
         return true;
     }
 
@@ -496,10 +497,7 @@ public class DetailPostActivity extends BaseActivity {
                 Intent intentTranslatePost = new Intent(this, TranslatePost.class);
                 intentTranslatePost.putExtra(ONE_POST_DATA, postDTO);
                 startActivityForResult(intentTranslatePost, 1);
-
                 return true;
-
-
             default:
                 return super.onOptionsItemSelected(item);
         }

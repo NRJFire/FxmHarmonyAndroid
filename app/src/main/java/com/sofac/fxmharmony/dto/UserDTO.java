@@ -1,5 +1,7 @@
 package com.sofac.fxmharmony.dto;
+
 import com.orm.SugarRecord;
+
 import java.io.Serializable;
 
 import static android.R.attr.type;
@@ -16,9 +18,10 @@ public class UserDTO extends SugarRecord implements Serializable {
     private Boolean visible;
     private String access;
 
-    public UserDTO(){}
+    public UserDTO() {
+    }
 
-    public UserDTO (Long id, String login, String password, String role, Boolean visible, String access) {
+    public UserDTO(Long id, String login, String password, String role, Boolean visible, String access) {
 
         setId(id);
         this.login = login;
@@ -116,6 +119,11 @@ public class UserDTO extends SugarRecord implements Serializable {
     public Boolean isAccessStaffGroup() {
         return getAccess().contains("staffgroup");
     }
+
+    public Boolean isAccessTranslate() {
+        return getAccess().contains("translate");
+    }
+
 
     public Boolean isAdmin() {
         return getRole().contains("admin");

@@ -78,7 +78,7 @@ public class NavigationActivity extends BaseActivity implements NavigationView.O
         userName = (TextView) header.findViewById(R.id.idNavDrawNameManager);
 
         viewPager = (ViewPager) findViewById(R.id.viewpager);
-        setupViewPager(viewPager);
+
 
         tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(viewPager);
@@ -89,6 +89,7 @@ public class NavigationActivity extends BaseActivity implements NavigationView.O
                 if(isSuccess) {
                     if (answerServerResponse.getDataTransferObject() != null) {
                         PostDTO.saveInTx(answerServerResponse.getDataTransferObject());
+                        setupViewPager(viewPager);
                     }
                 } else {
                     Toast.makeText(NavigationActivity.this, "Connection error", Toast.LENGTH_SHORT).show();

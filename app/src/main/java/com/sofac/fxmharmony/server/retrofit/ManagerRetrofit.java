@@ -188,7 +188,7 @@ public class ManagerRetrofit<T> {
      * Логирование данных передачи
      */
     private ServerRequest logServerRequest(ServerRequest serverRequest) {
-        Timber.e(">>>>> class:ManagerRetrofit; object:serverRequest : \n" + serverRequest);
+        Timber.e(">>>>>>>> " + serverRequest);
         return serverRequest;
     }
 
@@ -196,7 +196,7 @@ public class ManagerRetrofit<T> {
      * Логирование данных приема
      */
     private String logServerResponse(String serverResponse) {
-        Timber.e("<<<<< class:ManagerRetrofit; object:serverResponse : \n" + serverResponse);
+        Timber.e("<<<<<<<< " + serverResponse);
         return serverResponse;
     }
 
