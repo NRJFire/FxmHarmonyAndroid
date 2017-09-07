@@ -47,19 +47,17 @@ import com.sofac.fxmharmony.util.ConvertorHTML;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Locale;
-import java.util.Objects;
 
 import jp.wasabeef.glide.transformations.CropCircleTransformation;
+import timber.log.Timber;
 
 import static com.sofac.fxmharmony.Constants.BASE_URL;
 import static com.sofac.fxmharmony.Constants.DELETE_COMMENT_REQUEST;
 import static com.sofac.fxmharmony.Constants.DELETE_POST_REQUEST;
-import static com.sofac.fxmharmony.Constants.LOAD_COMMENTS_REQUEST;
 import static com.sofac.fxmharmony.Constants.ONE_POST_DATA;
 import static com.sofac.fxmharmony.Constants.PART_AVATAR;
-import static com.sofac.fxmharmony.Constants.UPDATE_COMMENT_REQUEST;
+import static com.sofac.fxmharmony.Constants.POST_ID;
 import static com.sofac.fxmharmony.Constants.USER_ID_PREF;
-import static com.sofac.fxmharmony.Constants.WRITE_COMMENT_REQUEST;
 
 public class DetailPostActivity extends BaseActivity {
 
@@ -68,7 +66,7 @@ public class DetailPostActivity extends BaseActivity {
     View headerView;
     ArrayList<CommentDTO> arrayListComments;
     ListView listViewComments;
-    PostDTO postDTO;
+    PostDTO postDTO = new PostDTO();
     EditText editTextComment;
     AdapterCommentsGroup adapterCommentsGroup;
     SharedPreferences preferences;
@@ -80,7 +78,7 @@ public class DetailPostActivity extends BaseActivity {
     ClipData clipData;
     LinearLayout linearLayout;
     Parcelable state;
-
+    TextView messageTextView;
     TextView buttonTranslatePushMessage;
     TextView messageTranslatePushMessage;
 
@@ -89,6 +87,10 @@ public class DetailPostActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail_post);
         setTitle(getString(R.string.FXM_group));
+
+        intentChangePost = new Intent(this, ChangePost.class);
+
+        postDTO= PostDTO.findById(PostDTO.class, getIntent().getLongExtra(POST_ID,1));
 
         if (state != null) {
             listViewComments.onRestoreInstanceState(state);
@@ -102,10 +104,7 @@ public class DetailPostActivity extends BaseActivity {
         actionBar.setHomeButtonEnabled(true);
         actionBar.setDisplayHomeAsUpEnabled(true);
 
-        intentChangePost = new Intent(this, ChangePost.class);
-        intent = getIntent();
 
-        postDTO = (PostDTO) intent.getSerializableExtra(ONE_POST_DATA);
 
         buttonSend = (Button) findViewById(R.id.sendComment);
         editTextComment = (EditText) findViewById(R.id.edit_text_comment);
@@ -116,7 +115,7 @@ public class DetailPostActivity extends BaseActivity {
             public void onItemClick(AdapterView<?> parent, View itemClicked, int position, long id) {
                 if (arrayListComments != null) {
                     if (position > 0) {
-                        editTextComment.append(arrayListComments.get(position - 1).getUserName() + ", ");
+                        editTextComment.append(arrayListComments.get(position - 1).getName() + ", ");
                     }
                 }
             }
@@ -127,9 +126,9 @@ public class DetailPostActivity extends BaseActivity {
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
                 if (position > 0) {
                     commentDTO = arrayListComments.get(position - 1);
-                    if (commentDTO.getServerID() != null) {
-                        DetailPostActivity.idComment = commentDTO.getServerID();
-                        if (commentDTO.getUserID() == preferences.getLong(USER_ID_PREF, 0L)) {
+                    if (commentDTO.getId() != null) {
+                        DetailPostActivity.idComment = commentDTO.getId();
+                        if (commentDTO.getUser_id() == preferences.getLong(USER_ID_PREF, 0L)) {
                             AlertDialog.Builder builder = new AlertDialog.Builder(DetailPostActivity.this);
                             builder.setItems(R.array.choice_double_click_post, new DialogInterface.OnClickListener() {
                                 @Override
@@ -138,7 +137,7 @@ public class DetailPostActivity extends BaseActivity {
                                     switch (which) {
                                         case 0: //Edit
                                             editTextComment.setText("");
-                                            editTextComment.append(commentDTO.getCommentText());
+                                            editTextComment.append(commentDTO.getBody());
                                             isCreatingComment = false;
                                             break;
                                         case 1: //Delete
@@ -170,32 +169,32 @@ public class DetailPostActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 if (!(editTextComment.getText().toString()).isEmpty()) {
-                    if (isCreatingComment) { //Создание коментария
-                        new GroupExchangeOnServer<>(new CommentDTO(1L, null, (getSharedPreferences(USER_SERVICE, MODE_PRIVATE).getLong(USER_ID_PREF, 1L)), "Name", null, editTextComment.getText().toString(), postDTO.getId(), null), true, WRITE_COMMENT_REQUEST, DetailPostActivity.this, new GroupExchangeOnServer.AsyncResponseWithAnswer() {
-                            @Override
-                            public void processFinish(Boolean isSuccess, String answer) {
-                                if (isSuccess) {
-                                    updateListView();
-                                    editTextComment.setText("");
-                                } else {
-                                    Toast.makeText(DetailPostActivity.this, R.string.create_comment_error, Toast.LENGTH_SHORT).show();
-                                }
-                            }
-                        }).execute();
-                    } else { // Редактирование коментария
-                        new GroupExchangeOnServer<>(new CommentDTO(1L, commentDTO.getServerID(), (getSharedPreferences(USER_SERVICE, MODE_PRIVATE).getLong(USER_ID_PREF, 1L)), "Name", null, editTextComment.getText().toString(), postDTO.getId(), null), true, UPDATE_COMMENT_REQUEST, DetailPostActivity.this, new GroupExchangeOnServer.AsyncResponseWithAnswer() {
-                            @Override
-                            public void processFinish(Boolean isSuccess, String answer) {
-                                if (isSuccess) {
-                                    updateListView();
-                                    editTextComment.setText("");
-                                    isCreatingComment = true;
-                                } else {
-                                    Toast.makeText(DetailPostActivity.this, R.string.edit_comment_error, Toast.LENGTH_SHORT).show();
-                                }
-                            }
-                        }).execute();
-                    }
+//                    if (isCreatingComment) { //Создание коментария
+//                        new GroupExchangeOnServer<>(new CommentDTO(1L, null, (getSharedPreferences(USER_SERVICE, MODE_PRIVATE).getLong(USER_ID_PREF, 1L)), "Name", null, editTextComment.getText().toString(), postDTO.getId(), null), true, WRITE_COMMENT_REQUEST, DetailPostActivity.this, new GroupExchangeOnServer.AsyncResponseWithAnswer() {
+//                            @Override
+//                            public void processFinish(Boolean isSuccess, String answer) {
+//                                if (isSuccess) {
+//                                    updateListView();
+//                                    editTextComment.setText("");
+//                                } else {
+//                                    Toast.makeText(DetailPostActivity.this, R.string.create_comment_error, Toast.LENGTH_SHORT).show();
+//                                }
+//                            }
+//                        }).execute();
+//                    } else { // Редактирование коментария
+//                        new GroupExchangeOnServer<>(new CommentDTO(1L, commentDTO.getServerID(), (getSharedPreferences(USER_SERVICE, MODE_PRIVATE).getLong(USER_ID_PREF, 1L)), "Name", null, editTextComment.getText().toString(), postDTO.getId(), null), true, UPDATE_COMMENT_REQUEST, DetailPostActivity.this, new GroupExchangeOnServer.AsyncResponseWithAnswer() {
+//                            @Override
+//                            public void processFinish(Boolean isSuccess, String answer) {
+//                                if (isSuccess) {
+//                                    updateListView();
+//                                    editTextComment.setText("");
+//                                    isCreatingComment = true;
+//                                } else {
+//                                    Toast.makeText(DetailPostActivity.this, R.string.edit_comment_error, Toast.LENGTH_SHORT).show();
+//                                }
+//                            }
+//                        }).execute();
+//                    }
 
                 } else {
                     Toast.makeText(DetailPostActivity.this, R.string.field_empty, Toast.LENGTH_SHORT).show();
@@ -206,7 +205,14 @@ public class DetailPostActivity extends BaseActivity {
         updateListView();
     }
 
-    public void createHeaderPost() {
+
+    public void initialHeaderPost() {
+        if (postDTO != null) {
+            listViewComments.addHeaderView(createHeaderPost(), null, false);
+        }
+    }
+
+    public View createHeaderPost() {
         headerView = createPostView(postDTO.getName(), new SimpleDateFormat("d MMM yyyy HH:mm:ss", Locale.GERMAN).format(postDTO.getDate()), postDTO.getBody_original());
         Spinner spinnerLanguage = (Spinner) headerView.findViewById(R.id.spinner_language);
 
@@ -249,16 +255,8 @@ public class DetailPostActivity extends BaseActivity {
 
             }
         });
+        return headerView;
     }
-
-    public void initialHeaderPost() {
-        if (postDTO != null) {
-            createHeaderPost();
-            listViewComments.addHeaderView(headerView, null, false);
-        }
-    }
-
-    TextView messageTextView;
 
     View createPostView(String name, String date, String message) {
         LinearLayout.LayoutParams lParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -432,18 +430,14 @@ public class DetailPostActivity extends BaseActivity {
         return linearLayout;
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-    }
-
     public void updateListView() {
+        Timber.e("updateListView()" + postDTO.toString() + postDTO.getId());
         new Server<ArrayList<CommentDTO>>().getListComments(postDTO.getId(), new Server.AnswerServerResponse<ArrayList<CommentDTO>>() {
             @Override
             public void processFinish(Boolean isSuccess, ServerResponse<ArrayList<CommentDTO>> answerServerResponse) {
                 if(isSuccess){
-                    arrayListComments = (ArrayList<CommentDTO>) CommentDTO.listAll(CommentDTO.class);
-                    adapterCommentsGroup = new AdapterCommentsGroup(DetailPostActivity.this, arrayListComments);
+                    //arrayListComments = (ArrayList<CommentDTO>) CommentDTO.listAll(CommentDTO.class);
+                    adapterCommentsGroup = new AdapterCommentsGroup(DetailPostActivity.this, answerServerResponse.getDataTransferObject());
                     listViewComments.setAdapter(adapterCommentsGroup);
                     adapterCommentsGroup.notifyDataSetChanged();
                 }else{
@@ -506,13 +500,17 @@ public class DetailPostActivity extends BaseActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == 2) {
-            Toast.makeText(this, "CHANGE!!!", Toast.LENGTH_SHORT).show();
             linearLayout.removeAllViews();
             postDTO = (PostDTO) data.getSerializableExtra(ONE_POST_DATA);
             createHeaderPost();
             updateListView();
         }
         super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
     }
 
     @Override

@@ -33,10 +33,13 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 
+import timber.log.Timber;
+
 import static android.content.Context.MODE_PRIVATE;
 import static android.content.Context.USER_SERVICE;
 import static com.sofac.fxmharmony.Constants.DELETE_POST_REQUEST;
 import static com.sofac.fxmharmony.Constants.ONE_POST_DATA;
+import static com.sofac.fxmharmony.Constants.POST_ID;
 import static com.sofac.fxmharmony.Constants.TYPE_GROUP;
 import static com.sofac.fxmharmony.Constants.USER_ID_PREF;
 
@@ -80,6 +83,15 @@ public class GroupFragment extends Fragment implements SwipeRefreshLayout.OnRefr
         recyclerViewPost.setHasFixedSize(true);
         recyclerViewPost.setLayoutManager(mLayoutManager);
 
+        postDTOs = (ArrayList<PostDTO>) PostDTO.find(PostDTO.class, "type = ?", stringTypeGroup);
+        Collections.sort(postDTOs, new Comparator<PostDTO>() {
+            public int compare(PostDTO o1, PostDTO o2) {
+                return o2.getDate().compareTo(o1.getDate());
+            }
+        });
+        adapterPostGroup = new AdapterPostGroup(getActivity(), postDTOs);
+        recyclerViewPost.setAdapter(adapterPostGroup);
+
         groupSwipeRefreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.refresh);
         groupSwipeRefreshLayout.setOnRefreshListener(this);
         setHasOptionsMenu(true);
@@ -94,12 +106,12 @@ public class GroupFragment extends Fragment implements SwipeRefreshLayout.OnRefr
             }
         });
 
-
         recyclerViewPost.addOnItemTouchListener(new RecyclerItemClickListener(getContext(), recyclerViewPost, new RecyclerItemClickListener.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
                 if (postDTOs != null) {
-                    intentDetailPostActivity.putExtra(ONE_POST_DATA, postDTOs.get(position));
+                    Timber.e("recyclerViewPost.addOnItemTouchListener -> postDTOs.get(position)   " + postDTOs.get(position).getId());
+                    intentDetailPostActivity.putExtra(POST_ID, postDTOs.get(position).getId());
                     startActivity(intentDetailPostActivity);
                 }
             }
@@ -137,14 +149,6 @@ public class GroupFragment extends Fragment implements SwipeRefreshLayout.OnRefr
                 }
             }
         }));
-        postDTOs = (ArrayList<PostDTO>) PostDTO.find(PostDTO.class, "type = ?", stringTypeGroup);
-        Collections.sort(postDTOs, new Comparator<PostDTO>() {
-            public int compare(PostDTO o1, PostDTO o2) {
-                return o2.getDate().compareTo(o1.getDate());
-            }
-        });
-        adapterPostGroup = new AdapterPostGroup(getActivity(), postDTOs);
-        recyclerViewPost.setAdapter(adapterPostGroup);
 
         return rootView;
     }
@@ -154,10 +158,12 @@ public class GroupFragment extends Fragment implements SwipeRefreshLayout.OnRefr
         new Server<ArrayList<PostDTO>>().getListPosts(stringTypeGroup, new Server.AnswerServerResponse<ArrayList<PostDTO>>() {
             @Override
             public void processFinish(Boolean isSuccess, ServerResponse<ArrayList<PostDTO>> answerServerResponse) {
-                if (answerServerResponse != null) {
+                if (isSuccess && answerServerResponse != null) {
                     PostDTO.saveInTx(answerServerResponse.getDataTransferObject());
                     groupSwipeRefreshLayout.setRefreshing(false);
                     refreshRecyclerView();
+                } else {
+                    groupSwipeRefreshLayout.setRefreshing(false);
                 }
             }
         });

@@ -187,7 +187,7 @@ public class Server<T> {
         } catch (JsonSyntaxException e) {
 
             Timber.e("Не соответствующий тип данных для парсинга JSON");
-            e.printStackTrace(); //TODO проверка на нул при ошибочном типе парсинга
+            e.printStackTrace();
             return null;
         }
     }

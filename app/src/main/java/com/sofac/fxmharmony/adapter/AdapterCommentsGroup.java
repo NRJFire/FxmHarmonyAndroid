@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.StrictMode;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -74,7 +75,7 @@ public class AdapterCommentsGroup extends BaseAdapter {
         //}
         final CommentDTO commentDTO = getCommentDTO(position);
 
-        Uri uri = Uri.parse(Constants.BASE_URL + Constants.PART_URL_FILE_AVATAR + commentDTO.getCommentUserAvatarImage());
+        Uri uri = Uri.parse(Constants.BASE_URL + Constants.PART_URL_FILE_AVATAR + commentDTO.getAvatar());
         ImageView avatar = (ImageView) view.findViewById(R.id.idCommentAvatar);
         Glide.with(ctx)
                 .load(uri)
@@ -89,12 +90,12 @@ public class AdapterCommentsGroup extends BaseAdapter {
         StrictMode.setThreadPolicy(policy);
         TranslateOptions options = TranslateOptions.newBuilder().setApiKey(Constants.CLOUD_API_KEY).build();
         Translate translate = options.getService();
-        final Translation translation = translate.translate((commentDTO.getCommentText()).replaceAll("<(.*?)>", " "), Translate.TranslateOption.targetLanguage(Locale.getDefault().getLanguage()));
+        final Translation translation = translate.translate((commentDTO.getBody()).replaceAll("<(.*?)>", " "), Translate.TranslateOption.targetLanguage(Locale.getDefault().getLanguage()));
 
         //String postComment = commentDTO.getCommentText().replaceAll("<(.*?)>", "");
-        ((TextView) view.findViewById(R.id.idNameUserComment)).setText(commentDTO.getUserName());
+        ((TextView) view.findViewById(R.id.idNameUserComment)).setText(commentDTO.getName());
         ((TextView) view.findViewById(R.id.idDateComment)).setText(new SimpleDateFormat("d MMM yyyy HH:mm", Locale.GERMAN).format(commentDTO.getDate())); //"d MMM yyyy HH:mm:ss"
-        ((TextView) view.findViewById(R.id.idMessageItemComment)).setText(commentDTO.getCommentText().replaceAll("<(.*?)>", ""));//postDTO.getPostTextOriginal().replaceAll("<(.*?)>"," ")  translation.getTranslatedText()
+        ((TextView) view.findViewById(R.id.idMessageItemComment)).setText(commentDTO.getBody().replaceAll("<(.*?)>", ""));//postDTO.getPostTextOriginal().replaceAll("<(.*?)>"," ")  translation.getTranslatedText()
 
 
         final LinearLayout linearLayout = (LinearLayout) view.findViewById(R.id.commentLiner);
@@ -103,6 +104,7 @@ public class AdapterCommentsGroup extends BaseAdapter {
 
         final TextView textMessageLink = new TextView(view.getContext());
         textMessageLink.setText("Translate");
+        textMessageLink.setGravity(Gravity.RIGHT);
         textMessageLink.setTextColor(view.getResources().getColor(R.color.commentTranslate));
         final Drawable drawable = view.getResources().getDrawable(R.drawable.verticalline);
 

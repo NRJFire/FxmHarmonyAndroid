@@ -126,7 +126,8 @@ public class PostDTO extends SugarRecord implements Serializable {
     @Override
     public String toString() {
         return "PostDTO{" +
-                "user_id=" + user_id +
+                "id=" + getId() +
+                ", user_id=" + user_id +
                 ", name='" + name + '\'' +
                 ", date='" + date + '\'' +
                 ", body_original='" + body_original + '\'' +

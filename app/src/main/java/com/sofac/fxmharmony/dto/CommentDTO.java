@@ -3,107 +3,97 @@ package com.sofac.fxmharmony.dto;
 import com.orm.SugarRecord;
 
 import java.io.Serializable;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 public class CommentDTO extends SugarRecord implements Serializable {
 
     public CommentDTO() {
     }
 
-    public CommentDTO(Long id, Long serverID, Long userID, String userName, Date date, String commentText, Long postID,  String commentUserAvatarImage) {
-        this.id = id;
-        this.userID = userID;
-        this.userName = userName;
+    public CommentDTO(Long id, Long user_id, Long post_id, String body, String name, String date, String avatar) {
+        setId(id);
+        this.user_id = user_id;
+        this.post_id = post_id;
+        this.body = body;
+        this.name = name;
         this.date = date;
-        this.commentText = commentText;
-        this.postID = postID;
-        this.commentUserAvatarImage = commentUserAvatarImage;
+        this.avatar = avatar;
     }
 
-    private transient Long id;
-    private Long serverID;
-    private Long userID;
-    private String userName;
-    private Date date;
-    private String commentText;
-    private Long postID;
-    private String commentUserAvatarImage;
+    private Long user_id;
+    private Long post_id;
+    private String body;
+    private String name;
+    private String date;
+    private String avatar;
 
-    public Long getId() {
-        return id;
+    public Long getUser_id() {
+        return user_id;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setUser_id(Long user_id) {
+        this.user_id = user_id;
     }
 
-    public Long getUserID() {
-        return userID;
+    public Long getPost_id() {
+        return post_id;
     }
 
-    public void setUserID(Long userID) {
-        this.userID = userID;
+    public void setPost_id(Long post_id) {
+        this.post_id = post_id;
+    }
+
+    public String getBody() {
+        return body;
+    }
+
+    public void setBody(String body) {
+        this.body = body;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public Date getDate() {
-        return date;
+        SimpleDateFormat dateParser = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ITALIAN);
+        try {
+            return  dateParser.parse(this.date);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
-    public void setDate(Date date) {
+    public void setDate(String date) {
         this.date = date;
     }
 
-    public String getCommentText() {
-        return commentText;
+    public String getAvatar() {
+        return avatar;
     }
 
-    public void setCommentText(String commentText) {
-        this.commentText = commentText;
-    }
-
-    public Long getPostID() {
-        return postID;
-    }
-
-    public void setPostID(Long postID) {
-        this.postID = postID;
-    }
-
-    public String getUserName() {
-        return userName;
-    }
-
-    public void setUserName(String userName) {
-        this.userName = userName;
-    }
-
-    public Long getServerID() {
-        return serverID;
-    }
-
-    public void setServerID(Long serverID) {
-        this.serverID = serverID;
-    }
-
-    public String getCommentUserAvatarImage() {
-        return commentUserAvatarImage;
-    }
-
-    public void setCommentUserAvatarImage(String commentUserAvatarImage) {
-        this.commentUserAvatarImage = commentUserAvatarImage;
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
     }
 
     @Override
     public String toString() {
         return "CommentDTO{" +
-                "id=" + id +
-                ", serverID=" + serverID +
-                ", userID=" + userID +
-                ", userName='" + userName + '\'' +
+                "id=" + getId() +
+                ", user_id=" + user_id +
+                ", post_id=" + post_id +
+                ", body='" + body + '\'' +
+                ", name='" + name + '\'' +
                 ", date=" + date +
-                ", commentText='" + commentText + '\'' +
-                ", postID=" + postID +
-                ", commentUserAvatarImage='" + commentUserAvatarImage + '\'' +
+                ", avatar='" + avatar + '\'' +
                 '}';
     }
 }
