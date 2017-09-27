@@ -3,21 +3,20 @@ package com.sofac.fxmharmony.view;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
 import android.widget.TabHost;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.sofac.fxmharmony.R;
-import com.sofac.fxmharmony.data.GroupExchangeOnServer;
 import com.sofac.fxmharmony.dto.PostDTO;
+import com.sofac.fxmharmony.server.Server;
+import com.sofac.fxmharmony.server.type.ServerResponse;
 import com.sofac.fxmharmony.util.ConvertorHTML;
 
-import static com.sofac.fxmharmony.Constants.ONE_POST_DATA;
-import static com.sofac.fxmharmony.Constants.UPDATE_POST_REQUEST;
-import static com.sofac.fxmharmony.Constants.USER_ID_PREF;
+import static com.sofac.fxmharmony.Constants.POST_ID;
 
 
 public class TranslatePost extends BaseActivity {
@@ -36,27 +35,27 @@ public class TranslatePost extends BaseActivity {
         setContentView(R.layout.translate_post);
         setTitle(getString(R.string.translate_post));
 
-        postDTO = (PostDTO) getIntent().getSerializableExtra(ONE_POST_DATA);
-        assert (postDTO == null);
+
+        postDTO = PostDTO.findById(PostDTO.class, getIntent().getLongExtra(POST_ID,0L));
         preferences = getSharedPreferences(USER_SERVICE, MODE_PRIVATE);
 
         //TextView
-//        postTextOrig = (TextView) findViewById(R.id.id_text_orig);
-//        if (postDTO.getPostTextOriginal() != null && !"".equals(postDTO.getPostTextOriginal()))
-//            postTextOrig.setText(ConvertorHTML.fromHTML(postDTO.getPostTextOriginal()));
-//
-//        //EditText
-//        postTextEng = (EditText) findViewById(R.id.id_text_eng);
-//        if (postDTO.getPostTextEn() != null && !"".equals(postDTO.getPostTextEn()))
-//            postTextEng.setText(ConvertorHTML.fromHTML(postDTO.getPostTextEn()));
-//
-//        postTextKor = (EditText) findViewById(R.id.id_text_kor);
-//        if (postDTO.getPostTextKo() != null && !"".equals(postDTO.getPostTextKo()))
-//            postTextKor.setText(ConvertorHTML.fromHTML(postDTO.getPostTextKo()));
-//
-//        postTextRus = (EditText) findViewById(R.id.id_text_rus);
-//        if (postDTO.getPostTextRu() != null && !"".equals(postDTO.getPostTextRu()))
-//            postTextRus.setText(ConvertorHTML.fromHTML(postDTO.getPostTextRu()));
+        postTextOrig = (TextView) findViewById(R.id.id_text_orig);
+        if (postDTO.getBody_original() != null && !"".equals(postDTO.getBody_original()))
+            postTextOrig.setText(ConvertorHTML.fromHTML(postDTO.getBody_original()));
+
+        //EditText
+        postTextEng = (EditText) findViewById(R.id.id_text_eng);
+        if (postDTO.getBody_en() != null && !"".equals(postDTO.getBody_en()))
+            postTextEng.setText(ConvertorHTML.fromHTML(postDTO.getBody_en()));
+
+        postTextKor = (EditText) findViewById(R.id.id_text_kor);
+        if (postDTO.getBody_ko() != null && !"".equals(postDTO.getBody_ko()))
+            postTextKor.setText(ConvertorHTML.fromHTML(postDTO.getBody_ko()));
+
+        postTextRus = (EditText) findViewById(R.id.id_text_rus);
+        if (postDTO.getBody_ru() != null && !"".equals(postDTO.getBody_ru()))
+            postTextRus.setText(ConvertorHTML.fromHTML(postDTO.getBody_ru()));
 
         TabHost tabHost = (TabHost) findViewById(android.R.id.tabhost);
 
@@ -104,41 +103,32 @@ public class TranslatePost extends BaseActivity {
         switch (item.getItemId()) {
             case R.id.send_post_button:
 
-//                postDTO.setPostTextRu(postTextRus.getText().toString());
-//                postDTO.setPostTextEn(postTextEng.getText().toString());
-//                postDTO.setPostTextKo(postTextKor.getText().toString());
-//
-//                PostDTO changePostDTO =
-//                        new PostDTO(
-//                                postDTO.getId(),
-//                                postDTO.getServerID(),
-//                                preferences.getLong(USER_ID_PREF, 0L),
-//                                postDTO.getUserName(),
-//                                null,
-//                                postDTO.getPostTextOriginal(),
-//                                ConvertorHTML.toHTML(postTextRus.getText().toString()),
-//                                ConvertorHTML.toHTML(postTextEng.getText().toString()),
-//                                ConvertorHTML.toHTML(postTextKor.getText().toString()) ,
-//                                postDTO.getLinksFile() ,
-//                                postDTO.getLinksVideo() ,
-//                                postDTO.getLinksImage() ,
-//                                postDTO.getPostUserAvatarImage(),
-//                                postDTO.getGroupType());
-//
-//                new GroupExchangeOnServer<PostDTO>(changePostDTO, true, UPDATE_POST_REQUEST, this, new GroupExchangeOnServer.AsyncResponseWithAnswer() {
-//                    @Override
-//                    public void processFinish(Boolean isSuccess , String answer) {
-//                        Intent intent = new Intent(TranslatePost.this, DetailPostActivity.class);
-//                        intent.putExtra(ONE_POST_DATA, postDTO);
-//                        setResult(2, intent);
-//                        finish();
-//                    }
-//                }).execute();
+                postDTO.setBody_ru(postTextRus.getText().toString());
+                postDTO.setBody_en(postTextEng.getText().toString());
+                postDTO.setBody_ko(postTextKor.getText().toString());
+
+                new Server<String>().updatePost(postDTO, new Server.AnswerServerResponse<String>() {
+                    @Override
+                    public void processFinish(Boolean isSuccess, ServerResponse<String> answerServerResponse) {
+                        if(isSuccess){
+                            postDTO.save();
+                            Intent intent = new Intent(TranslatePost.this, DetailPostActivity.class);
+                            setResult(2, intent);
+                            finish();
+                        }else{
+                            toastUpdateTranslateError();
+                        }
+                    }
+                });
 
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    public void toastUpdateTranslateError(){
+        Toast.makeText(this, "Can't to save translate!", Toast.LENGTH_SHORT).show();
     }
 }
 

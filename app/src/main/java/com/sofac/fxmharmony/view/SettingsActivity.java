@@ -240,7 +240,7 @@ public class SettingsActivity extends BaseActivity implements DialogInterface.On
 
             Log.i("TEST", imageFileUri.getPath());
 
-            RequestMethods.startServiceAttachLoadAvatarToUser(this, imageFileUri);
+            //RequestMethods.startServiceAttachLoadAvatarToUser(this, imageFileUri);
 
 
             Glide.with(SettingsActivity.this)

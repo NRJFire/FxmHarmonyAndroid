@@ -3,9 +3,9 @@
 
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/idNotification"
-            android:icon="@drawable/receipt"
-            android:title="Notification" />
+            android:id="@+id/idWebSiteSOFAC"
+            android:icon="@drawable/web"
+            android:title="SOFAC WebSite" />
     </group>
 
     <item android:title="@string/configuration">

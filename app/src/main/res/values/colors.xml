@@ -24,6 +24,8 @@
 
     <color name="FileName">#9b9b9b</color>
     <color name="lineView">#e6e6e6</color>
+    <color name="lineViewFiles">#e5e5e5</color>
+    <color name="lineViewDownPost">#c4c4c4</color>
 
     <color name="black">#000</color>
 

@@ -1,20 +1,31 @@
 package com.sofac.fxmharmony.dto;
 
+import android.text.TextUtils;
+
 import com.orm.SugarRecord;
+import com.sofac.fxmharmony.util.TypeFiles;
 
 import java.io.Serializable;
+import java.lang.reflect.Array;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.Locale;
+
+import timber.log.Timber;
+
+import static com.sofac.fxmharmony.Constants.SPLIT_FILES;
 
 public class PostDTO extends SugarRecord implements Serializable {
 
     public PostDTO() {
     }
 
-    public PostDTO(Long user_id, String name, String date, String body_original, String body_ru, String body_en, String body_ko, String files, String avatar, String type) throws ParseException {
-        setId(user_id);
+    public PostDTO(Long id, Long user_id, String name, String date, String body_original, String body_ru, String body_en, String body_ko, String files, String avatar, String type) {
+        setId(id);
+        this.user_id = user_id;
         this.name = name;
         this.date = date;
         this.body_original = body_original;
@@ -56,7 +67,7 @@ public class PostDTO extends SugarRecord implements Serializable {
     public Date getDate() {
         SimpleDateFormat dateParser = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ITALIAN);
         try {
-            return  dateParser.parse(this.date);
+            return dateParser.parse(this.date);
         } catch (ParseException e) {
             e.printStackTrace();
         }
@@ -99,12 +110,13 @@ public class PostDTO extends SugarRecord implements Serializable {
         this.body_ko = body_ko;
     }
 
-    public String getFiles() {
-        return files;
+    private String[] getFiles() {
+        //Timber.e("!! GET FILES !!!" + Arrays.toString(TextUtils.split(files, SPLIT_FILES)));
+        return TextUtils.split(files, SPLIT_FILES);
     }
 
-    public void setFiles(String files) {
-        this.files = files;
+    private void setFiles(String[] files) {
+        this.files = TextUtils.join(SPLIT_FILES, files);
     }
 
     public String getAvatar() {
@@ -121,6 +133,27 @@ public class PostDTO extends SugarRecord implements Serializable {
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    public ArrayList<String> getImages() {
+        return new TypeFiles(getFiles()).getImages();
+    }
+
+    public void setImages() {
+    }
+
+    public ArrayList<String> getMovies() {
+        return new TypeFiles(getFiles()).getMovies();
+    }
+
+    public void setMovies() {
+    }
+
+    public ArrayList<String> getDocs() {
+        return new TypeFiles(getFiles()).getDocs();
+    }
+
+    public void setDocs() {
     }
 
     @Override

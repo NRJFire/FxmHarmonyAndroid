@@ -44,27 +44,34 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                    android:layout_gravity="center_vertical">
 
-                    <TextView
-                        android:id="@+id/idTitleItemPost"
-                        android:layout_width="wrap_content"
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:ellipsize="end"
-                        android:maxLines="1"
-                        android:text="Title"
-                        android:textColor="@color/colorItemTitle"
-                        android:textSize="18sp"
-                        android:textStyle="bold" />
+                        android:orientation="vertical">
 
-                    <TextView
-                        android:id="@+id/idDateItemPost"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:gravity="end"
-                        android:maxLines="1"
-                        android:text="date"
-                        android:textColor="@color/colorItemDate" />
+                        <TextView
+                            android:id="@+id/idTitleItemPost"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:ellipsize="end"
+                            android:maxLines="1"
+                            android:text="Title"
+                            android:textColor="@color/colorItemTitle"
+                            android:textSize="14sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/idDateItemPost"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="end"
+                            android:maxLines="1"
+                            android:text="date"
+                            android:textColor="@color/colorItemDate"
+                            android:textSize="13sp" />
+                    </LinearLayout>
                 </LinearLayout>
 
             </LinearLayout>
@@ -73,10 +80,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:paddingBottom="15dp"
-                android:paddingEnd="15dp"
-                android:paddingStart="15dp"
-                android:paddingTop="10dp">
+                android:paddingBottom="5dp"
+                android:paddingEnd="10dp"
+                android:paddingStart="10dp"
+                android:paddingTop="5dp">
 
                 <TextView
                     android:id="@+id/idMessageItemPost"
@@ -84,22 +91,24 @@
                     android:layout_height="wrap_content"
                     android:ellipsize="end"
                     android:maxLines="5"
-                    android:textColor="@color/colorTextDarkPostDetail" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/idListFilesPostItem"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
-
+                    android:textColor="@color/colorTextDarkPostDetail"
+                    android:textSize="14sp" />
             </LinearLayout>
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/idImageCarousel"
                 android:layout_width="match_parent"
                 android:layout_height="160dp"
-                android:visibility="gone"/>
+                android:visibility="gone" />
+
+            <LinearLayout
+                android:id="@+id/idListFilesPostItem"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone">
+            </LinearLayout>
+
             <Space
                 android:layout_width="match_parent"
                 android:layout_height="20dp" />

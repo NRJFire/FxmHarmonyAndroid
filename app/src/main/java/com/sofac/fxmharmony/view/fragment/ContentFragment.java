@@ -16,6 +16,7 @@ import android.widget.ListView;
 import com.sofac.fxmharmony.R;
 import com.sofac.fxmharmony.adapter.AdapterPushListView;
 import com.sofac.fxmharmony.dto.PushMessage;
+import com.sofac.fxmharmony.view.BaseFragment;
 import com.sofac.fxmharmony.view.DetailPushMessageActivity;
 
 import java.util.ArrayList;
@@ -23,7 +24,7 @@ import java.util.ArrayList;
 import static com.orm.SugarRecord.listAll;
 import static com.sofac.fxmharmony.Constants.ONE_PUSH_MESSAGE_DATA;
 
-public class ContentFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
+public class ContentFragment extends BaseFragment implements SwipeRefreshLayout.OnRefreshListener {
 
     public Intent intentDetailTaskActivity;
     public SwipeRefreshLayout groupSwipeRefreshLayout;

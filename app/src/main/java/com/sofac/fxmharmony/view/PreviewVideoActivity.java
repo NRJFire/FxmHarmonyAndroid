@@ -68,30 +68,32 @@ public class PreviewVideoActivity extends BaseActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.idDownloadPhoto:
-                new FileLoadingTask(
-                        linkVideo,
-                        new File(Environment.getExternalStorageDirectory() + "/Download/" + nameVideo),
-                        new FileLoadingListener() {
-                            @Override
-                            public void onBegin() {
-                                Toast.makeText(PreviewVideoActivity.this, "Begin download", Toast.LENGTH_SHORT).show();
-                            }
+                if(isStoragePermissionGranted()) {
+                    new FileLoadingTask(
+                            linkVideo,
+                            new File(Environment.getExternalStorageDirectory() + "/Download/" + nameVideo),
+                            new FileLoadingListener() {
+                                @Override
+                                public void onBegin() {
+                                    Toast.makeText(PreviewVideoActivity.this, "Begin download", Toast.LENGTH_SHORT).show();
+                                }
 
-                            @Override
-                            public void onSuccess() {
-                                Toast.makeText(PreviewVideoActivity.this, "Successful download", Toast.LENGTH_SHORT).show();
-                            }
+                                @Override
+                                public void onSuccess() {
+                                    Toast.makeText(PreviewVideoActivity.this, "Successful download", Toast.LENGTH_SHORT).show();
+                                }
 
-                            @Override
-                            public void onFailure(Throwable cause) {
-                                Toast.makeText(PreviewVideoActivity.this, "Error download", Toast.LENGTH_SHORT).show();
-                            }
+                                @Override
+                                public void onFailure(Throwable cause) {
+                                    Toast.makeText(PreviewVideoActivity.this, "Error download", Toast.LENGTH_SHORT).show();
+                                }
 
-                            @Override
-                            public void onEnd() {
+                                @Override
+                                public void onEnd() {
 
-                            }
-                        }).execute();
+                                }
+                            }).execute();
+                }
                 return true;
             case android.R.id.home:
                 finish();

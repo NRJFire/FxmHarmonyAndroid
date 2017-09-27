@@ -21,13 +21,13 @@ import com.sofac.fxmharmony.util.ConvertorHTML;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.Locale;
 
 import jp.wasabeef.glide.transformations.CropCircleTransformation;
 
 import static com.sofac.fxmharmony.Constants.BASE_URL;
+import static com.sofac.fxmharmony.Constants.PART_POST;
+import static com.sofac.fxmharmony.R.string.files;
 
 public class AdapterPostGroup extends RecyclerView.Adapter<AdapterPostGroup.ViewHolder> {
     private ArrayList<PostDTO> postDTOArrayList;
@@ -69,37 +69,39 @@ public class AdapterPostGroup extends RecyclerView.Adapter<AdapterPostGroup.View
                 .bitmapTransform(new CropCircleTransformation(ctx))
                 .into(view.avatar);
 
-
         view.titleItemPost.setText(postDTO.getName());
         view.dateItemPost.setText(postDTO.getDate().toString());
         view.dateItemPost.setText(new SimpleDateFormat("d MMM yyyy", Locale.GERMAN).format(postDTO.getDate())); //"d MMM yyyy HH:mm:ss"
-        if (postDTO.getBody_original() != null)  view.messageItemPost.setText(ConvertorHTML.fromHTML(postDTO.getBody_original()));
+        if (postDTO.getBody_original() != null)
+            view.messageItemPost.setText(ConvertorHTML.fromHTML(postDTO.getBody_original()));
 
-//        if (null != postDTO.getLinksFile() && !"".equals(postDTO.getLinksFile()) && postDTO.getLinksFile().length() > 5) {
-//            view.linearLayoutFiles.setVisibility(View.VISIBLE);
-//            for (final String imageName : postDTO.getLinksFile().split(";#")) {
-//
-//                View fileItemView = inflater.inflate(R.layout.item_preview_post_file, null);
-//                TextView textView = (TextView) fileItemView.findViewById(R.id.idNameFile);
-//                textView.setText(imageName);
-//                view.linearLayoutFiles.addView(fileItemView, lParams);
-//            }
-//
-//        } else {
-//            view.linearLayoutFiles.setVisibility(View.INVISIBLE);
-//        }
+        //FILES
+        if (postDTO.getDocs().size() > 0) {
+            view.linearLayoutFiles.setVisibility(View.VISIBLE);
+            view.linearLayoutFiles.removeAllViews();
+            View fileItemView = inflater.inflate(R.layout.item_preview_post_file, null);
+            TextView textView = (TextView) fileItemView.findViewById(R.id.idNameFile);
+            if (postDTO.getDocs().size() == 1) {
+                textView.setText("" + postDTO.getDocs().get(0) + "");
+            } else if (postDTO.getDocs().size() > 1) {
+                textView.setText(postDTO.getDocs().get(0) + " and " + (postDTO.getDocs().size()-1) + " files");
+            }
+            view.linearLayoutFiles.addView(fileItemView, lParams);
+        } else {
+            view.linearLayoutFiles.setVisibility(View.INVISIBLE);
+        }
 
-        view.recyclerView.setLayoutManager(new LinearLayoutManager(ctx, LinearLayoutManager.HORIZONTAL,false));
-
-//        if (null != postDTO.getLinksImage() && !"".equals(postDTO.getLinksImage()) && postDTO.getLinksImage().length() > 5) {
-//            view.recyclerView.setVisibility(View.VISIBLE);
-//            for (String imageName : postDTO.getLinksImage().split(";#")) {
-//                listImage.add(BASE_URL + PART_URL_FILE_IMAGE_POST + imageName);
-//            }
-//            view.recyclerView.setAdapter(new AdapterGalleryGroup(listImage));
-//        } else {
-//            view.recyclerView.setVisibility(View.GONE);
-//        }
+        //PHOTO CAROUSEL
+        view.recyclerView.setLayoutManager(new LinearLayoutManager(ctx, LinearLayoutManager.HORIZONTAL, false));
+        if (postDTO.getImages().size() > 0) {
+            view.recyclerView.setVisibility(View.VISIBLE);
+            for (String imageName : postDTO.getImages()) {
+                listImage.add(BASE_URL + PART_POST + imageName);
+            }
+            view.recyclerView.setAdapter(new AdapterGalleryGroup(listImage));
+        } else {
+            view.recyclerView.setVisibility(View.GONE);
+        }
 
     }
 
@@ -116,9 +118,7 @@ public class AdapterPostGroup extends RecyclerView.Adapter<AdapterPostGroup.View
         return ((PostDTO) getItem(position));
     }
 
-
-
-    /// CLASS VIEW HOLDER
+    // CLASS VIEW HOLDER
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         LinearLayout linearLayoutFiles;

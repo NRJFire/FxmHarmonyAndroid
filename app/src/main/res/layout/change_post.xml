@@ -10,101 +10,107 @@
     tools:context="com.sofac.fxmharmony.view.CreatePost">
 
 
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+    <!--<ScrollView-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content">-->
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:orientation="vertical">
 
             <EditText
                 android:id="@+id/post_text_input"
+                android:hint="Tap here to write a story."
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="#ffffff"
+                android:layout_height="match_parent"
+                android:background="#f2f2f2"
+                android:gravity="top"
+                android:inputType="textMultiLine"
+                android:minLines="5"
+                android:layout_margin="5dp"
+                android:textSize="14sp"
                 android:padding="5dp"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
 
-            <TextView
-                android:id="@+id/image_gallery_name"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="5dp"
-                android:text="@string/images" />
+            <!--<TextView-->
+                <!--android:id="@+id/image_gallery_name"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:padding="5dp"-->
+                <!--android:text="@string/images" />-->
 
-            <HorizontalScrollView
-                android:id="@+id/horizontal_image_scroll"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+            <!--<HorizontalScrollView-->
+                <!--android:id="@+id/horizontal_image_scroll"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content">-->
 
-                <com.sofac.fxmharmony.view.customView.LinearLayoutGallery
-                    android:id="@+id/image_gallery_layout"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+                <!--<com.sofac.fxmharmony.view.customView.LinearLayoutGallery-->
+                    <!--android:id="@+id/image_gallery_layout"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:orientation="horizontal">-->
 
-                </com.sofac.fxmharmony.view.customView.LinearLayoutGallery>
+                <!--</com.sofac.fxmharmony.view.customView.LinearLayoutGallery>-->
 
-            </HorizontalScrollView>
+            <!--</HorizontalScrollView>-->
 
-            <TextView
-                android:id="@+id/video_gallery_name"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="5dp"
-                android:text="@string/videos" />
+            <!--<TextView-->
+                <!--android:id="@+id/video_gallery_name"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:padding="5dp"-->
+                <!--android:text="@string/videos" />-->
 
-            <HorizontalScrollView
-                android:id="@+id/horizontal_video_scroll"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+            <!--<HorizontalScrollView-->
+                <!--android:id="@+id/horizontal_video_scroll"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content">-->
 
-                <com.sofac.fxmharmony.view.customView.LinearLayoutGallery
-                    android:id="@+id/video_gallery_layout"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+                <!--<com.sofac.fxmharmony.view.customView.LinearLayoutGallery-->
+                    <!--android:id="@+id/video_gallery_layout"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:orientation="horizontal">-->
 
-                </com.sofac.fxmharmony.view.customView.LinearLayoutGallery>
+                <!--</com.sofac.fxmharmony.view.customView.LinearLayoutGallery>-->
 
-            </HorizontalScrollView>
+            <!--</HorizontalScrollView>-->
 
-            <TextView
-                android:id="@+id/file_gallery_name"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="5dp"
-                android:text="@string/files" />
+            <!--<TextView-->
+                <!--android:id="@+id/file_gallery_name"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:padding="5dp"-->
+                <!--android:text="@string/files" />-->
 
-            <com.sofac.fxmharmony.view.customView.LinearLayoutGallery
-                android:id="@+id/file_gallery_layout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
+            <!--<com.sofac.fxmharmony.view.customView.LinearLayoutGallery-->
+                <!--android:id="@+id/file_gallery_layout"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:orientation="vertical">-->
 
-            </com.sofac.fxmharmony.view.customView.LinearLayoutGallery>
+            <!--</com.sofac.fxmharmony.view.customView.LinearLayoutGallery>-->
 
         </LinearLayout>
-    </ScrollView>
+    <!--</ScrollView>-->
 
-    <android.support.design.widget.BottomNavigationView
-        android:id="@+id/bottom_navigation"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_marginEnd="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginStart="8dp"
-        app:itemBackground="@color/colorPrimary"
-        app:itemIconTint="@color/colorWhite"
-        app:itemTextColor="@color/colorWhite"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:menu="@menu/menu_change_post_bottom" />
+    <!--<android.support.design.widget.BottomNavigationView-->
+        <!--android:id="@+id/bottom_navigation"-->
+        <!--android:layout_width="0dp"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_alignParentBottom="true"-->
+        <!--android:layout_marginEnd="8dp"-->
+        <!--android:layout_marginLeft="8dp"-->
+        <!--android:layout_marginRight="8dp"-->
+        <!--android:layout_marginStart="8dp"-->
+        <!--app:itemBackground="@color/colorPrimary"-->
+        <!--app:itemIconTint="@color/colorWhite"-->
+        <!--app:itemTextColor="@color/colorWhite"-->
+        <!--app:layout_constraintBottom_toBottomOf="parent"-->
+        <!--app:layout_constraintLeft_toLeftOf="parent"-->
+        <!--app:layout_constraintRight_toRightOf="parent"-->
+        <!--app:menu="@menu/menu_change_post_bottom" />-->
 
 
 </android.support.constraint.ConstraintLayout>

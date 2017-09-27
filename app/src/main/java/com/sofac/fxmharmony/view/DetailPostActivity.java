@@ -1,17 +1,24 @@
 package com.sofac.fxmharmony.view;
 
+import android.Manifest;
 import android.app.AlertDialog;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Parcelable;
 import android.os.StrictMode;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -34,7 +41,6 @@ import com.google.cloud.translate.Translation;
 import com.sofac.fxmharmony.Constants;
 import com.sofac.fxmharmony.R;
 import com.sofac.fxmharmony.adapter.AdapterCommentsGroup;
-import com.sofac.fxmharmony.data.GroupExchangeOnServer;
 import com.sofac.fxmharmony.dto.CommentDTO;
 import com.sofac.fxmharmony.dto.PostDTO;
 import com.sofac.fxmharmony.dto.UserDTO;
@@ -43,7 +49,10 @@ import com.sofac.fxmharmony.server.type.ServerResponse;
 import com.sofac.fxmharmony.util.AppMethods;
 import com.sofac.fxmharmony.util.AppUserID;
 import com.sofac.fxmharmony.util.ConvertorHTML;
+import com.sofac.fxmharmony.util.FileLoadingListener;
+import com.sofac.fxmharmony.util.FileLoadingTask;
 
+import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Locale;
@@ -52,12 +61,13 @@ import jp.wasabeef.glide.transformations.CropCircleTransformation;
 import timber.log.Timber;
 
 import static com.sofac.fxmharmony.Constants.BASE_URL;
-import static com.sofac.fxmharmony.Constants.DELETE_COMMENT_REQUEST;
-import static com.sofac.fxmharmony.Constants.DELETE_POST_REQUEST;
-import static com.sofac.fxmharmony.Constants.ONE_POST_DATA;
+import static com.sofac.fxmharmony.Constants.LINK_IMAGE;
+import static com.sofac.fxmharmony.Constants.LINK_VIDEO;
+import static com.sofac.fxmharmony.Constants.NAME_IMAGE;
+import static com.sofac.fxmharmony.Constants.NAME_VIDEO;
 import static com.sofac.fxmharmony.Constants.PART_AVATAR;
+import static com.sofac.fxmharmony.Constants.PART_POST;
 import static com.sofac.fxmharmony.Constants.POST_ID;
-import static com.sofac.fxmharmony.Constants.USER_ID_PREF;
 
 public class DetailPostActivity extends BaseActivity {
 
@@ -69,7 +79,6 @@ public class DetailPostActivity extends BaseActivity {
     PostDTO postDTO = new PostDTO();
     EditText editTextComment;
     AdapterCommentsGroup adapterCommentsGroup;
-    SharedPreferences preferences;
     public static Long idComment = 0L;
     public static Boolean isCreatingComment = true;
     public static CommentDTO commentDTO;
@@ -90,20 +99,17 @@ public class DetailPostActivity extends BaseActivity {
 
         intentChangePost = new Intent(this, ChangePost.class);
 
-        postDTO= PostDTO.findById(PostDTO.class, getIntent().getLongExtra(POST_ID,1));
+        postDTO = PostDTO.findById(PostDTO.class, getIntent().getLongExtra(POST_ID, 1));
 
         if (state != null) {
             listViewComments.onRestoreInstanceState(state);
         }
-
-        preferences = getSharedPreferences(USER_SERVICE, MODE_PRIVATE);
         linearLayout = new LinearLayout(this);
 
         //ActionBar
         ActionBar actionBar = getSupportActionBar();
         actionBar.setHomeButtonEnabled(true);
         actionBar.setDisplayHomeAsUpEnabled(true);
-
 
 
         buttonSend = (Button) findViewById(R.id.sendComment);
@@ -128,7 +134,7 @@ public class DetailPostActivity extends BaseActivity {
                     commentDTO = arrayListComments.get(position - 1);
                     if (commentDTO.getId() != null) {
                         DetailPostActivity.idComment = commentDTO.getId();
-                        if (commentDTO.getUser_id() == preferences.getLong(USER_ID_PREF, 0L)) {
+                        if (commentDTO.getUser_id().equals(appUserID.getID())) {
                             AlertDialog.Builder builder = new AlertDialog.Builder(DetailPostActivity.this);
                             builder.setItems(R.array.choice_double_click_post, new DialogInterface.OnClickListener() {
                                 @Override
@@ -141,15 +147,19 @@ public class DetailPostActivity extends BaseActivity {
                                             isCreatingComment = false;
                                             break;
                                         case 1: //Delete
-                                            new GroupExchangeOnServer<>(DetailPostActivity.idComment, true, DELETE_COMMENT_REQUEST, DetailPostActivity.this, new GroupExchangeOnServer.AsyncResponseWithAnswer() {
+                                            progressBar.showView();
+                                            new Server<String>().deleteComment(commentDTO, new Server.AnswerServerResponse<String>() {
                                                 @Override
-                                                public void processFinish(Boolean isSuccess, String answer) {
+                                                public void processFinish(Boolean isSuccess, ServerResponse<String> answerServerResponse) {
                                                     if (isSuccess) {
                                                         updateListView();
                                                         Toast.makeText(DetailPostActivity.this, R.string.comment_was_delete, Toast.LENGTH_SHORT).show();
+                                                    } else {
+                                                        Toast.makeText(DetailPostActivity.this, "Error deleting!", Toast.LENGTH_SHORT).show();
                                                     }
+                                                    progressBar.dismissView();
                                                 }
-                                            }).execute();
+                                            });
                                             break;
                                     }
                                 }
@@ -168,39 +178,46 @@ public class DetailPostActivity extends BaseActivity {
         buttonSend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                progressBar.showView();
                 if (!(editTextComment.getText().toString()).isEmpty()) {
-//                    if (isCreatingComment) { //Создание коментария
-//                        new GroupExchangeOnServer<>(new CommentDTO(1L, null, (getSharedPreferences(USER_SERVICE, MODE_PRIVATE).getLong(USER_ID_PREF, 1L)), "Name", null, editTextComment.getText().toString(), postDTO.getId(), null), true, WRITE_COMMENT_REQUEST, DetailPostActivity.this, new GroupExchangeOnServer.AsyncResponseWithAnswer() {
-//                            @Override
-//                            public void processFinish(Boolean isSuccess, String answer) {
-//                                if (isSuccess) {
-//                                    updateListView();
-//                                    editTextComment.setText("");
-//                                } else {
-//                                    Toast.makeText(DetailPostActivity.this, R.string.create_comment_error, Toast.LENGTH_SHORT).show();
-//                                }
-//                            }
-//                        }).execute();
-//                    } else { // Редактирование коментария
-//                        new GroupExchangeOnServer<>(new CommentDTO(1L, commentDTO.getServerID(), (getSharedPreferences(USER_SERVICE, MODE_PRIVATE).getLong(USER_ID_PREF, 1L)), "Name", null, editTextComment.getText().toString(), postDTO.getId(), null), true, UPDATE_COMMENT_REQUEST, DetailPostActivity.this, new GroupExchangeOnServer.AsyncResponseWithAnswer() {
-//                            @Override
-//                            public void processFinish(Boolean isSuccess, String answer) {
-//                                if (isSuccess) {
-//                                    updateListView();
-//                                    editTextComment.setText("");
-//                                    isCreatingComment = true;
-//                                } else {
-//                                    Toast.makeText(DetailPostActivity.this, R.string.edit_comment_error, Toast.LENGTH_SHORT).show();
-//                                }
-//                            }
-//                        }).execute();
-//                    }
+                    if (isCreatingComment) { //Создание коментария
+
+                        new Server<String>().createComment(new CommentDTO(1L, appUserID.getID(), postDTO.getId(), editTextComment.getText().toString(), "", "", ""), new Server.AnswerServerResponse<String>() {
+                            @Override
+                            public void processFinish(Boolean isSuccess, ServerResponse<String> answerServerResponse) {
+                                if (isSuccess) {
+                                    updateListView();
+                                    editTextComment.setText("");
+                                } else {
+                                    Toast.makeText(DetailPostActivity.this, R.string.create_comment_error, Toast.LENGTH_SHORT).show();
+                                }
+                                progressBar.dismissView();
+                            }
+                        });
+
+                    } else { // Редактирование коментария
+                        commentDTO.setBody(editTextComment.getText().toString());
+                        new Server<String>().updateComment(commentDTO, new Server.AnswerServerResponse<String>() {
+                            @Override
+                            public void processFinish(Boolean isSuccess, ServerResponse<String> answerServerResponse) {
+                                if (isSuccess) {
+                                    updateListView();
+                                    editTextComment.setText("");
+                                    isCreatingComment = true;
+                                } else {
+                                    Toast.makeText(DetailPostActivity.this, R.string.edit_comment_error, Toast.LENGTH_SHORT).show();
+                                }
+                                progressBar.dismissView();
+                            }
+                        });
+                    }
 
                 } else {
                     Toast.makeText(DetailPostActivity.this, R.string.field_empty, Toast.LENGTH_SHORT).show();
                 }
             }
         });
+
         initialHeaderPost();
         updateListView();
     }
@@ -226,7 +243,7 @@ public class DetailPostActivity extends BaseActivity {
         if (!stringsSpinnerLanguage.isEmpty())
             stringsSpinnerLanguage.add(0, getString(R.string.original_spinner));
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, stringsSpinnerLanguage);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.spinner_layout, stringsSpinnerLanguage);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
         spinnerLanguage.setAdapter(adapter);
@@ -236,16 +253,16 @@ public class DetailPostActivity extends BaseActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
-                if (parent.getSelectedItem().toString() == getString(R.string.original_spinner)) {
+                if (parent.getSelectedItem().toString().equals(getString(R.string.original_spinner))) {
                     ((TextView) headerView.findViewById(R.id.idMessagePost)).setText(ConvertorHTML.fromHTML(postDTO.getBody_original()));
 
-                } else if (parent.getSelectedItem().toString() == getString(R.string.english_spinner)) {
+                } else if (parent.getSelectedItem().toString().equals(getString(R.string.english_spinner))) {
                     ((TextView) headerView.findViewById(R.id.idMessagePost)).setText(ConvertorHTML.fromHTML(postDTO.getBody_en()));
 
-                } else if (parent.getSelectedItem().toString() == getString(R.string.korean_spinner)) {
+                } else if (parent.getSelectedItem().toString().equals(getString(R.string.korean_spinner))) {
                     ((TextView) headerView.findViewById(R.id.idMessagePost)).setText(ConvertorHTML.fromHTML(postDTO.getBody_ko()));
 
-                } else if (parent.getSelectedItem().toString() == getString(R.string.russian_spinner)) {
+                } else if (parent.getSelectedItem().toString().equals(getString(R.string.russian_spinner))) {
                     ((TextView) headerView.findViewById(R.id.idMessagePost)).setText(ConvertorHTML.fromHTML(postDTO.getBody_ru()));
                 }
             }
@@ -283,116 +300,116 @@ public class DetailPostActivity extends BaseActivity {
         // START LIST IMAGE
         LinearLayout linearLayoutPhotos = (LinearLayout) v.findViewById(R.id.idListPhotos);
 
-//        if (null != postDTO.getLinksImage() && !"".equals(postDTO.getLinksImage()) && postDTO.getLinksImage().length() > 5) {
-//            for (final String imageName : postDTO.getLinksImage().split(";#")) {
-//
-//                View photoItemView = getLayoutInflater().inflate(R.layout.item_detail_post_photo, null);
-//                ImageView imageView = (ImageView) photoItemView.findViewById(R.id.idItemPhoto);
-//
-//                Uri uriImage = Uri.parse(BASE_URL + PART_URL_FILE_IMAGE_POST + imageName);
-//                Glide.with(this)
-//                        .load(uriImage)
-//                        .error(R.drawable.no_image)
-//                        .placeholder(R.drawable.no_image)
-//                        .into(imageView);
-//                linearLayoutPhotos.addView(photoItemView, lParams);
-//                photoItemView.setOnClickListener(new View.OnClickListener() {
-//                    @Override
-//                    public void onClick(View v) {
-//                        Intent intentPhoto = new Intent(DetailPostActivity.this, PreviewPhotoActivity.class);
-//                        intentPhoto.putExtra(LINK_IMAGE, ("" + BASE_URL + PART_URL_FILE_IMAGE_POST + imageName));
-//                        intentPhoto.putExtra(NAME_IMAGE, ("" + imageName));
-//                        startActivity(intentPhoto);
-//                    }
-//                });
-//            }
-//
-//        } else {
-//            linearLayoutPhotos.setVisibility(View.INVISIBLE);
-//        }
+        if (postDTO.getImages().size() > 0) {
+            for (final String imageName : postDTO.getImages()) {
+
+                View photoItemView = getLayoutInflater().inflate(R.layout.item_detail_post_photo, null);
+                ImageView imageView = (ImageView) photoItemView.findViewById(R.id.idItemPhoto);
+
+                Glide.with(this)
+                        .load(BASE_URL + PART_POST + imageName)
+                        .error(R.drawable.no_image)
+                        .placeholder(R.drawable.no_image)
+                        .into(imageView);
+                linearLayoutPhotos.addView(photoItemView, lParams);
+                photoItemView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intentPhoto = new Intent(DetailPostActivity.this, PreviewPhotoActivity.class);
+                        intentPhoto.putExtra(LINK_IMAGE, ("" + BASE_URL + PART_POST + imageName));
+                        intentPhoto.putExtra(NAME_IMAGE, ("" + imageName));
+                        startActivity(intentPhoto);
+                    }
+                });
+            }
+
+        } else {
+            linearLayoutPhotos.setVisibility(View.INVISIBLE);
+        }
         // START LIST IMAGE
 
 
-//        // START VIDEO
-//        LinearLayout linearLayoutVideos = (LinearLayout) v.findViewById(R.id.idListVideos);
-//
-//        if (null != postDTO.getLinksVideo() && !"".equals(postDTO.getLinksVideo()) && postDTO.getLinksVideo().length() > 5) {
-//            for (final String videoName : postDTO.getLinksVideo().split(";#")) {
-//
-//                View videoItemView = getLayoutInflater().inflate(R.layout.item_detail_post_video, null);
-//                ImageView imageVideoView = (ImageView) videoItemView.findViewById(R.id.idItemVideo);
-//
-//                Uri uriVideo = Uri.parse(BASE_URL + GET_POST_thumbnails_END_URL + videoName + ".png");
-//                Glide.with(this)
-//                        .load(uriVideo)
-//                        .error(R.drawable.no_video)
-//                        .placeholder(R.drawable.no_video)
-//                        .into(imageVideoView);
-//                linearLayoutVideos.addView(videoItemView, lParams);
-//
-//                videoItemView.setOnClickListener(new View.OnClickListener() {
-//                    @Override
-//                    public void onClick(View v) {
-//                        Intent intentVideo = new Intent(DetailPostActivity.this, PreviewVideoActivity.class);
-//                        intentVideo.putExtra(LINK_VIDEO, ("" + BASE_URL + GET_POST_FILES_END_URL + videoName));
-//                        intentVideo.putExtra(NAME_VIDEO, ("" + videoName));
-//                        startActivity(intentVideo);
-//                    }
-//                });
-//            }
-//
-//        } else {
-//            linearLayoutVideos.setVisibility(View.INVISIBLE);
-//        }
-//        // END VIDEO
+        // START VIDEO
+        LinearLayout linearLayoutVideos = (LinearLayout) v.findViewById(R.id.idListVideos);
+
+        if (postDTO.getMovies().size() > 0) {
+            for (final String videoName : postDTO.getMovies()) {
+
+                View videoItemView = getLayoutInflater().inflate(R.layout.item_detail_post_video, null);
+                ImageView imageVideoView = (ImageView) videoItemView.findViewById(R.id.idItemVideo);
+
+                Uri uriVideo = Uri.parse(BASE_URL + PART_POST + videoName + ".png");
+                Glide.with(this)
+                        .load(uriVideo)
+                        .error(R.drawable.no_video)
+                        .placeholder(R.drawable.no_video)
+                        .into(imageVideoView);
+                linearLayoutVideos.addView(videoItemView, lParams);
+
+                videoItemView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intentVideo = new Intent(DetailPostActivity.this, PreviewVideoActivity.class);
+                        intentVideo.putExtra(LINK_VIDEO, ("" + BASE_URL + PART_POST + videoName));
+                        intentVideo.putExtra(NAME_VIDEO, ("" + videoName));
+                        startActivity(intentVideo);
+                    }
+                });
+            }
+
+        } else {
+            linearLayoutVideos.setVisibility(View.INVISIBLE);
+        }
+        // END VIDEO
 
 
-//        // START FILES
-//        LinearLayout linearLayoutFiles = (LinearLayout) v.findViewById(R.id.idListFiles);
-//
-//        if (null != postDTO.getLinksFile() && !"".equals(postDTO.getLinksFile()) && postDTO.getLinksFile().length() > 5) {
-//            for (final String fileName : postDTO.getLinksFile().split(";#")) {
-//                View fileItemView = getLayoutInflater().inflate(R.layout.item_detail_post_file, null);
-//                TextView textView = (TextView) fileItemView.findViewById(R.id.idNameFile);
-//                textView.setText(fileName);
-//
-//                Log.e("FILES URL", BASE_URL + GET_POST_FILES_END_URL + fileName);
-//                fileItemView.setOnClickListener(new View.OnClickListener() {
-//                    @Override
-//                    public void onClick(View v) {
-//                        new FileLoadingTask(
-//                                BASE_URL + GET_POST_FILES_END_URL + fileName,
-//                                new File(Environment.getExternalStorageDirectory() + "/Download/" + fileName),
-//                                new FileLoadingListener() {
-//                                    @Override
-//                                    public void onBegin() {
-//                                        Toast.makeText(DetailPostActivity.this, "Begin download", Toast.LENGTH_SHORT).show();
-//                                    }
-//
-//                                    @Override
-//                                    public void onSuccess() {
-//                                        Toast.makeText(DetailPostActivity.this, "Successful download", Toast.LENGTH_SHORT).show();
-//                                    }
-//
-//                                    @Override
-//                                    public void onFailure(Throwable cause) {
-//                                        Toast.makeText(DetailPostActivity.this, "Error download", Toast.LENGTH_SHORT).show();
-//                                    }
-//
-//                                    @Override
-//                                    public void onEnd() {
-//
-//                                    }
-//                                }).execute();
-//                    }
-//                });
-//                linearLayoutFiles.addView(fileItemView, lParams);
-//            }
-//        } else {
-//            linearLayoutFiles.setVisibility(View.INVISIBLE);
-//        }
-//        // END FILES
+        // START FILES
+        LinearLayout linearLayoutFiles = (LinearLayout) v.findViewById(R.id.idListFiles);
 
+        if (postDTO.getDocs().size() > 0) {
+            for (final String fileName : postDTO.getDocs()) {
+                View fileItemView = getLayoutInflater().inflate(R.layout.item_detail_post_file, null);
+                TextView textView = (TextView) fileItemView.findViewById(R.id.idNameFile);
+                textView.setText(fileName);
+
+                fileItemView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (isStoragePermissionGranted()) {
+                            new FileLoadingTask(
+                                    BASE_URL + PART_POST + fileName,
+                                    new File(Environment.getExternalStorageDirectory() + "/Download/" + fileName),
+                                    new FileLoadingListener() {
+                                        @Override
+                                        public void onBegin() {
+                                            Toast.makeText(DetailPostActivity.this, "Begin download", Toast.LENGTH_SHORT).show();
+                                        }
+
+                                        @Override
+                                        public void onSuccess() {
+                                            Toast.makeText(DetailPostActivity.this, "Successful download", Toast.LENGTH_SHORT).show();
+                                        }
+
+                                        @Override
+                                        public void onFailure(Throwable cause) {
+                                            Toast.makeText(DetailPostActivity.this, "Error download", Toast.LENGTH_SHORT).show();
+                                        }
+
+                                        @Override
+                                        public void onEnd() {
+
+                                        }
+                                    }).execute();
+                        }
+                    }
+                });
+                linearLayoutFiles.addView(fileItemView, lParams);
+            }
+        } else {
+            linearLayoutFiles.setVisibility(View.INVISIBLE);
+        }
+
+        // END FILES
 
         messageTextView.setText(ConvertorHTML.fromHTML(message));
         clipboardManager = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
@@ -430,19 +447,23 @@ public class DetailPostActivity extends BaseActivity {
         return linearLayout;
     }
 
+
+
+
     public void updateListView() {
-        Timber.e("updateListView()" + postDTO.toString() + postDTO.getId());
+        progressBar.showView();
         new Server<ArrayList<CommentDTO>>().getListComments(postDTO.getId(), new Server.AnswerServerResponse<ArrayList<CommentDTO>>() {
             @Override
             public void processFinish(Boolean isSuccess, ServerResponse<ArrayList<CommentDTO>> answerServerResponse) {
-                if(isSuccess){
-                    //arrayListComments = (ArrayList<CommentDTO>) CommentDTO.listAll(CommentDTO.class);
-                    adapterCommentsGroup = new AdapterCommentsGroup(DetailPostActivity.this, answerServerResponse.getDataTransferObject());
+                if (isSuccess) {
+                    arrayListComments = answerServerResponse.getDataTransferObject();
+                    adapterCommentsGroup = new AdapterCommentsGroup(DetailPostActivity.this, arrayListComments);
                     listViewComments.setAdapter(adapterCommentsGroup);
                     adapterCommentsGroup.notifyDataSetChanged();
-                }else{
-                    Toast.makeText(DetailPostActivity.this, getString(R.string.errorConnection), Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(DetailPostActivity.this, getString(R.string.errorServer), Toast.LENGTH_SHORT).show();
                 }
+                progressBar.dismissView();
             }
         });
     }
@@ -463,6 +484,17 @@ public class DetailPostActivity extends BaseActivity {
         return true;
     }
 
+    public void changePost(Long post_id) {
+        intentChangePost.putExtra(POST_ID, post_id);
+        startActivityForResult(intentChangePost, 1);
+    }
+
+    public void translatePost(Long post_id) {
+        Intent intentTranslatePost = new Intent(this, TranslatePost.class);
+        intentTranslatePost.putExtra(POST_ID, post_id);
+        startActivityForResult(intentTranslatePost, 1);
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -473,24 +505,23 @@ public class DetailPostActivity extends BaseActivity {
                 finish();
                 return true;
             case R.id.menu_edit:
-                intentChangePost.putExtra(ONE_POST_DATA, postDTO);
-                startActivityForResult(intentChangePost, 1);
+                changePost(postDTO.getId());
                 return true;
             case R.id.menu_delete:
-                new GroupExchangeOnServer<>(postDTO.getId(), true, DELETE_POST_REQUEST, this, new GroupExchangeOnServer.AsyncResponseWithAnswer() {
+                new Server<String>().deletePost(postDTO, new Server.AnswerServerResponse<String>() {
                     @Override
-                    public void processFinish(Boolean isSuccess, String answer) {
+                    public void processFinish(Boolean isSuccess, ServerResponse<String> answerServerResponse) {
                         if (isSuccess) {
                             Toast.makeText(DetailPostActivity.this, R.string.post_was_delete, Toast.LENGTH_SHORT).show();
                             finish();
+                        } else {
+                            Toast.makeText(DetailPostActivity.this, R.string.errorServer, Toast.LENGTH_SHORT).show();
                         }
                     }
-                }).execute();
+                });
                 return true;
             case R.id.menu_translate_post:
-                Intent intentTranslatePost = new Intent(this, TranslatePost.class);
-                intentTranslatePost.putExtra(ONE_POST_DATA, postDTO);
-                startActivityForResult(intentTranslatePost, 1);
+                translatePost(postDTO.getId());
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -501,7 +532,7 @@ public class DetailPostActivity extends BaseActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == 2) {
             linearLayout.removeAllViews();
-            postDTO = (PostDTO) data.getSerializableExtra(ONE_POST_DATA);
+            postDTO = PostDTO.findById(PostDTO.class, postDTO.getId());
             createHeaderPost();
             updateListView();
         }

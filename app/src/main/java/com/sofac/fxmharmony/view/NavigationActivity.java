@@ -1,8 +1,9 @@
 package com.sofac.fxmharmony.view;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -20,31 +21,28 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.sofac.fxmharmony.Constants;
 import com.sofac.fxmharmony.R;
 import com.sofac.fxmharmony.dto.PostDTO;
-import com.sofac.fxmharmony.dto.UserDTO;
 import com.sofac.fxmharmony.server.Server;
 import com.sofac.fxmharmony.server.type.ServerResponse;
-import com.sofac.fxmharmony.util.AppMethods;
-import com.sofac.fxmharmony.util.AppUserID;
+import com.sofac.fxmharmony.util.CheckAuthorization;
 import com.sofac.fxmharmony.view.fragment.ContentFragment;
 import com.sofac.fxmharmony.view.fragment.GroupFragment;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import timber.log.Timber;
+import jp.wasabeef.glide.transformations.CropCircleTransformation;
 
-import static android.R.attr.data;
-import static com.orm.SugarRecord.findById;
-import static com.sofac.fxmharmony.Constants.APP_PREFERENCES;
-import static com.sofac.fxmharmony.Constants.IS_AUTHORIZATION;
+import static com.sofac.fxmharmony.Constants.AVATAR_IMAGE_SIZE;
 import static com.sofac.fxmharmony.Constants.TYPE_GROUP;
 
 public class NavigationActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     public Toolbar toolbar;
-    private static long backPressed;
+
     private ImageView avatarImage;
     private TextView userName;
 
@@ -59,12 +57,13 @@ public class NavigationActivity extends BaseActivity implements NavigationView.O
         setContentView(R.layout.activity_navigation);
         setTitle(getString(R.string.app_name));
 
+        progressBar.showView();
+
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
         drawer.findViewById(R.id.idNavDrawNameManager);
@@ -75,7 +74,16 @@ public class NavigationActivity extends BaseActivity implements NavigationView.O
         menu = navigationView.getMenu();
 
         avatarImage = (ImageView) header.findViewById(R.id.navAvatarImage);
+        avatarImage.setImageDrawable(getResources().getDrawable(R.drawable.logo));
+        Glide.with(this)
+                .load("https://s5.postimg.org/6zrmvcblz/avatar3.png")
+                .bitmapTransform(new CropCircleTransformation(this))
+                .error(R.drawable.no_avatar)
+                .override(AVATAR_IMAGE_SIZE, AVATAR_IMAGE_SIZE)
+                .into(avatarImage);
+
         userName = (TextView) header.findViewById(R.id.idNavDrawNameManager);
+        userName.setText(userDTO.getLogin());
 
         viewPager = (ViewPager) findViewById(R.id.viewpager);
 
@@ -86,8 +94,10 @@ public class NavigationActivity extends BaseActivity implements NavigationView.O
         new Server<ArrayList<PostDTO>>().getListPosts("", new Server.AnswerServerResponse<ArrayList<PostDTO>>() {
             @Override
             public void processFinish(Boolean isSuccess, ServerResponse<ArrayList<PostDTO>> answerServerResponse) {
+                progressBar.dismissView();
                 if(isSuccess) {
                     if (answerServerResponse.getDataTransferObject() != null) {
+                        PostDTO.deleteAll(PostDTO.class);
                         PostDTO.saveInTx(answerServerResponse.getDataTransferObject());
                         setupViewPager(viewPager);
                     }
@@ -99,23 +109,7 @@ public class NavigationActivity extends BaseActivity implements NavigationView.O
 
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        AppMethods.putAvatarIntoImageView(this, avatarImage);
-        //userName.setText(AppMethods.getUserName(this));
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (data == null) {
-            Timber.e("!!!!!! onActivityResult");
-        }
-    }
-
-
     private void setupViewPager(ViewPager viewPager) { // Заполнение ViewPager
-        UserDTO userDTO = findById(UserDTO.class, new AppUserID(this).getID());
 
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
         adapter.addFragment(new ContentFragment(), "PUSH");
@@ -148,6 +142,7 @@ public class NavigationActivity extends BaseActivity implements NavigationView.O
 
     //
     private class ViewPagerAdapter extends FragmentPagerAdapter {
+
         private final List<Fragment> mFragmentList = new ArrayList<>();
         private final List<String> mFragmentTitleList = new ArrayList<>();
 
@@ -177,28 +172,24 @@ public class NavigationActivity extends BaseActivity implements NavigationView.O
     }
 
 
-    @SuppressWarnings("StatementWithEmptyBody")
     @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
 
         switch (item.getItemId()) {
-            case R.id.idNotification:
-                tabLayout.getTabAt(0).select();
+            case R.id.idWebSiteSOFAC:
+                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(Constants.BASE_URL+"control/")));
+                //tabLayout.getTabAt(0).select();
                 item.setChecked(true);
                 break;
             case R.id.idSettingItem:
                 Intent intentSettings = new Intent(NavigationActivity.this, SettingsActivity.class);
                 startActivity(intentSettings);
+                item.setChecked(true);
                 break;
             case R.id.idExitItem:
-                Intent intentSplashActivity = new Intent(this, SplashActivity.class);
-                SharedPreferences preferences = getSharedPreferences(APP_PREFERENCES, MODE_PRIVATE);
-                SharedPreferences.Editor editor = preferences.edit();
-                editor.putBoolean(IS_AUTHORIZATION, false);
-                editor.apply();
-                intentSplashActivity.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                editor.commit();
-                startActivity(intentSplashActivity);
+                new CheckAuthorization(this).setAuthorization(false);
+                startActivity(new Intent(this, SplashActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                item.setChecked(true);
                 break;
         }
 
@@ -207,6 +198,8 @@ public class NavigationActivity extends BaseActivity implements NavigationView.O
         return true;
     }
 
+
+    private static long backPressed;
 
     @Override
     public void onBackPressed() {

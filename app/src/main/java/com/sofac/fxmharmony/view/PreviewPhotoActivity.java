@@ -58,30 +58,32 @@ public class PreviewPhotoActivity extends BaseActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.idDownloadPhoto:
-                new FileLoadingTask(
-                        linkImage,
-                        new File(Environment.getExternalStorageDirectory() + "/Download/" + nameImage),
-                        new FileLoadingListener() {
-                            @Override
-                            public void onBegin() {
-                                Toast.makeText(PreviewPhotoActivity.this, "Begin download", Toast.LENGTH_SHORT).show();
-                            }
+                if(isStoragePermissionGranted()) {
+                    new FileLoadingTask(
+                            linkImage,
+                            new File(Environment.getExternalStorageDirectory() + "/Download/" + nameImage),
+                            new FileLoadingListener() {
+                                @Override
+                                public void onBegin() {
+                                    Toast.makeText(PreviewPhotoActivity.this, "Begin download", Toast.LENGTH_SHORT).show();
+                                }
 
-                            @Override
-                            public void onSuccess() {
-                                Toast.makeText(PreviewPhotoActivity.this, "Successful download", Toast.LENGTH_SHORT).show();
-                            }
+                                @Override
+                                public void onSuccess() {
+                                    Toast.makeText(PreviewPhotoActivity.this, "Successful download", Toast.LENGTH_SHORT).show();
+                                }
 
-                            @Override
-                            public void onFailure(Throwable cause) {
-                                Toast.makeText(PreviewPhotoActivity.this, "Error download", Toast.LENGTH_SHORT).show();
-                            }
+                                @Override
+                                public void onFailure(Throwable cause) {
+                                    Toast.makeText(PreviewPhotoActivity.this, "Error download", Toast.LENGTH_SHORT).show();
+                                }
 
-                            @Override
-                            public void onEnd() {
+                                @Override
+                                public void onEnd() {
 
-                            }
-                        }).execute();
+                                }
+                            }).execute();
+                }
                 return true;
             case android.R.id.home:
                 finish();

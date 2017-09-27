@@ -26,7 +26,7 @@ public class UserDTO extends SugarRecord implements Serializable {
         setId(id);
         this.login = login;
         this.password = password;
-        this.role = role;
+        this.role = role; // manager;admin;staff,customer
         this.visible = visible;
         this.access = access;
     }
@@ -123,7 +123,6 @@ public class UserDTO extends SugarRecord implements Serializable {
     public Boolean isAccessTranslate() {
         return getAccess().contains("translate");
     }
-
 
     public Boolean isAdmin() {
         return getRole().contains("admin");

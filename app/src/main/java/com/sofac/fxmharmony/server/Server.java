@@ -18,7 +18,8 @@ import com.sofac.fxmharmony.server.type.ServerResponse;
 
 import timber.log.Timber;
 
-import static com.sofac.fxmharmony.view.fragment.GroupFragment.postDTO;
+import static com.sofac.fxmharmony.view.DetailPostActivity.commentDTO;
+
 
 /**
  * Created by Maxim on 03.08.2017.
@@ -55,7 +56,7 @@ public class Server<T> {
     /**
      * Get correct VERSION from Server
      */
-    public void getCorrectVersion(AnswerServerResponse<T> async) {
+    public void getCorrectVersion(AnswerServerResponse<T> async) { //Change name request() / Change data in method parameters
         answerServerResponse = async;
         new ManagerRetrofit<String>().sendRequest("", new Object() {// Change type Object sending / Change data
         }.getClass().getEnclosingMethod().getName(), new ManagerRetrofit.AsyncAnswerString() {
@@ -113,12 +114,12 @@ public class Server<T> {
 
     public void getListComments(Long postId, AnswerServerResponse<T> async) {
         answerServerResponse = async;
-        new ManagerRetrofit<Long>().sendRequest(postId, new Object() {// Change type Object sending / Change data
+        new ManagerRetrofit<Long>().sendRequest(postId, new Object() {// Change (type sending) / (data sending)
         }.getClass().getEnclosingMethod().getName(), new ManagerRetrofit.AsyncAnswerString() {
             @Override
             public void processFinish(Boolean isSuccess, String answerString) {
                 if (isSuccess) {
-                    Type typeAnswer = new TypeToken<ServerResponse<ArrayList<CommentDTO>>>() { //Change type response
+                    Type typeAnswer = new TypeToken<ServerResponse<ArrayList<CommentDTO>>>() { //Change type response(тип ответа)
                     }.getType();
                     tryParsing(answerString, typeAnswer);
                 } else {
@@ -131,12 +132,12 @@ public class Server<T> {
     /**   */
     public void getListPosts(String stringTypeGroup, AnswerServerResponse<T> async) {
         answerServerResponse = async;
-        new ManagerRetrofit<String>().sendRequest(stringTypeGroup, new Object() {// Change type Object sending / Change data
+        new ManagerRetrofit<String>().sendRequest(stringTypeGroup, new Object() {// Change (type sending) / (data sending)
         }.getClass().getEnclosingMethod().getName(), new ManagerRetrofit.AsyncAnswerString() {
             @Override
             public void processFinish(Boolean isSuccess, String answerString) {
                 if (isSuccess) {
-                    Type typeAnswer = new TypeToken<ServerResponse<List<PostDTO>>>() { //Change type response
+                    Type typeAnswer = new TypeToken<ServerResponse<List<PostDTO>>>() { //Change type response(тип ответа)
                     }.getType();
                     tryParsing(answerString, typeAnswer);
                 } else {
@@ -147,29 +148,114 @@ public class Server<T> {
     }
 
     /**   */
-    public void createPost() {
+    public void createPost(PostDTO postDTO, AnswerServerResponse<T> async) {
+        answerServerResponse = async;
+        new ManagerRetrofit<PostDTO>().sendRequest(postDTO, new Object() {// Change (type sending) / (data sending)
+        }.getClass().getEnclosingMethod().getName(), new ManagerRetrofit.AsyncAnswerString() {
+            @Override
+            public void processFinish(Boolean isSuccess, String answerString) {
+                if (isSuccess) {
+                    Type typeAnswer = new TypeToken<ServerResponse>() { //Change type response(тип ответа)
+                    }.getType();
+                    tryParsing(answerString, typeAnswer);
+                } else {
+                    answerServerResponse.processFinish(false, null);
+                }
+            }
+        });
+    }
+
+
+    /**   */
+    public void updatePost(PostDTO postDTO, AnswerServerResponse<T> async) {
+        answerServerResponse = async;
+        new ManagerRetrofit<PostDTO>().sendRequest(postDTO, new Object() {// Change (type sending) / (data sending)
+        }.getClass().getEnclosingMethod().getName(), new ManagerRetrofit.AsyncAnswerString() {
+            @Override
+            public void processFinish(Boolean isSuccess, String answerString) {
+                if (isSuccess) {
+                    Type typeAnswer = new TypeToken<ServerResponse>() { //Change type response(тип ответа)
+                    }.getType();
+                    tryParsing(answerString, typeAnswer);
+                } else {
+                    answerServerResponse.processFinish(false, null);
+                }
+            }
+        });
     }
 
     /**   */
-    public void createComment() {
+    public void deletePost(PostDTO postDTO, AnswerServerResponse<T> async) {
+        answerServerResponse = async;
+        new ManagerRetrofit<Long>().sendRequest(postDTO.getId(), new Object() {// Change (type sending) / (data sending)
+        }.getClass().getEnclosingMethod().getName(), new ManagerRetrofit.AsyncAnswerString() {
+            @Override
+            public void processFinish(Boolean isSuccess, String answerString) {
+                if (isSuccess) {
+                    Type typeAnswer = new TypeToken<ServerResponse>() { //Change type response(тип ответа)
+                    }.getType();
+                    tryParsing(answerString, typeAnswer);
+                } else {
+                    answerServerResponse.processFinish(false, null);
+                }
+            }
+        });
     }
 
-
-    /**   */
-    public void updatePost() {
+    /**
+     * COMMENT
+     */
+    public void createComment(CommentDTO commentDTO, AnswerServerResponse<T> async) {
+        answerServerResponse = async;
+        new ManagerRetrofit<CommentDTO>().sendRequest(commentDTO, new Object() {// Change (type sending) / (data sending)
+        }.getClass().getEnclosingMethod().getName(), new ManagerRetrofit.AsyncAnswerString() {
+            @Override
+            public void processFinish(Boolean isSuccess, String answerString) {
+                if (isSuccess) {
+                    Type typeAnswer = new TypeToken<ServerResponse>() { //Change type response(тип ответа)
+                    }.getType();
+                    tryParsing(answerString, typeAnswer);
+                } else {
+                    answerServerResponse.processFinish(false, null);
+                }
+            }
+        });
     }
 
     /**   */
-    public void updateComment() {
+    public void updateComment(CommentDTO commentDTO, AnswerServerResponse<T> async) {
+        answerServerResponse = async;
+        new ManagerRetrofit<CommentDTO>().sendRequest(commentDTO, new Object() {// Change (type sending) / (data sending)
+        }.getClass().getEnclosingMethod().getName(), new ManagerRetrofit.AsyncAnswerString() {
+            @Override
+            public void processFinish(Boolean isSuccess, String answerString) {
+                if (isSuccess) {
+                    Type typeAnswer = new TypeToken<ServerResponse>() { //Change type response(тип ответа)
+                    }.getType();
+                    tryParsing(answerString, typeAnswer);
+                } else {
+                    answerServerResponse.processFinish(false, null);
+                }
+            }
+        });
     }
 
-
     /**   */
-    public void deletePost() {
-    }
-
-    /**   */
-    public void deleteComment() {
+    public void deleteComment(CommentDTO commentDTO, AnswerServerResponse<T> async) {
+        answerServerResponse = async;
+        new ManagerRetrofit<Long>().sendRequest(commentDTO.getId(), new Object() {// Change (type sending) / (data sending)
+        }.getClass().getEnclosingMethod().getName(), new ManagerRetrofit.AsyncAnswerString() {
+            @Override
+            public void processFinish(Boolean isSuccess, String answerString) {
+                if (isSuccess) {
+                    Type typeAnswer = new TypeToken<ServerResponse>() { //Change type response(тип ответа)
+                    }.getType();
+                    tryParsing(answerString, typeAnswer);
+                } else {
+                    answerServerResponse.processFinish(false, null);
+                }
+            }
+        });
     }
 
     private void tryParsing(String answerString, Type typeAnswer) {

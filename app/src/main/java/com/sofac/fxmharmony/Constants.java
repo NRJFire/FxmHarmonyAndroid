@@ -23,8 +23,10 @@ public class Constants {
     public final static String PUSH_MESSAGES_STATE = "PUSH_MESSAGES_STATE";
 
     //public final static String BASE_URL = "http://52.211.242.225:8080/"; // a.sofac.kr
+    //public final static String BASE_URL = "http://www.sofac.kr/"; // http://swfac.kr/
     //public final static String BASE_URL = "http://52.57.116.160:8080/"; //Test server
-    public final static String BASE_URL = "http://192.168.1.25/"; //Zegna
+    public final static String BASE_URL = "http://192.168.1.4/"; //Zegna
+    //public final static String BASE_URL = "http://192.168.1.5/"; //FreeMax
     //public final static String BASE_URL = "http://192.168.1.2:8080/"; //Maxx
 
     public final static String PART_CONTROLLER = "data/ajax/request.php"; //Part app controller php
@@ -35,6 +37,10 @@ public class Constants {
     public final static String PART_POST = "/data/files/post/"; //Part post
     public final static String PART_TOSS = "/data/files/toss/"; //Part toss
     public final static String PART_AVATAR = "/data/files/avatar/"; //Part toss
+
+    public final static String SPLIT_FILES = ";"; //Split files from server
+
+
 
     public final static String GET_POST_FILES_END_URL = "softwarefactoryadmin/post/";
 
