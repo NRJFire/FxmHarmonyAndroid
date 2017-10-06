@@ -112,11 +112,11 @@ public class ManagerRetrofit<T> {
 
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
+                t.printStackTrace();
                 answerString.processFinish(false, null);
             }
         });
     }
-
 
     /**
      * String
@@ -144,6 +144,7 @@ public class ManagerRetrofit<T> {
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
                 answerString.processFinish(false, null);
+                t.printStackTrace();
             }
         });
     }

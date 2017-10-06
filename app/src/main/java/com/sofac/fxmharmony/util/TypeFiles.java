@@ -20,10 +20,12 @@ public class TypeFiles {
         return arrayListImages;
     }
 
+    //mp4 3gp
+    //if (mov.length()>4 &&getMimeType(mov).contains("video/"))
     public ArrayList<String> getMovies() {
         ArrayList<String> arrayListMovies = new ArrayList<>();
         for (String mov : files) {
-            if (mov.length()>4 &&getMimeType(mov).contains("video/"))
+            if (mov.length()>4 &&(getMimeType(mov).contains("mp4")||getMimeType(mov).contains("3gp")))
                 arrayListMovies.add(mov);
         }
         return arrayListMovies;
@@ -32,7 +34,7 @@ public class TypeFiles {
     public ArrayList<String> getDocs() {
         ArrayList<String> arrayListDocs = new ArrayList<>();
         for (String doc : files) {
-            if (doc.length()>4 &&!getMimeType(doc).contains("image/") && !getMimeType(doc).contains("video/"))
+            if (doc.length()>4 &&!getMimeType(doc).contains("image/") && !(getMimeType(doc).contains("mp4")||getMimeType(doc).contains("3gp")))
                 arrayListDocs.add(doc);
         }
         return arrayListDocs;

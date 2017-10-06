@@ -25,6 +25,7 @@ import com.sofac.fxmharmony.server.retrofit.ServiceGenerator;
 import com.sofac.fxmharmony.server.retrofit.ServiceRetrofit;
 import com.sofac.fxmharmony.server.type.ServerResponse;
 import com.sofac.fxmharmony.util.PathUtil;
+import com.sofac.fxmharmony.view.BaseActivity;
 
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
@@ -35,6 +36,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import timber.log.Timber;
 
+import static com.sofac.fxmharmony.R.drawable.file;
 import static com.sofac.fxmharmony.view.DetailPostActivity.commentDTO;
 
 
@@ -182,12 +184,11 @@ public class Server<T> {
 //            }
 //        });
 //    }
-
-    public void createPost(PostDTO postDTO, ArrayList<Uri> uriArrayList, Context context, AnswerServerResponse<T> async) {
+    public void createPost(PostDTO postDTO, ArrayList<MultipartBody.Part> listMultipartBody, Context context, AnswerServerResponse<T> async) {
         answerServerResponse = async;
 
         new ManagerRetrofit<PostDTO>().sendMultiPartRequest(postDTO, new Object() {// Change (type sending) / (data sending)
-        }.getClass().getEnclosingMethod().getName(),generateMultiPartList(uriArrayList,context), new ManagerRetrofit.AsyncAnswerString() {
+        }.getClass().getEnclosingMethod().getName(), listMultipartBody, new ManagerRetrofit.AsyncAnswerString() {
             @Override
             public void processFinish(Boolean isSuccess, String answerString) {
                 if (isSuccess) {

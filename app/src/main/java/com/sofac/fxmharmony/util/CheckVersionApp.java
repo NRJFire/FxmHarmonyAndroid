@@ -53,7 +53,7 @@ public class CheckVersionApp {
                             builder.setCancelable(false);
                             builder.setOnCancelListener(null);
                             builder.setTitle("Check version");
-                            builder.setMessage("This is very important version and you can't use this app. Please update your application from PlayMarket.\n \nNew version: " + serverResponse.getDataTransferObject().getVersion_name() + "\nYour version: " + versionName);
+                            builder.setMessage("This is important update, you can't use app. Please update your application from PlayMarket.\n \nNew version: " + serverResponse.getDataTransferObject().getVersion_name() + "\nYour version: " + versionName);
                             builder.setPositiveButton("Update from PlayMarket", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {

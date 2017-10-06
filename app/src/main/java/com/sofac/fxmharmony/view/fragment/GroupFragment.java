@@ -132,10 +132,11 @@ public class GroupFragment extends BaseFragment implements SwipeRefreshLayout.On
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             switch (which) {
-                                case 0: // Edit
-                                    changePost(GroupFragment.idPost);
-                                    break;
-                                case 1: // Delete
+//                                case 0: // Edit
+//                                    changePost(GroupFragment.idPost);
+//                                    break;
+                                case 0: // Delete
+                                    Timber.e("Click delete");
                                     deletePost();
                                     break;
                             }
@@ -151,8 +152,7 @@ public class GroupFragment extends BaseFragment implements SwipeRefreshLayout.On
 
     public void loadUpdate() {
         PostDTO.deleteAll(PostDTO.class, "type = ?", stringTypeGroup);
-        //new Server<ArrayList<PostDTO>>().getListPosts(stringTypeGroup, new Server.AnswerServerResponse<ArrayList<PostDTO>>() {
-        new Server<ArrayList<PostDTO>>().getListPosts("", new Server.AnswerServerResponse<ArrayList<PostDTO>>() {
+        new Server<ArrayList<PostDTO>>().getListPosts(stringTypeGroup, new Server.AnswerServerResponse<ArrayList<PostDTO>>() {
             @Override
             public void processFinish(Boolean isSuccess, ServerResponse<ArrayList<PostDTO>> answerServerResponse) {
                 if (isSuccess && answerServerResponse != null) {

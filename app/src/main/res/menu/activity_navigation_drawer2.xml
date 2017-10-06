@@ -10,10 +10,10 @@
 
     <item android:title="@string/configuration">
         <menu>
-            <item
-                android:id="@+id/idSettingItem"
-                android:icon="@drawable/ic_menu_manage"
-                android:title="@string/settings" />
+            <!--<item-->
+                <!--android:id="@+id/idSettingItem"-->
+                <!--android:icon="@drawable/ic_menu_manage"-->
+                <!--android:title="@string/settings" />-->
             <item
                 android:id="@+id/idExitItem"
                 android:icon="@drawable/exit_to_app"

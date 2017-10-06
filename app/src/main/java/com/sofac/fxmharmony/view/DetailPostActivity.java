@@ -506,9 +506,9 @@ public class DetailPostActivity extends BaseActivity {
             case android.R.id.home:
                 finish();
                 return true;
-            case R.id.menu_edit:
-                changePost(postDTO.getId());
-                return true;
+//            case R.id.menu_edit:
+//                changePost(postDTO.getId());
+//                return true;
             case R.id.menu_delete:
                 new Server<String>().deletePost(postDTO, new Server.AnswerServerResponse<String>() {
                     @Override

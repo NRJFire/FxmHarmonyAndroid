@@ -59,7 +59,7 @@ public class AdapterPostGroup extends RecyclerView.Adapter<AdapterPostGroup.View
 
         LinearLayout.LayoutParams lParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);///////////////
 
-        Uri uri = Uri.parse(BASE_URL + Constants.PART_URL_FILE_AVATAR + postDTO.getAvatar());
+        Uri uri = Uri.parse(BASE_URL + Constants.PART_AVATAR + postDTO.getAvatar());
 
         Glide.with(ctx)
                 .load(uri)
@@ -88,7 +88,7 @@ public class AdapterPostGroup extends RecyclerView.Adapter<AdapterPostGroup.View
             }
             view.linearLayoutFiles.addView(fileItemView, lParams);
         } else {
-            view.linearLayoutFiles.setVisibility(View.INVISIBLE);
+            view.linearLayoutFiles.setVisibility(View.GONE);
         }
 
         //PHOTO CAROUSEL

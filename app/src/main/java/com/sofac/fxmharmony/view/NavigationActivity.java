@@ -181,11 +181,11 @@ public class NavigationActivity extends BaseActivity implements NavigationView.O
                 //tabLayout.getTabAt(0).select();
                 item.setChecked(true);
                 break;
-            case R.id.idSettingItem:
-                Intent intentSettings = new Intent(NavigationActivity.this, SettingsActivity.class);
-                startActivity(intentSettings);
-                item.setChecked(true);
-                break;
+//            case R.id.idSettingItem:
+//                Intent intentSettings = new Intent(NavigationActivity.this, SettingsActivity.class);
+//                startActivity(intentSettings);
+//                item.setChecked(true);
+//                break;
             case R.id.idExitItem:
                 new CheckAuthorization(this).setAuthorization(false);
                 startActivity(new Intent(this, SplashActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
