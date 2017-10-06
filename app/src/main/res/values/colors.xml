@@ -12,6 +12,7 @@
     <color name="colorItemContext">#979797</color>
     <color name="colorBGItemNoRead">#e6e6e6</color>
 
+
     <color name="tabsScrollColor">#004d40</color>
 
     <color name="transparent">#00000000</color>
@@ -33,6 +34,9 @@
     <color name="commentTranslate">#0992a9</color>
 
 
-
+    <color name="white">#fafafa</color>
+    <color name="white_pressed">#f1f1f1</color>
+    <color name="black_semi_transparent">#B2000000</color>
+    <color name="half_black">#808080</color>
 
 </resources>

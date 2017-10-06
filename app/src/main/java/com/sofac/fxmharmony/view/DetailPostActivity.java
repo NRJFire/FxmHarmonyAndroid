@@ -99,7 +99,9 @@ public class DetailPostActivity extends BaseActivity {
 
         intentChangePost = new Intent(this, ChangePost.class);
 
-        postDTO = PostDTO.findById(PostDTO.class, getIntent().getLongExtra(POST_ID, 1));
+        Long id_post = getIntent().getLongExtra(POST_ID, 1);
+        postDTO = PostDTO.findById(PostDTO.class, id_post);
+        Timber.e(postDTO.toString());
 
         if (state != null) {
             listViewComments.onRestoreInstanceState(state);
@@ -279,6 +281,8 @@ public class DetailPostActivity extends BaseActivity {
         LinearLayout.LayoutParams lParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         View v = getLayoutInflater().inflate(R.layout.post_view_detail, null);
 
+        Timber.e(BASE_URL + PART_AVATAR + postDTO.getAvatar());
+
         // START AVATAR
         Uri uri = Uri.parse(BASE_URL + PART_AVATAR + postDTO.getAvatar());
         ImageView avatar = (ImageView) v.findViewById(R.id.idAvatarPost);
@@ -446,8 +450,6 @@ public class DetailPostActivity extends BaseActivity {
         linearLayout.addView(v);
         return linearLayout;
     }
-
-
 
 
     public void updateListView() {

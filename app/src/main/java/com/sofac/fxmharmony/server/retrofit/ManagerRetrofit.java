@@ -9,7 +9,11 @@ import com.sofac.fxmharmony.server.type.ServerResponse;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -44,8 +48,7 @@ public class ManagerRetrofit<T> {
 
     /**
      * Иницалиазация сервиса передачи
-     * */
-    {
+     * */ {
         Gson gson = new GsonBuilder()
                 .setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
                 .create();
@@ -71,6 +74,49 @@ public class ManagerRetrofit<T> {
         serverRequest = new ServerRequest(requestType, object);
         serviceRetrofit.getData(logServerRequest(serverRequest)).enqueue(responseBodyCallback);
     }
+
+    /**
+     * Get Callback<ResponseBody> for this Request;
+     */
+    @SuppressWarnings("unchecked")
+    public void sendMultiPartRequest(T object, String requestType, ArrayList<MultipartBody.Part> partArrayList, AsyncAnswerString asyncAnswer) {
+        serverRequest = new ServerRequest(requestType, object);
+        answerString = asyncAnswer;
+
+        GsonBuilder builder = new GsonBuilder();
+        Gson gson = builder.create();
+
+        ServiceRetrofit serviceUploading = ServiceGenerator.createService(ServiceRetrofit.class);
+        // finally, execute the request
+        Call<ResponseBody> call = serviceUploading.sendMultiPartRequest(
+                RequestBody.create(
+                        MediaType.parse("text/plain"),
+                        gson.toJson(serverRequest)),
+                partArrayList);
+
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                try {
+                    serverResponse = logServerResponse(response.body().string());
+                    if (serverResponseSuccess.equals(getServerResponseStringFromJSON(serverResponse).getResponseStatus())) {
+                        answerString.processFinish(true, serverResponse);
+                    } else {
+                        answerString.processFinish(false, null);
+                    }
+                } catch (IOException e) {
+                    answerString.processFinish(false, null);
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                answerString.processFinish(false, null);
+            }
+        });
+    }
+
 
     /**
      * String
@@ -103,68 +149,6 @@ public class ManagerRetrofit<T> {
     }
 
 
-//    /**
-//     * ServerResponse<String>
-//     * Get AsyncAnswer with True(SUCCESS) or False(ERROR) and (AsyncAnswerServerResponseString asyncAnswer <= body response) for this Request;
-//     */
-//    public void sendRequest(T object, String requestType, AsyncAnswerServerResponseString asyncAnswer) {
-//        answerServerResponseString = asyncAnswer;
-//
-//        sendRequest(object, requestType, new Callback<ResponseBody>() {
-//            @Override
-//            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-//                try {
-//                    serverResponse = logServerResponse(response.body().string());
-//                    if (!serverResponseError.equals(getServerResponseStringFromJSON(serverResponse).getResponseStatus())) {
-//                        answerServerResponseString.processFinish(true, getServerResponseStringFromJSON(serverResponse));
-//                    } else {
-//                        answerServerResponseString.processFinish(false, null);
-//                    }
-//                } catch (IOException e) {
-//                    answerServerResponseString.processFinish(false, null);
-//                    e.printStackTrace();
-//                }
-//            }
-//
-//            @Override
-//            public void onFailure(Call<ResponseBody> call, Throwable t) {
-//                answerServerResponseString.processFinish(false, null);
-//            }
-//        });
-//    }
-
-
-//    /**
-//     * ServerResponse
-//     * Get AsyncAnswer with True(SUCCESS) or False(ERROR) and (AsyncAnswerServerResponse asyncAnswer <= body response) for this Request;
-//     */
-//    public void sendRequest(T object, String requestType, final Type typeObjectResponse, AsyncAnswerServerResponse asyncAnswer) {
-//        answerServerResponse = asyncAnswer;
-//
-//        sendRequest(object, requestType, new Callback<ResponseBody>() {
-//            @Override
-//            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-//                try {
-//                    serverResponse = logServerResponse(response.body().string());
-//                    if (!serverResponseError.equals(getServerResponseStringFromJSON(serverResponse).getResponseStatus())) {
-//                        answerServerResponse.processFinish(true, getServerResponseObjectFromJSON(serverResponse, typeObjectResponse));
-//                    } else {
-//                        answerServerResponse.processFinish(false, null);
-//                    }
-//                } catch (IOException e) {
-//                    answerServerResponse.processFinish(false, null);
-//                    e.printStackTrace();
-//                }
-//            }
-//
-//            @Override
-//            public void onFailure(Call<ResponseBody> call, Throwable t) {
-//                answerServerResponse.processFinish(false, null);
-//            }
-//        });
-//    }
-
-
     /**
      * //////// Вспомогательные методы ////////
      */
@@ -180,7 +164,7 @@ public class ManagerRetrofit<T> {
         } catch (JsonSyntaxException e) {
             e.printStackTrace();
         }
-        return new ServerResponse<>(serverResponseError,"");
+        return new ServerResponse<>(serverResponseError, "");
     }
 
 

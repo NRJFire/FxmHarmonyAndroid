@@ -29,8 +29,7 @@ public class Constants {
     //public final static String BASE_URL = "http://192.168.1.5/"; //FreeMax
     //public final static String BASE_URL = "http://192.168.1.2:8080/"; //Maxx
 
-    public final static String PART_UPLOAD_FILES = "upload.php"; //Part app controller php
-    //public final static String PART_CONTROLLER = "data/ajax/request.php"; //Part app controller php
+    public final static String PART_CONTROLLER = "data/ajax/request.php"; //Part app controller php
 
     //File path
     public final static String PART_ESTIMATE = "/data/files/estimate/"; //Part estimate

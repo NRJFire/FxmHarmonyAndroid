@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:fab="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -10,107 +11,271 @@
     tools:context="com.sofac.fxmharmony.view.CreatePost">
 
 
-    <!--<ScrollView-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content">-->
+    <ScrollView
+        android:id="@+id/idScrollViewEditPost"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
         <LinearLayout
+            android:id="@+id/relativeLayout"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="vertical">
 
             <EditText
                 android:id="@+id/post_text_input"
-                android:hint="Tap here to write a story."
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="#f2f2f2"
-                android:gravity="top"
-                android:inputType="textMultiLine"
-                android:minLines="5"
+                android:layout_height="wrap_content"
                 android:layout_margin="5dp"
-                android:textSize="14sp"
+                android:background="#ffffff"
+                android:gravity="top"
+                android:hint="Tap here to write a story."
+                android:inputType="textMultiLine"
+                android:maxLines="99999"
+                android:minLines="6"
                 android:padding="5dp"
-                android:textAppearance="?android:attr/textAppearanceMedium" />
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textSize="14sp">
+
+            </EditText>
 
             <!--<TextView-->
-                <!--android:id="@+id/image_gallery_name"-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:padding="5dp"-->
-                <!--android:text="@string/images" />-->
+            <!--android:id="@+id/image_gallery_name"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:padding="5dp"-->
+            <!--android:text="@string/images" />-->
 
             <!--<HorizontalScrollView-->
-                <!--android:id="@+id/horizontal_image_scroll"-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="wrap_content">-->
-
-                <!--<com.sofac.fxmharmony.view.customView.LinearLayoutGallery-->
-                    <!--android:id="@+id/image_gallery_layout"-->
-                    <!--android:layout_width="wrap_content"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:orientation="horizontal">-->
-
-                <!--</com.sofac.fxmharmony.view.customView.LinearLayoutGallery>-->
-
-            <!--</HorizontalScrollView>-->
-
-            <!--<TextView-->
-                <!--android:id="@+id/video_gallery_name"-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:padding="5dp"-->
-                <!--android:text="@string/videos" />-->
-
-            <!--<HorizontalScrollView-->
-                <!--android:id="@+id/horizontal_video_scroll"-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="wrap_content">-->
-
-                <!--<com.sofac.fxmharmony.view.customView.LinearLayoutGallery-->
-                    <!--android:id="@+id/video_gallery_layout"-->
-                    <!--android:layout_width="wrap_content"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:orientation="horizontal">-->
-
-                <!--</com.sofac.fxmharmony.view.customView.LinearLayoutGallery>-->
-
-            <!--</HorizontalScrollView>-->
-
-            <!--<TextView-->
-                <!--android:id="@+id/file_gallery_name"-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:padding="5dp"-->
-                <!--android:text="@string/files" />-->
+            <!--android:id="@+id/horizontal_image_scroll"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content">-->
 
             <!--<com.sofac.fxmharmony.view.customView.LinearLayoutGallery-->
-                <!--android:id="@+id/file_gallery_layout"-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:orientation="vertical">-->
+            <!--android:id="@+id/image_gallery_layout"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:orientation="horizontal">-->
 
             <!--</com.sofac.fxmharmony.view.customView.LinearLayoutGallery>-->
 
+            <!--</HorizontalScrollView>-->
+
+            <!--<TextView-->
+            <!--android:id="@+id/video_gallery_name"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:padding="5dp"-->
+            <!--android:text="@string/videos" />-->
+
+            <!--<HorizontalScrollView-->
+            <!--android:id="@+id/horizontal_video_scroll"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content">-->
+
+            <!--<com.sofac.fxmharmony.view.customView.LinearLayoutGallery-->
+            <!--android:id="@+id/video_gallery_layout"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:orientation="horizontal">-->
+
+            <!--</com.sofac.fxmharmony.view.customView.LinearLayoutGallery>-->
+
+            <!--</HorizontalScrollView>-->
+
+            <!--<TextView-->
+            <!--android:id="@+id/file_gallery_name"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:padding="5dp"-->
+            <!--android:text="@string/files" />-->
+
+            <!--<com.sofac.fxmharmony.view.customView.LinearLayoutGallery-->
+            <!--android:id="@+id/file_gallery_layout"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:orientation="vertical">-->
+
+            <!--</com.sofac.fxmharmony.view.customView.LinearLayoutGallery>-->
+
+
+            <LinearLayout
+                android:id="@+id/idLayoutPhotos"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
+                    android:layout_marginLeft="0dp"
+                    android:layout_marginRight="0dp"
+                    android:layout_marginTop="0dp"
+                    android:background="@color/lineViewFiles" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:text="Photo(s)"
+                    android:textSize="13sp" />
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/idListPhotos"
+                    android:layout_width="match_parent"
+                    android:layout_height="80dp"
+                    android:layout_marginBottom="10dp"
+                    android:orientation="horizontal"
+                    android:paddingEnd="10dp"
+                    android:paddingStart="10dp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/idLayoutMovies"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
+                    android:layout_marginLeft="0dp"
+                    android:layout_marginRight="0dp"
+                    android:layout_marginTop="0dp"
+                    android:background="@color/lineViewFiles" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:text="Movie(s)"
+                    android:textSize="13sp" />
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/idListMovies"
+                    android:layout_width="match_parent"
+                    android:layout_height="80dp"
+                    android:layout_marginBottom="10dp"
+                    android:orientation="horizontal"
+                    android:paddingEnd="10dp"
+                    android:paddingStart="10dp" />
+
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:id="@+id/idLayoutFiles"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
+                    android:layout_marginLeft="0dp"
+                    android:layout_marginRight="0dp"
+                    android:layout_marginTop="0dp"
+                    android:background="@color/lineViewFiles" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:text="File(s)"
+                    android:textSize="13sp" />
+
+                <LinearLayout
+                    android:id="@+id/idListFiles"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:orientation="horizontal" />
+
+            </LinearLayout>
+
+
         </LinearLayout>
-    <!--</ScrollView>-->
 
-    <!--<android.support.design.widget.BottomNavigationView-->
-        <!--android:id="@+id/bottom_navigation"-->
-        <!--android:layout_width="0dp"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_alignParentBottom="true"-->
-        <!--android:layout_marginEnd="8dp"-->
-        <!--android:layout_marginLeft="8dp"-->
-        <!--android:layout_marginRight="8dp"-->
-        <!--android:layout_marginStart="8dp"-->
-        <!--app:itemBackground="@color/colorPrimary"-->
-        <!--app:itemIconTint="@color/colorWhite"-->
-        <!--app:itemTextColor="@color/colorWhite"-->
-        <!--app:layout_constraintBottom_toBottomOf="parent"-->
-        <!--app:layout_constraintLeft_toLeftOf="parent"-->
-        <!--app:layout_constraintRight_toRightOf="parent"-->
-        <!--app:menu="@menu/menu_change_post_bottom" />-->
+    </ScrollView>
+
+    <com.github.clans.fab.FloatingActionMenu
+        android:id="@+id/idMenuButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_marginBottom="0dp"
+        android:layout_marginEnd="5dp"
+        android:layout_marginStart="11dp"
+        fab:menu_animationDelayPerItem="55"
+        fab:menu_backgroundColor="@android:color/transparent"
+        fab:menu_buttonSpacing="0dp"
+        fab:menu_colorNormal="@color/colorPrimary"
+        fab:menu_colorPressed="#157789"
+        fab:menu_colorRipple="#99d4d4d4"
+
+        fab:menu_fab_size="normal"
+        fab:menu_icon="@drawable/fab_add"
+        fab:menu_labels_colorNormal="#333"
+        fab:menu_labels_colorPressed="#444"
+        fab:menu_labels_colorRipple="#66efecec"
+        fab:menu_labels_cornerRadius="3dp"
+        fab:menu_labels_ellipsize="none"
+        fab:menu_labels_hideAnimation="@anim/fab_slide_out_to_right"
+        fab:menu_labels_margin="0dp"
+        fab:menu_labels_maxLines="-1"
+        fab:menu_labels_padding="8dp"
+        fab:menu_labels_position="left"
+        fab:menu_labels_showAnimation="@anim/fab_slide_in_from_right"
+        fab:menu_labels_showShadow="true"
+        fab:menu_labels_singleLine="false"
+        fab:menu_labels_textColor="#e6e6e6"
+        fab:menu_labels_textSize="13sp"
+        fab:menu_openDirection="up"
+        fab:menu_shadowColor="#77686868"
+        fab:menu_shadowRadius="4dp"
+        fab:menu_shadowXOffset="1dp"
+        fab:menu_shadowYOffset="4dp"
+        fab:menu_showShadow="true">
+
+        <!--fab:menu_fab_label="Floating Action Menu"-->
+
+        <com.github.clans.fab.FloatingActionButton
+            android:id="@+id/buttonAddFiles"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_file_white_18dp"
+            fab:fab_colorNormal="@color/colorPrimary"
+            fab:fab_colorPressed="#157789"
+            fab:fab_colorRipple="#99d4d4d4"
+            fab:fab_label="Add files"
+            fab:fab_size="mini" />
+
+        <com.github.clans.fab.FloatingActionButton
+            android:id="@+id/buttonAddMovies"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_video_white_18dp"
+            fab:fab_colorNormal="@color/colorPrimary"
+            fab:fab_colorPressed="#157789"
+            fab:fab_colorRipple="#99d4d4d4"
+            fab:fab_label="Add movies"
+            fab:fab_size="mini" />
+
+        <com.github.clans.fab.FloatingActionButton
+            android:id="@+id/buttonAddPhotos"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_image_white_18dp"
+            fab:fab_colorNormal="@color/colorPrimary"
+            fab:fab_colorPressed="#157789"
+            fab:fab_colorRipple="#99d4d4d4"
+            fab:fab_label="Add photos"
+            fab:fab_size="mini" />
+    </com.github.clans.fab.FloatingActionMenu>
 
 
-</android.support.constraint.ConstraintLayout>
+</android.support.design.widget.CoordinatorLayout>

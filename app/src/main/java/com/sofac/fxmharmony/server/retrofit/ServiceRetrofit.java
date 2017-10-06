@@ -14,7 +14,6 @@ import retrofit2.http.Body;
 import retrofit2.http.Part;
 
 import static com.sofac.fxmharmony.Constants.PART_CONTROLLER;
-import static com.sofac.fxmharmony.Constants.PART_UPLOAD_FILES;
 
 /**
  * Created by Maxim on 03.08.2017.
@@ -26,6 +25,8 @@ public interface ServiceRetrofit {
     Call<ResponseBody> getData(@Body ServerRequest serverRequest);
 
     @Multipart
-    @POST(PART_UPLOAD_FILES)
-    Call<ResponseBody> uploadFiles(@Part("name") RequestBody fuck, @Part ArrayList<MultipartBody.Part> file);
+    @POST(PART_CONTROLLER)
+    Call<ResponseBody> sendMultiPartRequest(@Part("json") RequestBody obj, @Part ArrayList<MultipartBody.Part> file);
+
+
 }

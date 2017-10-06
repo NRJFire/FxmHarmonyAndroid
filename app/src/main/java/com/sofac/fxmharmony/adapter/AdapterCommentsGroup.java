@@ -34,10 +34,7 @@ public class AdapterCommentsGroup extends BaseAdapter {
     private ArrayList<CommentDTO> commentDTOArrayList;
     private Context ctx;
     private LayoutInflater inflater;
-    /*private View view;
-    private TextView translateTextView;
-    private TextView textMessageLink;
-    private LinearLayout linearLayout;*/
+
 
     public AdapterCommentsGroup(Context context, ArrayList<CommentDTO> commentDTOArrayList) {
         Collections.sort(commentDTOArrayList, new Comparator<CommentDTO>() {

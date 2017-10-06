@@ -1,14 +1,9 @@
 package com.sofac.fxmharmony.adapter;
 
-import android.app.Fragment;
-import android.graphics.Point;
-import android.support.annotation.Dimension;
 import android.support.v7.widget.RecyclerView;
-import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
@@ -16,8 +11,6 @@ import com.bumptech.glide.Glide;
 import com.sofac.fxmharmony.R;
 
 import java.util.ArrayList;
-
-import static android.R.attr.width;
 
 /**
  * Created by Maxim on 21.07.2017.

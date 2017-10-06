@@ -1,6 +1,13 @@
 package com.sofac.fxmharmony.server;
 
+import android.content.Context;
+import android.net.Uri;
+import android.util.Log;
+
+import java.io.File;
+import java.io.IOException;
 import java.lang.reflect.Type;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,8 +21,18 @@ import com.sofac.fxmharmony.dto.CommentDTO;
 import com.sofac.fxmharmony.dto.PostDTO;
 import com.sofac.fxmharmony.dto.UserDTO;
 import com.sofac.fxmharmony.server.retrofit.ManagerRetrofit;
+import com.sofac.fxmharmony.server.retrofit.ServiceGenerator;
+import com.sofac.fxmharmony.server.retrofit.ServiceRetrofit;
 import com.sofac.fxmharmony.server.type.ServerResponse;
+import com.sofac.fxmharmony.util.PathUtil;
 
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 import timber.log.Timber;
 
 import static com.sofac.fxmharmony.view.DetailPostActivity.commentDTO;
@@ -148,10 +165,29 @@ public class Server<T> {
     }
 
     /**   */
-    public void createPost(PostDTO postDTO, AnswerServerResponse<T> async) {
+//    public void createPost(PostDTO postDTO, AnswerServerResponse<T> async) {
+//        answerServerResponse = async;
+//
+//        new ManagerRetrofit<PostDTO>().sendRequest(postDTO, new Object() {// Change (type sending) / (data sending)
+//        }.getClass().getEnclosingMethod().getName(), new ManagerRetrofit.AsyncAnswerString() {
+//            @Override
+//            public void processFinish(Boolean isSuccess, String answerString) {
+//                if (isSuccess) {
+//                    Type typeAnswer = new TypeToken<ServerResponse>() { //Change type response(тип ответа)
+//                    }.getType();
+//                    tryParsing(answerString, typeAnswer);
+//                } else {
+//                    answerServerResponse.processFinish(false, null);
+//                }
+//            }
+//        });
+//    }
+
+    public void createPost(PostDTO postDTO, ArrayList<Uri> uriArrayList, Context context, AnswerServerResponse<T> async) {
         answerServerResponse = async;
-        new ManagerRetrofit<PostDTO>().sendRequest(postDTO, new Object() {// Change (type sending) / (data sending)
-        }.getClass().getEnclosingMethod().getName(), new ManagerRetrofit.AsyncAnswerString() {
+
+        new ManagerRetrofit<PostDTO>().sendMultiPartRequest(postDTO, new Object() {// Change (type sending) / (data sending)
+        }.getClass().getEnclosingMethod().getName(),generateMultiPartList(uriArrayList,context), new ManagerRetrofit.AsyncAnswerString() {
             @Override
             public void processFinish(Boolean isSuccess, String answerString) {
                 if (isSuccess) {
@@ -163,6 +199,7 @@ public class Server<T> {
                 }
             }
         });
+
     }
 
 
@@ -256,6 +293,21 @@ public class Server<T> {
                 }
             }
         });
+    }
+
+    public ArrayList<MultipartBody.Part> generateMultiPartList(ArrayList<Uri> listFileUri, Context context) {
+
+        ArrayList<MultipartBody.Part> arrayListMulti = new ArrayList<>();
+        for (int i = 0; i < listFileUri.size(); i++) {
+            try {
+                File file = new File(PathUtil.getPath(context, listFileUri.get(i)));
+                arrayListMulti.add(MultipartBody.Part.createFormData("files[" + i + "]", file.getName(), RequestBody.create(MediaType.parse("multipart/form-data"), file)));
+            } catch (URISyntaxException e) {
+                e.printStackTrace();
+            }
+
+        }
+        return arrayListMulti;
     }
 
     private void tryParsing(String answerString, Type typeAnswer) {

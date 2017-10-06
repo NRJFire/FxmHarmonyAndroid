@@ -35,6 +35,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 
+import timber.log.Timber;
+
 import static android.content.Context.MODE_PRIVATE;
 import static android.content.Context.USER_SERVICE;
 import static com.orm.SugarRecord.findById;
@@ -149,7 +151,8 @@ public class GroupFragment extends BaseFragment implements SwipeRefreshLayout.On
 
     public void loadUpdate() {
         PostDTO.deleteAll(PostDTO.class, "type = ?", stringTypeGroup);
-        new Server<ArrayList<PostDTO>>().getListPosts(stringTypeGroup, new Server.AnswerServerResponse<ArrayList<PostDTO>>() {
+        //new Server<ArrayList<PostDTO>>().getListPosts(stringTypeGroup, new Server.AnswerServerResponse<ArrayList<PostDTO>>() {
+        new Server<ArrayList<PostDTO>>().getListPosts("", new Server.AnswerServerResponse<ArrayList<PostDTO>>() {
             @Override
             public void processFinish(Boolean isSuccess, ServerResponse<ArrayList<PostDTO>> answerServerResponse) {
                 if (isSuccess && answerServerResponse != null) {
