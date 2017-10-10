@@ -305,7 +305,6 @@ public class CreatePost extends BaseActivity implements View.OnClickListener {
                     Intent takeFileIntent = new Intent(Intent.ACTION_GET_CONTENT);
                     takeFileIntent.setType("*/*");
                     startActivityForResult(takeFileIntent, REQUEST_TAKE_FILE);
-                    Toast.makeText(this, "!!!!", Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
                     intent.setType("*/*");
                     intent.addCategory(Intent.CATEGORY_OPENABLE);

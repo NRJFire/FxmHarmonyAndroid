@@ -72,7 +72,7 @@ public class AdapterCommentsGroup extends BaseAdapter {
         //}
         final CommentDTO commentDTO = getCommentDTO(position);
 
-        Uri uri = Uri.parse(Constants.BASE_URL + Constants.PART_URL_FILE_AVATAR + commentDTO.getAvatar());
+        Uri uri = Uri.parse(Constants.BASE_URL + Constants.PART_AVATAR + commentDTO.getAvatar());
         ImageView avatar = (ImageView) view.findViewById(R.id.idCommentAvatar);
         Glide.with(ctx)
                 .load(uri)

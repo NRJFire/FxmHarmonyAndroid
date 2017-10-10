@@ -99,8 +99,6 @@ public class ChangePost extends BaseActivity {
 //        imageList = fxmPostFile.getImageList();
 //        fileList = fxmPostFile.getFileList();
 
-//
-
 //        fileListToSend = new ArrayList<>();
 //
 //        for (String imgName : imageList) {
@@ -112,7 +110,6 @@ public class ChangePost extends BaseActivity {
 //        for (String fileName : fileList) {
 //            fileGalleryLayout.addView(new FileItemWithCancel(this, Uri.parse(BASE_URL + GET_POST_FILES_END_URL + fileName), fileList, fileListToSend));
 //        }
-
 
 //        bottomNavigationView.setOnNavigationItemSelectedListener(
 //                new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -184,10 +181,7 @@ public class ChangePost extends BaseActivity {
 //                        }
 //                    }
 //                });
-
-
 //        hideFileUI();
-
     }
 
 

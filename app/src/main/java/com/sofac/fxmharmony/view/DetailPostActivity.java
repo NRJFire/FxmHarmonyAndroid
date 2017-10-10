@@ -180,8 +180,8 @@ public class DetailPostActivity extends BaseActivity {
         buttonSend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                progressBar.showView();
                 if (!(editTextComment.getText().toString()).isEmpty()) {
+                    progressBar.showView();
                     if (isCreatingComment) { //Создание коментария
 
                         new Server<String>().createComment(new CommentDTO(1L, appUserID.getID(), postDTO.getId(), editTextComment.getText().toString(), "", "", ""), new Server.AnswerServerResponse<String>() {
