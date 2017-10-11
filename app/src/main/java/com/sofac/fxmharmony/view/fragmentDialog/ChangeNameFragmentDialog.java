@@ -4,32 +4,16 @@ package com.sofac.fxmharmony.view.fragmentDialog;
 import android.app.Activity;
 import android.app.DialogFragment;
 import android.content.DialogInterface;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.StrictMode;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
 
-import com.google.cloud.translate.Translate;
-import com.google.cloud.translate.TranslateOptions;
-import com.google.cloud.translate.Translation;
-import com.sofac.fxmharmony.Constants;
 import com.sofac.fxmharmony.R;
-import com.sofac.fxmharmony.data.SettingsExchangeOnServer;
-import com.sofac.fxmharmony.data.dto.ChangeNameDTO;
 import com.sofac.fxmharmony.util.AppMethods;
-
-
-import static com.sofac.fxmharmony.Constants.AVATAR_IMAGE_SIZE;
-import static com.sofac.fxmharmony.Constants.CHANGE_NAME_REQUEST;
-import static com.sofac.fxmharmony.Constants.DELETE_AVATAR_REQUEST;
-import static com.sofac.fxmharmony.R.id.textView;
 
 public class ChangeNameFragmentDialog extends DialogFragment {
 
@@ -79,17 +63,17 @@ public class ChangeNameFragmentDialog extends DialogFragment {
                 }
 
 
-                ChangeNameDTO changeNameDTO = new ChangeNameDTO(AppMethods.getUserId(getActivity()), newName);
+//                ChangeNameDTO changeNameDTO = new ChangeNameDTO(AppMethods.getUserId(getActivity()), newName);
 
-                new SettingsExchangeOnServer<ChangeNameDTO>(changeNameDTO, CHANGE_NAME_REQUEST, getActivity(), new SettingsExchangeOnServer.SettingsAsyncResponse() {
-                    @Override
-                    public void processFinish(Boolean isSuccess) {
-                        if (isSuccess) {
-                            AppMethods.saveUserName(getActivity(), newName);
-                            getDialog().cancel();
-                        }
-                    }
-                }).execute();
+//                new SettingsExchangeOnServer<ChangeNameDTO>(changeNameDTO, CHANGE_NAME_REQUEST, getActivity(), new SettingsExchangeOnServer.SettingsAsyncResponse() {
+//                    @Override
+//                    public void processFinish(Boolean isSuccess) {
+//                        if (isSuccess) {
+//                            AppMethods.saveUserName(getActivity(), newName);
+//                            getDialog().cancel();
+//                        }
+//                    }
+//                }).execute();
 
 
 

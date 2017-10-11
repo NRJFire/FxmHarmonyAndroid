@@ -36,6 +36,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
+import java.util.Locale;
 
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
@@ -283,7 +284,7 @@ public class CreatePost extends BaseActivity implements View.OnClickListener {
         ((TextView) view.findViewById(R.id.idTextFile)).setText(returnCursor.getString(nameIndex));
         Long sizeFile = returnCursor.getLong(sizeIndex);
         if (sizeFile > 1024L) sizeFile = sizeFile / 1024L;
-        ((TextView) view.findViewById(R.id.idSizeFile)).setText(sizeFile.toString() + " KB");
+        ((TextView) view.findViewById(R.id.idSizeFile)).setText(String.format(Locale.ENGLISH, "Size file: %,d KB", sizeFile));
 
         (view.findViewById(R.id.idButtonDeleting)).setOnClickListener(new View.OnClickListener() {
             @Override

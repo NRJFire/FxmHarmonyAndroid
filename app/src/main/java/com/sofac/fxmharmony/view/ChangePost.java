@@ -2,18 +2,12 @@ package com.sofac.fxmharmony.view;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.provider.OpenableColumns;
-import android.support.annotation.NonNull;
-import android.support.design.widget.BottomNavigationView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.Html;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -28,23 +22,17 @@ import com.github.clans.fab.FloatingActionMenu;
 import com.sofac.fxmharmony.R;
 import com.sofac.fxmharmony.adapter.AdapterCreatePostMovies;
 import com.sofac.fxmharmony.adapter.AdapterCreatePostPhotos;
-import com.sofac.fxmharmony.data.GroupExchangeOnServer;
 import com.sofac.fxmharmony.dto.PostDTO;
 import com.sofac.fxmharmony.server.Server;
 import com.sofac.fxmharmony.server.type.ServerResponse;
 import com.sofac.fxmharmony.util.ConvertorHTML;
-import com.sofac.fxmharmony.util.FxmPostFile;
 import com.sofac.fxmharmony.util.PathUtil;
-import com.sofac.fxmharmony.util.PermissionManager;
-import com.sofac.fxmharmony.util.RequestMethods;
-import com.sofac.fxmharmony.view.customView.FileItemWithCancel;
-import com.sofac.fxmharmony.view.customView.LinearLayoutGallery;
-import com.sofac.fxmharmony.view.customView.PhotoVideoItemWithCancel;
+
+import org.apache.commons.io.FilenameUtils;
 
 import java.io.File;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Locale;
 
 import okhttp3.MediaType;
@@ -52,17 +40,12 @@ import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import timber.log.Timber;
 
-import static android.R.attr.id;
 import static com.sofac.fxmharmony.Constants.BASE_URL;
-import static com.sofac.fxmharmony.Constants.GET_POST_FILES_END_URL;
-import static com.sofac.fxmharmony.Constants.ONE_POST_DATA;
+import static com.sofac.fxmharmony.Constants.PART_POST;
 import static com.sofac.fxmharmony.Constants.POST_ID;
 import static com.sofac.fxmharmony.Constants.REQUEST_TAKE_FILE;
 import static com.sofac.fxmharmony.Constants.REQUEST_TAKE_GALLERY_VIDEO;
 import static com.sofac.fxmharmony.Constants.REQUEST_TAKE_PHOTO;
-import static com.sofac.fxmharmony.Constants.TYPE_GROUP;
-import static com.sofac.fxmharmony.Constants.UPDATE_POST_REQUEST;
-import static com.sofac.fxmharmony.Constants.USER_ID_PREF;
 import static com.sofac.fxmharmony.R.id.idButtonDeleting;
 
 
@@ -77,6 +60,7 @@ public class ChangePost extends BaseActivity implements View.OnClickListener {
     public ArrayList<Uri> listPhoto;
     public ArrayList<Uri> listMovies;
     public ArrayList<Uri> listFiles;
+    public ArrayList<String> listDeleting;
 
     FloatingActionButton buttonAddFiles;
     FloatingActionButton buttonAddMovies;
@@ -97,36 +81,15 @@ public class ChangePost extends BaseActivity implements View.OnClickListener {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.change_post);
-
         setTitle(getString(R.string.change_post_activity_name));
+        postTextInput = (EditText) findViewById(R.id.post_text_input);
 
         postDTO = PostDTO.findById(PostDTO.class, getIntent().getLongExtra(POST_ID, 0));
 
         listPhoto = new ArrayList<>();
         listMovies = new ArrayList<>();
         listFiles = new ArrayList<>();
-
-        if (postDTO != null) {
-            postTextInput.setText(ConvertorHTML.fromHTML(postDTO.getBody_original()));
-
-            if(postDTO.getImages() !=null) {
-                for (String uriString : postDTO.getImages()) {
-                    listPhoto.add(Uri.parse(uriString));
-                }
-            }
-
-            if(postDTO.getMovies() !=null) {
-                for (String uriString : postDTO.getMovies()) {
-                    listMovies.add(Uri.parse(uriString));
-                }
-            }
-
-            if(postDTO.getDocs() !=null) {
-                for (String uriString : postDTO.getDocs()) {
-                    listFiles.add(Uri.parse(uriString));
-                }
-            }
-        }
+        listDeleting = new ArrayList<>();
 
         ScrollView scrollView = (ScrollView) findViewById(R.id.idScrollViewEditPost);
         scrollView.setOnClickListener(new View.OnClickListener() {
@@ -136,7 +99,7 @@ public class ChangePost extends BaseActivity implements View.OnClickListener {
             }
         });
 
-        postTextInput = (EditText) findViewById(R.id.post_text_input);
+
         buttonAddFiles = (FloatingActionButton) findViewById(R.id.buttonAddFiles);
         buttonAddMovies = (FloatingActionButton) findViewById(R.id.buttonAddMovies);
         buttonAddPhotos = (FloatingActionButton) findViewById(R.id.buttonAddPhotos);
@@ -154,12 +117,44 @@ public class ChangePost extends BaseActivity implements View.OnClickListener {
         buttonAddPhotos.setOnClickListener(this);
         menuButton.setClosedOnTouchOutside(true);
 
+        if (postDTO != null) {
+            postTextInput.setText(ConvertorHTML.fromHTML(postDTO.getBody_original()));
+
+            if (postDTO.getImages() != null && !postDTO.getImages().isEmpty()) {
+                for (String uriString : postDTO.getImages()) {
+                    listPhoto.add(Uri.parse(BASE_URL + PART_POST + uriString));
+                }
+                linearLayoutPhoto.setVisibility(View.VISIBLE);
+            }
+
+            if (postDTO.getMovies() != null && !postDTO.getMovies().isEmpty()) {
+                for (String uriString : postDTO.getMovies()) {
+                    listMovies.add(Uri.parse(BASE_URL + PART_POST + uriString));
+
+                }
+                linearLayoutMovies.setVisibility(View.VISIBLE);
+            }
+
+            if (postDTO.getDocs() != null && !postDTO.getDocs().isEmpty()) {
+                for (String nameFile : postDTO.getDocs()) {
+                    linearLayoutFiles.addView(createViewFileFromURL(nameFile));
+                }
+                linearLayoutFiles.setVisibility(View.VISIBLE);
+            }
+        }
+
+        Timber.e("listPhoto     "+ listPhoto.toString());
+        Timber.e("listMovies    "+listMovies.toString());
+        Timber.e("listFiles    "+listFiles.toString());
+
         adapterCreatePostPhotos = new AdapterCreatePostPhotos(listPhoto);
         adapterCreatePostPhotos.setItemClickListener(new AdapterCreatePostPhotos.ClickListener() {
             @Override
             public void onMyClick(View view, int position) {
                 switch (view.getId()) {
                     case idButtonDeleting:
+                        if (listPhoto.get(position).toString().contains("http://"))
+                            listDeleting.add(FilenameUtils.getName(listPhoto.get(position).getPath()));
                         listPhoto.remove(position);
                         adapterCreatePostPhotos.notifyDataSetChanged();
                         if (listPhoto.isEmpty()) linearLayoutPhoto.setVisibility(View.GONE);
@@ -167,6 +162,7 @@ public class ChangePost extends BaseActivity implements View.OnClickListener {
                 }
             }
         });
+
         recyclerViewPhoto.setAdapter(adapterCreatePostPhotos);
         recyclerViewPhoto.setHasFixedSize(true);
         recyclerViewPhoto.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
@@ -177,6 +173,8 @@ public class ChangePost extends BaseActivity implements View.OnClickListener {
             public void onMyClick(View view, int position) {
                 switch (view.getId()) {
                     case idButtonDeleting:
+                        if (listMovies.get(position).toString().contains("http://"))
+                            listDeleting.add(FilenameUtils.getName(listMovies.get(position).getPath()));
                         listMovies.remove(position);
                         adapterCreatePostMovies.notifyDataSetChanged();
                         if (listMovies.isEmpty()) linearLayoutMovies.setVisibility(View.GONE);
@@ -205,11 +203,16 @@ public class ChangePost extends BaseActivity implements View.OnClickListener {
                     PostDTO postDTO = new PostDTO(0L, appUserID.getID(), "", "", ConvertorHTML.toHTML(postTextInput.getText().toString()), "", "", "", "", "", stringTypeGroup);
 
                     ArrayList<Uri> arrayListAll = new ArrayList<>();
-                    arrayListAll.addAll(listPhoto);
-                    arrayListAll.addAll(listMovies);
+                    for (Uri uriPhoto : listPhoto) {
+                        if (!uriPhoto.toString().contains("http://")) arrayListAll.add(uriPhoto);
+                    }
+                    for (Uri uriMovies : listMovies) {
+                        if (!uriMovies.toString().contains("http://")) arrayListAll.add(uriMovies);
+                    }
+
                     arrayListAll.addAll(listFiles);
 
-                    new Server<String>().createPost(postDTO, generateMultiPartList(arrayListAll), new Server.AnswerServerResponse<String>() {
+                    new Server<String>().updatePost(postDTO, generateMultiPartList(arrayListAll),listDeleting, new Server.AnswerServerResponse<String>() {
                         @Override
                         public void processFinish(Boolean isSuccess, ServerResponse<String> answerServerResponse) {
                             if (isSuccess) {
@@ -284,7 +287,7 @@ public class ChangePost extends BaseActivity implements View.OnClickListener {
                     }
 
                     listFiles.add(fileUri);
-                    linearLayoutFiles.addView(createViewFile(fileUri));
+                    linearLayoutFiles.addView(createViewFileFromContent(fileUri));
                     linearLayoutFiles.setVisibility(View.VISIBLE);
 
                 }
@@ -295,8 +298,24 @@ public class ChangePost extends BaseActivity implements View.OnClickListener {
 
     }
 
+    public View createViewFileFromURL(final String nameFile) {
+        final View view = getLayoutInflater().inflate(R.layout.item_file_create_post, null);
 
-    public View createViewFile(final Uri fileUri) {
+        ((TextView) view.findViewById(R.id.idTextFile)).setText(nameFile);
+        ((TextView) view.findViewById(R.id.idSizeFile)).setText("Size file: none");
+
+        (view.findViewById(idButtonDeleting)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                linearLayoutFiles.removeView(view); //TODO Нюанс, нельзя убрать вью, не с чего проверить что осталось в файлах (Обдумать)
+                listDeleting.add(nameFile);
+                //if (listFiles.isEmpty()) linearLayoutFiles.setVisibility(View.GONE);
+            }
+        });
+        return view;
+    }
+
+    public View createViewFileFromContent(final Uri fileUri) {
         final View view = getLayoutInflater().inflate(R.layout.item_file_create_post, null);
 
         Cursor returnCursor = getContentResolver().query(fileUri, null, null, null, null);
@@ -306,13 +325,13 @@ public class ChangePost extends BaseActivity implements View.OnClickListener {
         ((TextView) view.findViewById(R.id.idTextFile)).setText(returnCursor.getString(nameIndex));
         Long sizeFile = returnCursor.getLong(sizeIndex);
         if (sizeFile > 1024L) sizeFile = sizeFile / 1024L;
-        ((TextView) view.findViewById(R.id.idSizeFile)).setText(String.format(Locale.ENGLISH, "%,d KB", sizeFile));
+        ((TextView) view.findViewById(R.id.idSizeFile)).setText(String.format(Locale.ENGLISH, "Size file: %,d KB", sizeFile));
         (view.findViewById(idButtonDeleting)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 linearLayoutFiles.removeView(view);
                 listFiles.remove(fileUri);
-                if (listFiles.isEmpty()) linearLayoutFiles.setVisibility(View.GONE);
+                //if (listFiles.isEmpty()) linearLayoutFiles.setVisibility(View.GONE);
             }
         });
         return view;

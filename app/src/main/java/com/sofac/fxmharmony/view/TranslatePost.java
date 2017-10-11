@@ -107,19 +107,19 @@ public class TranslatePost extends BaseActivity {
                 postDTO.setBody_en(postTextEng.getText().toString());
                 postDTO.setBody_ko(postTextKor.getText().toString());
 
-                new Server<String>().updatePost(postDTO, new Server.AnswerServerResponse<String>() {
-                    @Override
-                    public void processFinish(Boolean isSuccess, ServerResponse<String> answerServerResponse) {
-                        if(isSuccess){
-                            postDTO.save();
-                            Intent intent = new Intent(TranslatePost.this, DetailPostActivity.class);
-                            setResult(2, intent);
-                            finish();
-                        }else{
-                            toastUpdateTranslateError();
-                        }
-                    }
-                });
+//                new Server<String>().updatePost(postDTO, new Server.AnswerServerResponse<String>() {
+//                    @Override
+//                    public void processFinish(Boolean isSuccess, ServerResponse<String> answerServerResponse) {
+//                        if(isSuccess){
+//                            postDTO.save();
+//                            Intent intent = new Intent(TranslatePost.this, DetailPostActivity.class);
+//                            setResult(2, intent);
+//                            finish();
+//                        }else{
+//                            toastUpdateTranslateError();
+//                        }
+//                    }
+//                });
 
                 return true;
             default:

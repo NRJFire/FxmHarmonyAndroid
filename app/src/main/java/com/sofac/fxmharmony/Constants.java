@@ -27,7 +27,7 @@ public class Constants {
     //public final static String BASE_URL = "http://52.57.116.160:8080/"; //Test server
     //public final static String BASE_URL = "http://192.168.1.4/"; //Zegna
     //public final static String BASE_URL = "http://192.168.1.5/"; //FreeMax
-    //public final static String BASE_URL = "http://192.168.1.2:8080/"; //Maxx
+    //public final static String BASE_URL = "http://192.168.1.36/"; //Maxx
 
     public final static String PART_CONTROLLER = "data/ajax/request.php"; //Part app controller php
 

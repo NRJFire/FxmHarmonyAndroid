@@ -2,42 +2,30 @@ package com.sofac.fxmharmony.server;
 
 import android.content.Context;
 import android.net.Uri;
-import android.util.Log;
-
-import java.io.File;
-import java.io.IOException;
-import java.lang.reflect.Type;
-import java.net.URISyntaxException;
-import java.util.ArrayList;
-import java.util.List;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import com.sofac.fxmharmony.dto.AppVersionDTO;
-import com.sofac.fxmharmony.data.dto.ManagerInfoDTO;
 import com.sofac.fxmharmony.dto.AuthorizationDTO;
 import com.sofac.fxmharmony.dto.CommentDTO;
+import com.sofac.fxmharmony.dto.ManagerDTO;
 import com.sofac.fxmharmony.dto.PostDTO;
 import com.sofac.fxmharmony.dto.UserDTO;
 import com.sofac.fxmharmony.server.retrofit.ManagerRetrofit;
-import com.sofac.fxmharmony.server.retrofit.ServiceGenerator;
-import com.sofac.fxmharmony.server.retrofit.ServiceRetrofit;
 import com.sofac.fxmharmony.server.type.ServerResponse;
 import com.sofac.fxmharmony.util.PathUtil;
-import com.sofac.fxmharmony.view.BaseActivity;
+
+import java.io.File;
+import java.lang.reflect.Type;
+import java.net.URISyntaxException;
+import java.util.ArrayList;
+import java.util.List;
 
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
-import okhttp3.ResponseBody;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 import timber.log.Timber;
-
-import static com.sofac.fxmharmony.R.drawable.file;
-import static com.sofac.fxmharmony.view.DetailPostActivity.commentDTO;
 
 
 /**
@@ -57,7 +45,7 @@ public class Server<T> {
      */
     public void authorizationUser(AuthorizationDTO authorizationDTO, AnswerServerResponse<T> async) { //Change name request / Change data in method parameters
         answerServerResponse = async;
-        new ManagerRetrofit<AuthorizationDTO>().sendRequest(authorizationDTO, new Object() {// Change type Object sending / Change data
+        new ManagerRetrofit<AuthorizationDTO>().sendRequest(authorizationDTO, new Object() {// Change type Object sending / Change data sending
         }.getClass().getEnclosingMethod().getName(), new ManagerRetrofit.AsyncAnswerString() {
             @Override
             public void processFinish(Boolean isSuccess, String answerString) {
@@ -77,7 +65,7 @@ public class Server<T> {
      */
     public void getCorrectVersion(AnswerServerResponse<T> async) { //Change name request() / Change data in method parameters
         answerServerResponse = async;
-        new ManagerRetrofit<String>().sendRequest("", new Object() {// Change type Object sending / Change data
+        new ManagerRetrofit<String>().sendRequest("", new Object() {// Change type Object sending / Change data sending
         }.getClass().getEnclosingMethod().getName(), new ManagerRetrofit.AsyncAnswerString() {
             @Override
             public void processFinish(Boolean isSuccess, String answerString) {
@@ -103,6 +91,20 @@ public class Server<T> {
      * Get MANAGER info from server
      */
     public void getManagerInfo(Long idManager, AnswerServerResponse<T> async) {
+        answerServerResponse = async;
+        new ManagerRetrofit<Long>().sendRequest(idManager, new Object() {// Change type Object sending / Change data sending
+        }.getClass().getEnclosingMethod().getName(), new ManagerRetrofit.AsyncAnswerString() {
+            @Override
+            public void processFinish(Boolean isSuccess, String answerString) {
+                if (isSuccess) {
+                    Type typeAnswer = new TypeToken<ServerResponse<ManagerDTO>>() { //Change type response
+                    }.getType();
+                    tryParsing(answerString, typeAnswer);
+                } else {
+                    answerServerResponse.processFinish(false, null);
+                }
+            }
+        });
     }
 
     /**
@@ -123,12 +125,6 @@ public class Server<T> {
      */
     public void getSettings() {
 
-    }
-
-    /**
-     * Get ONE POST from Server
-     */
-    public void getPost(ManagerInfoDTO managerDTO, AnswerServerResponse<T> async) {
     }
 
     public void getListComments(Long postId, AnswerServerResponse<T> async) {
@@ -205,11 +201,11 @@ public class Server<T> {
 
 
     /**   */
-    public void updatePost(PostDTO postDTO, ArrayList<MultipartBody.Part> listMultipartBody, AnswerServerResponse<T> async) {
+    public void updatePost(PostDTO postDTO, ArrayList<MultipartBody.Part> listMultipartBody, ArrayList<String> listDeletingFiles, AnswerServerResponse<T> async) {
         answerServerResponse = async;
 
-        new ManagerRetrofit<PostDTO>().sendRequest(postDTO, new Object() {// Change (type sending) / (data sending)
-        }.getClass().getEnclosingMethod().getName(), new ManagerRetrofit.AsyncAnswerString() {
+        new ManagerRetrofit<PostDTO>().sendMultiPartWhithTwoObj(postDTO, new Object() {// Change (type sending) / (data sending)
+        }.getClass().getEnclosingMethod().getName(), listMultipartBody, listDeletingFiles, new ManagerRetrofit.AsyncAnswerString() {
             @Override
             public void processFinish(Boolean isSuccess, String answerString) {
                 if (isSuccess) {
@@ -221,6 +217,20 @@ public class Server<T> {
                 }
             }
         });
+
+//        new ManagerRetrofit<PostDTO>().sendRequest(postDTO, new Object() {// Change (type sending) / (data sending)
+//        }.getClass().getEnclosingMethod().getName(), new ManagerRetrofit.AsyncAnswerString() {
+//            @Override
+//            public void processFinish(Boolean isSuccess, String answerString) {
+//                if (isSuccess) {
+//                    Type typeAnswer = new TypeToken<ServerResponse>() { //Change type response(тип ответа)
+//                    }.getType();
+//                    tryParsing(answerString, typeAnswer);
+//                } else {
+//                    answerServerResponse.processFinish(false, null);
+//                }
+//            }
+//        });
     }
 
     /**   */
@@ -297,8 +307,12 @@ public class Server<T> {
         });
     }
 
-    public ArrayList<MultipartBody.Part> generateMultiPartList(ArrayList<Uri> listFileUri, Context context) {
 
+    /**
+     * Dop methods
+     */
+
+    public ArrayList<MultipartBody.Part> generateMultiPartList(ArrayList<Uri> listFileUri, Context context) {
         ArrayList<MultipartBody.Part> arrayListMulti = new ArrayList<>();
         for (int i = 0; i < listFileUri.size(); i++) {
             try {

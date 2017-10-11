@@ -29,7 +29,7 @@
             android:value="database.db" />
         <meta-data
             android:name="VERSION"
-            android:value="19" />
+            android:value="20" />
         <meta-data
             android:name="QUERY_LOG"
             android:value="true" />
@@ -77,11 +77,6 @@
             android:name=".view.SettingsActivity"
             android:label="@string/title_activity_settings"
             android:logo="@drawable/keyboard_backspace" />
-
-        <service
-            android:name=".service.BackgroundFileUploadService"
-            android:enabled="true"
-            android:exported="true" />
 
         <activity
             android:name=".view.PreviewPhotoActivity"

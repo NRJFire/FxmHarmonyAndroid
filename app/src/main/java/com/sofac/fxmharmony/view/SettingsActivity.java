@@ -5,27 +5,19 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
-import android.os.Environment;
 import android.os.StrictMode;
 import android.provider.MediaStore;
-import android.support.v4.content.FileProvider;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.PopupMenu;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -34,23 +26,13 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.sofac.fxmharmony.Constants;
 import com.sofac.fxmharmony.R;
-import com.sofac.fxmharmony.data.GroupExchangeOnServer;
-import com.sofac.fxmharmony.data.SettingsExchangeOnServer;
-import com.sofac.fxmharmony.service.BackgroundFileUploadService;
 import com.sofac.fxmharmony.util.AppMethods;
 import com.sofac.fxmharmony.util.PermissionManager;
-import com.sofac.fxmharmony.util.RequestMethods;
 import com.sofac.fxmharmony.view.fragmentDialog.ChangeLanguageFragmentDialog;
 import com.sofac.fxmharmony.view.fragmentDialog.ChangeNameFragmentDialog;
 
 
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.InputStream;
-import java.util.ArrayList;
 import java.util.Locale;
-import java.util.Set;
 
 import static com.sofac.fxmharmony.Constants.APP_PREFERENCES;
 import static com.sofac.fxmharmony.Constants.AVATAR_IMAGE_SIZE;
@@ -92,13 +74,13 @@ public class SettingsActivity extends BaseActivity implements DialogInterface.On
             builder.detectFileUriExposure();
         }
 
-        AppMethods.putAvatarIntoImageView(this, avatarImage);
+        //AppMethods.putAvatarIntoImageView(this, avatarImage);
 
         ActionBar actionBar = getSupportActionBar();
         actionBar.setHomeButtonEnabled(true);
         actionBar.setDisplayHomeAsUpEnabled(true);
 
-        userName.setText(AppMethods.getUserName(this));
+        //userName.setText(AppMethods.getUserName(this));
         userPosition.setText("Manager"); //temp
 
         avatarImage.setOnClickListener(new View.OnClickListener() {
@@ -143,17 +125,17 @@ public class SettingsActivity extends BaseActivity implements DialogInterface.On
                         builder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
                                 dialog.dismiss();
-                                new SettingsExchangeOnServer<Long>(AppMethods.getUserId(SettingsActivity.this), DELETE_AVATAR_REQUEST, SettingsActivity.this, new SettingsExchangeOnServer.SettingsAsyncResponse() {
-                                    @Override
-                                    public void processFinish(Boolean isSuccess) {
-                                        Glide.with(SettingsActivity.this)
-                                                .load(R.drawable.no_image)
-                                                .override(AVATAR_IMAGE_SIZE, AVATAR_IMAGE_SIZE)
-                                                .centerCrop()
-                                                .into(avatarImage);
-
-                                    }
-                                }).execute();
+//                                new SettingsExchangeOnServer<Long>(AppMethods.getUserId(SettingsActivity.this), DELETE_AVATAR_REQUEST, SettingsActivity.this, new SettingsExchangeOnServer.SettingsAsyncResponse() {
+//                                    @Override
+//                                    public void processFinish(Boolean isSuccess) {
+//                                        Glide.with(SettingsActivity.this)
+//                                                .load(R.drawable.no_image)
+//                                                .override(AVATAR_IMAGE_SIZE, AVATAR_IMAGE_SIZE)
+//                                                .centerCrop()
+//                                                .into(avatarImage);
+//
+//                                    }
+//                                }).execute();
 
                             }
                         });
@@ -256,7 +238,7 @@ public class SettingsActivity extends BaseActivity implements DialogInterface.On
 
     @Override
     public void onDismiss(final DialogInterface dialog) {
-        userName.setText(AppMethods.getUserName(this));
+        //userName.setText(AppMethods.getUserName(this));
     }
 
 

@@ -6,24 +6,16 @@ import android.graphics.Bitmap;
 import android.media.MediaMetadataRetriever;
 import android.os.Build;
 import android.os.Environment;
-import android.widget.ImageView;
 
-import com.bumptech.glide.Glide;
 import com.sofac.fxmharmony.Constants;
-import com.sofac.fxmharmony.R;
-import com.sofac.fxmharmony.data.dto.ManagerInfoDTO;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 
-import jp.wasabeef.glide.transformations.CropCircleTransformation;
-
 import static android.content.Context.MODE_PRIVATE;
 import static android.content.Context.USER_SERVICE;
-import static com.sofac.fxmharmony.Constants.AVATAR_IMAGE_SIZE;
-import static com.sofac.fxmharmony.Constants.BASE_URL;
 import static com.sofac.fxmharmony.Constants.PUSH_MESSAGES_STATE;
 import static com.sofac.fxmharmony.Constants.USER_ID_PREF;
 
@@ -50,25 +42,25 @@ public class AppMethods {
         editor.apply();
     }
 
-    public static String getAvatarImageUrl(Context context) {
-        ManagerInfoDTO managerInfoDTO = ManagerInfoDTO.findById(ManagerInfoDTO.class, getUserId(context));
-        String fileName;
-        try {
-            fileName = managerInfoDTO.getAvatarImage();
-        } catch (Exception e) {
-            e.printStackTrace();
-            fileName = "";
-        }
-        return BASE_URL + "get-file/avatar/" + fileName;
-    }
+//    public static String getAvatarImageUrl(Context context) {
+//        ManagerInfoDTO managerInfoDTO = ManagerInfoDTO.findById(ManagerInfoDTO.class, getUserId(context));
+//        String fileName;
+//        try {
+//            fileName = managerInfoDTO.getAvatarImage();
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            fileName = "";
+//        }
+//        return BASE_URL + "get-file/avatar/" + fileName;
+//    }
 
-    public static void saveAvatarImageName(Context context, String avatarName) {
-
-        ManagerInfoDTO managerInfoDTO = ManagerInfoDTO.findById(ManagerInfoDTO.class, getUserId(context));
-        managerInfoDTO.setAvatarImage(avatarName);
-        managerInfoDTO.save();
-
-    }
+//    public static void saveAvatarImageName(Context context, String avatarName) {
+//
+//        ManagerInfoDTO managerInfoDTO = ManagerInfoDTO.findById(ManagerInfoDTO.class, getUserId(context));
+//        managerInfoDTO.setAvatarImage(avatarName);
+//        managerInfoDTO.save();
+//
+//    }
 
     public static Long getUserId(Context context) {
 
@@ -91,25 +83,6 @@ public class AppMethods {
                 "IMG_" + timeStamp + ".jpg");
     }
 
-    public static void saveUserName(Context context, String newName) {
-        ManagerInfoDTO managerInfoDTO = ManagerInfoDTO.findById(ManagerInfoDTO.class, getUserId(context));
-        managerInfoDTO.setName(newName);
-
-    }
-
-    public static String getUserName(Context context) {
-        ManagerInfoDTO managerInfoDTO = ManagerInfoDTO.findById(ManagerInfoDTO.class, getUserId(context));
-        return managerInfoDTO.getName();
-    }
-
-    public static void putAvatarIntoImageView(Context context, ImageView imageView) {
-        Glide.with(context)
-                .load(AppMethods.getAvatarImageUrl(context))
-                .bitmapTransform(new CropCircleTransformation(context))
-                .error(R.drawable.no_avatar)
-                .override(AVATAR_IMAGE_SIZE, AVATAR_IMAGE_SIZE)
-                .into(imageView);
-    }
 
     public static int getPxFromDp(int dimensionDp, Context context) {
         float density = context.getResources().getDisplayMetrics().density;

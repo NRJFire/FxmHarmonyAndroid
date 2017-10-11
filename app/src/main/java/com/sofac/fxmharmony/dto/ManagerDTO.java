@@ -11,14 +11,16 @@ import java.io.Serializable;
 public class ManagerDTO extends SugarRecord implements Serializable {
 
     private String name;
+    private String avatar;
     private String email;
     private String phone;
     private String access;
 
     public ManagerDTO(){}
 
-    public ManagerDTO(String name, String email, String phone, String access) {
+    public ManagerDTO(String name, String avatar, String email, String phone, String access) {
         this.name = name;
+        this.avatar = avatar;
         this.email = email;
         this.phone = phone;
         this.access = access;
@@ -61,11 +63,19 @@ public class ManagerDTO extends SugarRecord implements Serializable {
         else return "";
     }
 
+    public String getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
+    }
 
     @Override
     public String toString() {
         return "ManagerDTO{" +
                 "name='" + name + '\'' +
+                ", avatar='" + avatar + '\'' +
                 ", email='" + email + '\'' +
                 ", phone='" + phone + '\'' +
                 ", access='" + access + '\'' +

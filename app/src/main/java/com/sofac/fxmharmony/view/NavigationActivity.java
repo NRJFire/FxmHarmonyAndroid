@@ -24,6 +24,7 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.sofac.fxmharmony.Constants;
 import com.sofac.fxmharmony.R;
+import com.sofac.fxmharmony.dto.ManagerDTO;
 import com.sofac.fxmharmony.dto.PostDTO;
 import com.sofac.fxmharmony.server.Server;
 import com.sofac.fxmharmony.server.type.ServerResponse;
@@ -37,6 +38,8 @@ import java.util.List;
 import jp.wasabeef.glide.transformations.CropCircleTransformation;
 
 import static com.sofac.fxmharmony.Constants.AVATAR_IMAGE_SIZE;
+import static com.sofac.fxmharmony.Constants.BASE_URL;
+import static com.sofac.fxmharmony.Constants.PART_AVATAR;
 import static com.sofac.fxmharmony.Constants.TYPE_GROUP;
 
 public class NavigationActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener {
@@ -44,7 +47,8 @@ public class NavigationActivity extends BaseActivity implements NavigationView.O
     public Toolbar toolbar;
 
     private ImageView avatarImage;
-    private TextView userName;
+    private TextView textViewUserName;
+    private TextView textViewUserStatus;
 
     private TabLayout tabLayout;
     private ViewPager viewPager;
@@ -74,22 +78,24 @@ public class NavigationActivity extends BaseActivity implements NavigationView.O
         menu = navigationView.getMenu();
 
         avatarImage = (ImageView) header.findViewById(R.id.navAvatarImage);
-        avatarImage.setImageDrawable(getResources().getDrawable(R.drawable.logo));
-        Glide.with(this)
-                .load("https://s5.postimg.org/6zrmvcblz/avatar3.png")
-                .bitmapTransform(new CropCircleTransformation(this))
-                .error(R.drawable.no_avatar)
-                .override(AVATAR_IMAGE_SIZE, AVATAR_IMAGE_SIZE)
-                .into(avatarImage);
-
-        userName = (TextView) header.findViewById(R.id.idNavDrawNameManager);
-        userName.setText(userDTO.getLogin());
+        textViewUserName = (TextView) header.findViewById(R.id.idNavDrawNameManager);
+        textViewUserStatus = (TextView) header.findViewById(R.id.idNavDrawTypeManager);
 
         viewPager = (ViewPager) findViewById(R.id.viewpager);
 
-
         tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(viewPager);
+
+        new Server<ManagerDTO>().getManagerInfo(userDTO.getId(), new Server.AnswerServerResponse<ManagerDTO>() {
+            @Override
+            public void processFinish(Boolean isSuccess, ServerResponse<ManagerDTO> answerServerResponse) {
+                if(isSuccess){
+                    setupUserInfoInHeader(BASE_URL + PART_AVATAR + answerServerResponse.getDataTransferObject().getAvatar(), answerServerResponse.getDataTransferObject().getName(), userDTO.getRole());
+                } else {
+                    setupUserInfoInHeader(BASE_URL + PART_AVATAR + "man-03.jpg", "Name", userDTO.getRole());
+                }
+            }
+        });
 
         new Server<ArrayList<PostDTO>>().getListPosts("", new Server.AnswerServerResponse<ArrayList<PostDTO>>() {
             @Override
@@ -106,6 +112,17 @@ public class NavigationActivity extends BaseActivity implements NavigationView.O
                 }
             }
         });
+    }
+
+    public void setupUserInfoInHeader(String userAvatarURL, String userName, String userStatus){
+        Glide.with(this)
+                .load(userAvatarURL)
+                .bitmapTransform(new CropCircleTransformation(this))
+                .error(R.drawable.no_avatar)
+                .override(AVATAR_IMAGE_SIZE, AVATAR_IMAGE_SIZE)
+                .into(avatarImage);
+        textViewUserName.setText(userName);
+        textViewUserStatus.setText(userStatus);
 
     }
 
