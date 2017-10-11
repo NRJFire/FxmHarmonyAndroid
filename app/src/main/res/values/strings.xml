@@ -142,7 +142,7 @@
     </string-array>
 
     <string-array name="choice_double_click_post">
-        <!--<item>Edit</item>-->
+        <item>Edit</item>
         <item>Delete</item>
     </string-array>
 

@@ -184,7 +184,7 @@ public class Server<T> {
 //            }
 //        });
 //    }
-    public void createPost(PostDTO postDTO, ArrayList<MultipartBody.Part> listMultipartBody, Context context, AnswerServerResponse<T> async) {
+    public void createPost(PostDTO postDTO, ArrayList<MultipartBody.Part> listMultipartBody, AnswerServerResponse<T> async) {
         answerServerResponse = async;
 
         new ManagerRetrofit<PostDTO>().sendMultiPartRequest(postDTO, new Object() {// Change (type sending) / (data sending)
@@ -205,8 +205,9 @@ public class Server<T> {
 
 
     /**   */
-    public void updatePost(PostDTO postDTO, AnswerServerResponse<T> async) {
+    public void updatePost(PostDTO postDTO, ArrayList<MultipartBody.Part> listMultipartBody, AnswerServerResponse<T> async) {
         answerServerResponse = async;
+
         new ManagerRetrofit<PostDTO>().sendRequest(postDTO, new Object() {// Change (type sending) / (data sending)
         }.getClass().getEnclosingMethod().getName(), new ManagerRetrofit.AsyncAnswerString() {
             @Override

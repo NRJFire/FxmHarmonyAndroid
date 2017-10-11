@@ -119,6 +119,52 @@ public class ManagerRetrofit<T> {
     }
 
     /**
+     * Get Callback<ResponseBody> for this Request;
+     */
+    @SuppressWarnings("unchecked")
+    public void sendMultiPartWhithTwoObj(T object, String requestType, ArrayList<MultipartBody.Part> partArrayList, ArrayList<String> listDeletingFiles, AsyncAnswerString asyncAnswer) {
+        serverRequest = new ServerRequest(requestType, object);
+        answerString = asyncAnswer;
+
+        GsonBuilder builder = new GsonBuilder();
+        Gson gson = builder.create();
+
+        ServiceRetrofit serviceUploading = ServiceGenerator.createService(ServiceRetrofit.class);
+        // finally, execute the request
+        Call<ResponseBody> call = serviceUploading.sendMultiPartWithTwoObj(
+                RequestBody.create(
+                        MediaType.parse("text/plain"),
+                        gson.toJson(serverRequest)),
+                RequestBody.create(
+                        MediaType.parse("text/plain"),
+                        gson.toJson(listDeletingFiles)),
+                partArrayList);
+
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                try {
+                    serverResponse = logServerResponse(response.body().string());
+                    if (serverResponseSuccess.equals(getServerResponseStringFromJSON(serverResponse).getResponseStatus())) {
+                        answerString.processFinish(true, serverResponse);
+                    } else {
+                        answerString.processFinish(false, null);
+                    }
+                } catch (IOException e) {
+                    answerString.processFinish(false, null);
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                t.printStackTrace();
+                answerString.processFinish(false, null);
+            }
+        });
+    }
+
+    /**
      * String
      * Get AsyncAnswer with True(SUCCESS) or False(ERROR) and String <= json (body response) for this Request;
      */

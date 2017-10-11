@@ -172,7 +172,7 @@ public class CreatePost extends BaseActivity implements View.OnClickListener {
                     arrayListAll.addAll(listMovies);
                     arrayListAll.addAll(listFiles);
 
-                    new Server<String>().createPost(postDTO, generateMultiPartList(arrayListAll), this, new Server.AnswerServerResponse<String>() {
+                    new Server<String>().createPost(postDTO, generateMultiPartList(arrayListAll), new Server.AnswerServerResponse<String>() {
                         @Override
                         public void processFinish(Boolean isSuccess, ServerResponse<String> answerServerResponse) {
                             if (isSuccess) {
@@ -351,49 +351,6 @@ public class CreatePost extends BaseActivity implements View.OnClickListener {
                 break;
         }
     }
-
-
-
-
-
-
-//    @Override
-//    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-//        super.onActivityResult(requestCode, resultCode, data);
-//        if (resultCode == Activity.RESULT_OK) {
-//
-//            Log.i("CODE", "" + requestCode);
-//
-//            if (data != null) {
-//
-//                Uri fileUri = data.getData();
-//
-//                for (Uri uriToSend : fileListToSend) {
-//                    if (fileUri.equals(uriToSend)) return;
-//                }
-//                fileListToSend.add(fileUri);
-//
-//                if (requestCode == REQUEST_TAKE_PHOTO) {
-//
-//                    PhotoVideoItemWithCancel photoVideoItemWithCancel = new PhotoVideoItemWithCancel(this, fileUri, new ArrayList<String>(), fileListToSend, false);
-//                    imagesGalleryLayout.addView(photoVideoItemWithCancel);
-//
-//                } else if (requestCode == REQUEST_TAKE_GALLERY_VIDEO) {
-//
-//                    PhotoVideoItemWithCancel photoVideoItemWithCancel = new PhotoVideoItemWithCancel(this, fileUri, new ArrayList<String>(), fileListToSend, false);
-//                    videoGalleryLayout.addView(photoVideoItemWithCancel);
-//
-//                } else if (requestCode == REQUEST_TAKE_FILE) {
-//
-//                    FileItemWithCancel fileItemWithCancel = new FileItemWithCancel(this, fileUri, new ArrayList<String>(), fileListToSend);
-//                    fileGalleryLayout.addView(fileItemWithCancel);
-//
-//                }
-//            }
-//
-//        }
-//    }
-
 
 }
 

@@ -132,10 +132,10 @@ public class GroupFragment extends BaseFragment implements SwipeRefreshLayout.On
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             switch (which) {
-//                                case 0: // Edit
-//                                    changePost(GroupFragment.idPost);
-//                                    break;
-                                case 0: // Delete
+                                case 0: // Edit
+                                    changePost(GroupFragment.idPost);
+                                    break;
+                                case 1: // Delete
                                     Timber.e("Click delete");
                                     deletePost();
                                     break;
