@@ -1,4 +1,5 @@
 package com.sofac.fxmharmony.view;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Environment;
@@ -6,13 +7,17 @@ import android.support.v7.app.ActionBar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
+
 import com.sofac.fxmharmony.R;
 import com.sofac.fxmharmony.util.FileLoadingListener;
 import com.sofac.fxmharmony.util.FileLoadingTask;
+
 import java.io.File;
+
 import fm.jiecao.jcvideoplayer_lib.JCVideoPlayer;
 import fm.jiecao.jcvideoplayer_lib.JCVideoPlayerStandard;
 import timber.log.Timber;
+
 import static com.sofac.fxmharmony.Constants.LINK_VIDEO;
 import static com.sofac.fxmharmony.Constants.NAME_VIDEO;
 

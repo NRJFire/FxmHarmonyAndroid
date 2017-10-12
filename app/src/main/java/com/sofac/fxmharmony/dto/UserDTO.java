@@ -4,8 +4,6 @@ import com.orm.SugarRecord;
 
 import java.io.Serializable;
 
-import static android.R.attr.type;
-
 /**
  * Created by Maxim on 02.09.2017.
  */

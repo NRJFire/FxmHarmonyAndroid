@@ -6,15 +6,11 @@ import com.orm.SugarRecord;
 import com.sofac.fxmharmony.util.TypeFiles;
 
 import java.io.Serializable;
-import java.lang.reflect.Array;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.Locale;
-
-import timber.log.Timber;
 
 import static com.sofac.fxmharmony.Constants.SPLIT_FILES;
 

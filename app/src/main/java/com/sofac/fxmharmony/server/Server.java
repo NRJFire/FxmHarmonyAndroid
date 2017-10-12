@@ -18,7 +18,6 @@ import com.sofac.fxmharmony.util.PathUtil;
 
 import java.io.File;
 import java.lang.reflect.Type;
-import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;

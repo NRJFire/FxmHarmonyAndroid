@@ -2,19 +2,20 @@ package com.sofac.fxmharmony.view;
 
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
+import android.os.Bundle;
 import android.os.Environment;
 import android.support.v7.app.ActionBar;
-import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.Toast;
+
 import com.bumptech.glide.Glide;
 import com.sofac.fxmharmony.R;
 import com.sofac.fxmharmony.util.FileLoadingListener;
 import com.sofac.fxmharmony.util.FileLoadingTask;
+
 import java.io.File;
-import java.lang.annotation.Target;
 
 import timber.log.Timber;
 
@@ -24,7 +25,6 @@ import static com.sofac.fxmharmony.Constants.NAME_IMAGE;
 public class PreviewPhotoActivity extends BaseActivity {
     public String linkImage;
     public String nameImage;
-    Drawable drawable;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

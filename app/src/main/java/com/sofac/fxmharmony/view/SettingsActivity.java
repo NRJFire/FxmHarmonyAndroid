@@ -7,10 +7,10 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Bundle;
 import android.os.StrictMode;
 import android.provider.MediaStore;
 import android.support.v7.app.ActionBar;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -31,12 +31,10 @@ import com.sofac.fxmharmony.util.PermissionManager;
 import com.sofac.fxmharmony.view.fragmentDialog.ChangeLanguageFragmentDialog;
 import com.sofac.fxmharmony.view.fragmentDialog.ChangeNameFragmentDialog;
 
-
 import java.util.Locale;
 
 import static com.sofac.fxmharmony.Constants.APP_PREFERENCES;
 import static com.sofac.fxmharmony.Constants.AVATAR_IMAGE_SIZE;
-import static com.sofac.fxmharmony.Constants.DELETE_AVATAR_REQUEST;
 import static com.sofac.fxmharmony.Constants.IS_AUTHORIZATION;
 
 public class SettingsActivity extends BaseActivity implements DialogInterface.OnDismissListener {

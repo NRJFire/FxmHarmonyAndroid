@@ -13,7 +13,6 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.sofac.fxmharmony.R;
-import com.sofac.fxmharmony.util.AppMethods;
 
 public class ChangeNameFragmentDialog extends DialogFragment {
 
