@@ -32,5 +32,4 @@ public interface ServiceRetrofit {
     @POST(PART_CONTROLLER)
     Call<ResponseBody> sendMultiPartWithTwoObj(@Part("json") RequestBody obj, @Part("deleteFiles") RequestBody listDeleteFiles, @Part ArrayList<MultipartBody.Part> file);
 
-
 }

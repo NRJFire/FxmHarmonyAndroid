@@ -163,23 +163,6 @@ public class Server<T> {
     }
 
     /**   */
-//    public void createPost(PostDTO postDTO, AnswerServerResponse<T> async) {
-//        answerServerResponse = async;
-//
-//        new ManagerRetrofit<PostDTO>().sendRequest(postDTO, new Object() {// Change (type sending) / (data sending)
-//        }.getClass().getEnclosingMethod().getName(), new ManagerRetrofit.AsyncAnswerString() {
-//            @Override
-//            public void processFinish(Boolean isSuccess, String answerString) {
-//                if (isSuccess) {
-//                    Type typeAnswer = new TypeToken<ServerResponse>() { //Change type response(тип ответа)
-//                    }.getType();
-//                    tryParsing(answerString, typeAnswer);
-//                } else {
-//                    answerServerResponse.processFinish(false, null);
-//                }
-//            }
-//        });
-//    }
     public void createPost(PostDTO postDTO, ArrayList<MultipartBody.Part> listMultipartBody, AnswerServerResponse<T> async) {
         answerServerResponse = async;
 
@@ -271,7 +254,7 @@ public class Server<T> {
         });
     }
 
-    /**   */
+    /** */
     public void updateComment(CommentDTO commentDTO, AnswerServerResponse<T> async) {
         answerServerResponse = async;
         new ManagerRetrofit<CommentDTO>().sendRequest(commentDTO, new Object() {// Change (type sending) / (data sending)
