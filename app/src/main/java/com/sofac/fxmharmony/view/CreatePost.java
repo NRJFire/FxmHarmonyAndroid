@@ -1,7 +1,6 @@
 package com.sofac.fxmharmony.view;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
@@ -9,7 +8,6 @@ import android.os.Bundle;
 import android.provider.OpenableColumns;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -26,32 +24,18 @@ import com.sofac.fxmharmony.adapter.AdapterCreatePostMovies;
 import com.sofac.fxmharmony.adapter.AdapterCreatePostPhotos;
 import com.sofac.fxmharmony.dto.PostDTO;
 import com.sofac.fxmharmony.server.Server;
-import com.sofac.fxmharmony.server.retrofit.ServiceGenerator;
-import com.sofac.fxmharmony.server.retrofit.ServiceRetrofit;
 import com.sofac.fxmharmony.server.type.ServerResponse;
 import com.sofac.fxmharmony.util.ConvertorHTML;
-import com.sofac.fxmharmony.util.PathUtil;
 
-import java.io.File;
-import java.io.IOException;
-import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Locale;
 
-import okhttp3.MediaType;
-import okhttp3.MultipartBody;
-import okhttp3.RequestBody;
-import okhttp3.ResponseBody;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 import timber.log.Timber;
 
 import static com.sofac.fxmharmony.Constants.REQUEST_TAKE_FILE;
 import static com.sofac.fxmharmony.Constants.REQUEST_TAKE_GALLERY_VIDEO;
 import static com.sofac.fxmharmony.Constants.REQUEST_TAKE_PHOTO;
 import static com.sofac.fxmharmony.Constants.TYPE_GROUP;
-import static com.sofac.fxmharmony.R.drawable.file;
 import static com.sofac.fxmharmony.R.id.idButtonDeleting;
 
 
@@ -173,7 +157,7 @@ public class CreatePost extends BaseActivity implements View.OnClickListener {
                     arrayListAll.addAll(listMovies);
                     arrayListAll.addAll(listFiles);
 
-                    new Server<String>().createPost(postDTO, generateMultiPartList(arrayListAll), new Server.AnswerServerResponse<String>() {
+                    new Server<String>().createPost(this, postDTO, arrayListAll, new Server.AnswerServerResponse<String>() {
                         @Override
                         public void processFinish(Boolean isSuccess, ServerResponse<String> answerServerResponse) {
                             if (isSuccess) {
@@ -200,22 +184,6 @@ public class CreatePost extends BaseActivity implements View.OnClickListener {
             default:
                 return super.onOptionsItemSelected(item);
         }
-    }
-
-    public ArrayList<MultipartBody.Part> generateMultiPartList(ArrayList<Uri> listFileUri) {
-
-        ArrayList<MultipartBody.Part> arrayListMulti = new ArrayList<>();
-        for (int i = 0; i < listFileUri.size(); i++) {
-            try {
-                if(isStoragePermissionGranted()){
-                    File file = new File(PathUtil.getPath(this, listFileUri.get(i)));
-                    arrayListMulti.add(MultipartBody.Part.createFormData("files[" + i + "]", file.getName(), RequestBody.create(MediaType.parse("multipart/form-data"), file)));
-                }
-            } catch (URISyntaxException e) {
-                e.printStackTrace();
-            }
-        }
-        return arrayListMulti;
     }
 
     public void toastCantCreatePost() {

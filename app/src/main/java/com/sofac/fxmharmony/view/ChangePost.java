@@ -26,18 +26,12 @@ import com.sofac.fxmharmony.dto.PostDTO;
 import com.sofac.fxmharmony.server.Server;
 import com.sofac.fxmharmony.server.type.ServerResponse;
 import com.sofac.fxmharmony.util.ConvertorHTML;
-import com.sofac.fxmharmony.util.PathUtil;
 
 import org.apache.commons.io.FilenameUtils;
 
-import java.io.File;
-import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Locale;
 
-import okhttp3.MediaType;
-import okhttp3.MultipartBody;
-import okhttp3.RequestBody;
 import timber.log.Timber;
 
 import static com.sofac.fxmharmony.Constants.BASE_URL;
@@ -212,7 +206,7 @@ public class ChangePost extends BaseActivity implements View.OnClickListener {
 
                     arrayListAll.addAll(listFiles);
 
-                    new Server<String>().updatePost(postDTO, generateMultiPartList(arrayListAll),listDeleting, new Server.AnswerServerResponse<String>() {
+                    new Server<String>().updatePost(this, postDTO, arrayListAll, listDeleting, new Server.AnswerServerResponse<String>() {
                         @Override
                         public void processFinish(Boolean isSuccess, ServerResponse<String> answerServerResponse) {
                             if (isSuccess) {
@@ -392,24 +386,6 @@ public class ChangePost extends BaseActivity implements View.OnClickListener {
                 break;
         }
     }
-
-    public ArrayList<MultipartBody.Part> generateMultiPartList(ArrayList<Uri> listFileUri) {
-
-        ArrayList<MultipartBody.Part> arrayListMulti = new ArrayList<>();
-        for (int i = 0; i < listFileUri.size(); i++) {
-            try {
-                if (isStoragePermissionGranted()) {
-                    File file = new File(PathUtil.getPath(this, listFileUri.get(i)));
-                    arrayListMulti.add(MultipartBody.Part.createFormData("files[" + i + "]", file.getName(), RequestBody.create(MediaType.parse("multipart/form-data"), file)));
-                }
-            } catch (URISyntaxException e) {
-                e.printStackTrace();
-            }
-        }
-        return arrayListMulti;
-    }
-
-
 }
 
 

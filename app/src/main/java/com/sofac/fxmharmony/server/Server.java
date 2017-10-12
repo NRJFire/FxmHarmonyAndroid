@@ -18,6 +18,7 @@ import com.sofac.fxmharmony.util.PathUtil;
 
 import java.io.File;
 import java.lang.reflect.Type;
+import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
@@ -163,11 +164,11 @@ public class Server<T> {
     }
 
     /**   */
-    public void createPost(PostDTO postDTO, ArrayList<MultipartBody.Part> listMultipartBody, AnswerServerResponse<T> async) {
+    public void createPost(Context context, PostDTO postDTO, ArrayList<Uri> listUri, AnswerServerResponse<T> async) {
         answerServerResponse = async;
 
         new ManagerRetrofit<PostDTO>().sendMultiPartRequest(postDTO, new Object() {// Change (type sending) / (data sending)
-        }.getClass().getEnclosingMethod().getName(), listMultipartBody, new ManagerRetrofit.AsyncAnswerString() {
+        }.getClass().getEnclosingMethod().getName(), generateMultiPartList(listUri, context), new ManagerRetrofit.AsyncAnswerString() {
             @Override
             public void processFinish(Boolean isSuccess, String answerString) {
                 if (isSuccess) {
@@ -184,11 +185,11 @@ public class Server<T> {
 
 
     /**   */
-    public void updatePost(PostDTO postDTO, ArrayList<MultipartBody.Part> listMultipartBody, ArrayList<String> listDeletingFiles, AnswerServerResponse<T> async) {
+    public void updatePost(Context context, PostDTO postDTO, ArrayList<Uri> listUri, ArrayList<String> listDeletingFiles, AnswerServerResponse<T> async) {
         answerServerResponse = async;
 
         new ManagerRetrofit<PostDTO>().sendMultiPartWhithTwoObj(postDTO, new Object() {// Change (type sending) / (data sending)
-        }.getClass().getEnclosingMethod().getName(), listMultipartBody, listDeletingFiles, new ManagerRetrofit.AsyncAnswerString() {
+        }.getClass().getEnclosingMethod().getName(), generateMultiPartList(listUri, context), listDeletingFiles, new ManagerRetrofit.AsyncAnswerString() {
             @Override
             public void processFinish(Boolean isSuccess, String answerString) {
                 if (isSuccess) {
