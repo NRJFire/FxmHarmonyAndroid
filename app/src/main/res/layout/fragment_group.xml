@@ -7,7 +7,7 @@
     tools:context="com.sofac.fxmharmony.view.NavigationActivity">
 
 
-    <android.support.v4.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/refresh"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -26,7 +26,6 @@
                 android:background="@color/colorGroupBackground"
                 android:scrollbars="vertical"  />
         </LinearLayout>
-
 
         <!--<ListView-->
         <!--android:id="@+id/idListGroup"-->

@@ -79,6 +79,7 @@ public class ChangePost extends BaseActivity implements View.OnClickListener {
         postTextInput = (EditText) findViewById(R.id.post_text_input);
 
         postDTO = PostDTO.findById(PostDTO.class, getIntent().getLongExtra(POST_ID, 0));
+        Timber.e(postDTO.toString());
 
         listPhoto = new ArrayList<>();
         listMovies = new ArrayList<>();
@@ -137,10 +138,6 @@ public class ChangePost extends BaseActivity implements View.OnClickListener {
             }
         }
 
-        Timber.e("listPhoto     "+ listPhoto.toString());
-        Timber.e("listMovies    "+listMovies.toString());
-        Timber.e("listFiles    "+listFiles.toString());
-
         adapterCreatePostPhotos = new AdapterCreatePostPhotos(listPhoto);
         adapterCreatePostPhotos.setItemClickListener(new AdapterCreatePostPhotos.ClickListener() {
             @Override
@@ -194,7 +191,7 @@ public class ChangePost extends BaseActivity implements View.OnClickListener {
             case R.id.send_post_button:
                 if (!postTextInput.getText().toString().equals("")) {
                     progressBar.showView();
-                    PostDTO postDTO = new PostDTO(0L, appUserID.getID(), "", "", ConvertorHTML.toHTML(postTextInput.getText().toString()), "", "", "", "", "", stringTypeGroup);
+                    PostDTO newPostDTO = new PostDTO(postDTO.getId(), postDTO.getUser_id(), "", "", ConvertorHTML.toHTML(postTextInput.getText().toString()), postDTO.getBody_ru(), postDTO.getBody_en(), postDTO.getBody_ko(), "", "", postDTO.getType());
 
                     ArrayList<Uri> arrayListAll = new ArrayList<>();
                     for (Uri uriPhoto : listPhoto) {
@@ -206,7 +203,7 @@ public class ChangePost extends BaseActivity implements View.OnClickListener {
 
                     arrayListAll.addAll(listFiles);
 
-                    new Server<String>().updatePost(this, postDTO, arrayListAll, listDeleting, new Server.AnswerServerResponse<String>() {
+                    new Server<String>().updatePost(this, newPostDTO, arrayListAll, listDeleting, new Server.AnswerServerResponse<String>() {
                         @Override
                         public void processFinish(Boolean isSuccess, ServerResponse<String> answerServerResponse) {
                             if (isSuccess) {
@@ -237,11 +234,11 @@ public class ChangePost extends BaseActivity implements View.OnClickListener {
 
 
     public void toastCantCreatePost() {
-        Toast.makeText(this, "Some problem with creating post!", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "Some problem with editing post!", Toast.LENGTH_SHORT).show();
     }
 
     public void toastFinishTrans() {
-        Toast.makeText(this, "Finish creating post!", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "Finished edit post!", Toast.LENGTH_SHORT).show();
     }
 
     @Override

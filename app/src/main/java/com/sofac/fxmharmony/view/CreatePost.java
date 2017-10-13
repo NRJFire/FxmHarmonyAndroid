@@ -190,7 +190,7 @@ public class CreatePost extends BaseActivity implements View.OnClickListener {
         Toast.makeText(this, "Some problem with creating post!", Toast.LENGTH_SHORT).show();
     }
     public void toastFinishTrans() {
-        Toast.makeText(this, "Finish creating post!", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "Finished creating post!", Toast.LENGTH_SHORT).show();
     }
 
     @Override

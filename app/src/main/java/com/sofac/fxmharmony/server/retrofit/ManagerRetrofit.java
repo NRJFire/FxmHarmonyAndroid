@@ -72,7 +72,8 @@ public class ManagerRetrofit<T> {
     @SuppressWarnings("unchecked")
     public void sendRequest(T object, String requestType, Callback<ResponseBody> responseBodyCallback) {
         serverRequest = new ServerRequest(requestType, object);
-        serviceRetrofit.getData(logServerRequest(serverRequest)).enqueue(responseBodyCallback);
+        logServerRequest(serverRequest);
+        serviceRetrofit.getData(serverRequest).enqueue(responseBodyCallback);
     }
 
     /**
@@ -82,6 +83,7 @@ public class ManagerRetrofit<T> {
     public void sendMultiPartRequest(T object, String requestType, ArrayList<MultipartBody.Part> partArrayList, AsyncAnswerString asyncAnswer) {
         serverRequest = new ServerRequest(requestType, object);
         answerString = asyncAnswer;
+        logServerRequest(serverRequest);
 
         GsonBuilder builder = new GsonBuilder();
         Gson gson = builder.create();
@@ -125,11 +127,21 @@ public class ManagerRetrofit<T> {
     public void sendMultiPartWhithTwoObj(T object, String requestType, ArrayList<MultipartBody.Part> partArrayList, ArrayList<String> listDeletingFiles, AsyncAnswerString asyncAnswer) {
         serverRequest = new ServerRequest(requestType, object);
         answerString = asyncAnswer;
+        logServerRequest(serverRequest);
+
 
         GsonBuilder builder = new GsonBuilder();
         Gson gson = builder.create();
 
+        String stringDeleting = "";
+        for(String str : listDeletingFiles){
+            stringDeleting = stringDeleting + ";" + str;
+        }
+
+        Timber.e("JSON DEL >>>>>>>>> " + stringDeleting);
+
         ServiceRetrofit serviceUploading = ServiceGenerator.createService(ServiceRetrofit.class);
+
         // finally, execute the request
         Call<ResponseBody> call = serviceUploading.sendMultiPartWithTwoObj(
                 RequestBody.create(
@@ -137,7 +149,7 @@ public class ManagerRetrofit<T> {
                         gson.toJson(serverRequest)),
                 RequestBody.create(
                         MediaType.parse("text/plain"),
-                        gson.toJson(listDeletingFiles)),
+                        stringDeleting),
                 partArrayList);
 
         call.enqueue(new Callback<ResponseBody>() {
@@ -218,16 +230,17 @@ public class ManagerRetrofit<T> {
     /**
      * Логирование данных передачи
      */
-    private ServerRequest logServerRequest(ServerRequest serverRequest) {
-        Timber.e(">>>>>>>> " + serverRequest);
-        return serverRequest;
+    private void logServerRequest(ServerRequest serverRequest) {
+        GsonBuilder builder = new GsonBuilder();
+        Gson gson = builder.create();
+        Timber.e(">>>>>>>>>>>>>>>>> \n" + gson.toJson(serverRequest));
     }
 
     /**
      * Логирование данных приема
      */
     private String logServerResponse(String serverResponse) {
-        Timber.e("<<<<<<<< " + serverResponse);
+        Timber.e("<<<<<<<<<<<<<<<< \n" + serverResponse);
         return serverResponse;
     }
 
