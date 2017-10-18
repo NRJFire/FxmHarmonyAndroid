@@ -34,7 +34,7 @@ public class PreviewPhotoActivity extends BaseActivity {
         linkImage = intent.getStringExtra(LINK_IMAGE);
         nameImage = intent.getStringExtra(NAME_IMAGE);
 
-        setTitle("");
+        if(nameImage.isEmpty())setTitle(""); else setTitle(nameImage);
 
         ActionBar actionBar = getSupportActionBar();
         actionBar.setHomeButtonEnabled(true);

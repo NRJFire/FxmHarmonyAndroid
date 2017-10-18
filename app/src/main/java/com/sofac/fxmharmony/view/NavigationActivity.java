@@ -38,6 +38,8 @@ import jp.wasabeef.glide.transformations.CropCircleTransformation;
 
 import static com.sofac.fxmharmony.Constants.AVATAR_IMAGE_SIZE;
 import static com.sofac.fxmharmony.Constants.BASE_URL;
+import static com.sofac.fxmharmony.Constants.LINK_IMAGE;
+import static com.sofac.fxmharmony.Constants.NAME_IMAGE;
 import static com.sofac.fxmharmony.Constants.PART_AVATAR;
 import static com.sofac.fxmharmony.Constants.TYPE_GROUP;
 
@@ -108,6 +110,12 @@ public class NavigationActivity extends BaseActivity implements NavigationView.O
     }
 
     public void setupUserInfoInHeader(String userAvatarURL, String userName, String userStatus){
+        avatarImage.setOnClickListener( v -> {
+            Intent intent = new Intent(this, PreviewPhotoActivity.class);
+            intent.putExtra(LINK_IMAGE, userAvatarURL);
+            intent.putExtra(NAME_IMAGE,"User Avatar");
+            startActivity(intent);
+        });
         Glide.with(this)
                 .load(userAvatarURL)
                 .bitmapTransform(new CropCircleTransformation(this))

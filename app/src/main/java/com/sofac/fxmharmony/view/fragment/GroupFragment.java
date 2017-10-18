@@ -91,11 +91,7 @@ public class GroupFragment extends BaseFragment implements SwipeRefreshLayout.On
         //recyclerViewPost.setEmptyView(rootView.findViewById(R.id.id_list_empty));
 
         postDTOs = (ArrayList<PostDTO>) PostDTO.find(PostDTO.class, "type = ?", stringTypeGroup);
-        Collections.sort(postDTOs, new Comparator<PostDTO>() {
-            public int compare(PostDTO o1, PostDTO o2) {
-                return o2.getDate().compareTo(o1.getDate());
-            }
-        });
+        Collections.sort(postDTOs, (o1, o2) -> o2.getDate().compareTo(o1.getDate()));
         adapterPostGroup = new AdapterPostGroup(getActivity(), postDTOs);
         recyclerViewPost.setAdapter(adapterPostGroup);
 
@@ -111,7 +107,7 @@ public class GroupFragment extends BaseFragment implements SwipeRefreshLayout.On
             public void onItemClick(View view, int position) {
                 if (postDTOs != null) {
                     intentDetailPostActivity.putExtra(POST_ID, postDTOs.get(position).getId());
-                    startActivity(intentDetailPostActivity);
+                    startActivityForResult(intentDetailPostActivity, 1);
                 }
             }
 
@@ -123,18 +119,15 @@ public class GroupFragment extends BaseFragment implements SwipeRefreshLayout.On
                 if (postDTO.getUser_id().equals(userDTO.getId()) || userDTO.isAdmin()) {
 
                     AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                    builder.setItems(R.array.choice_double_click_post, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            switch (which) {
-                                case 0: // Edit
-                                    changePost(GroupFragment.idPost);
-                                    break;
-                                case 1: // Delete
-                                    Timber.e("Click delete");
-                                    deletePost();
-                                    break;
-                            }
+                    builder.setItems(R.array.choice_double_click_post, (dialog, which) -> {
+                        switch (which) {
+                            case 0: // Edit
+                                changePost(GroupFragment.idPost);
+                                break;
+                            case 1: // Delete
+                                Timber.e("Click delete");
+                                deletePost();
+                                break;
                         }
                     });
                     builder.show();

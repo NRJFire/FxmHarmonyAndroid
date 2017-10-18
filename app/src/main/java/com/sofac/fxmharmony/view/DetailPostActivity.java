@@ -463,6 +463,8 @@ public class DetailPostActivity extends BaseActivity {
                 new Connection<String>().deletePost(postDTO, (isSuccess, answerServerResponse) -> {
                     if (isSuccess) {
                         Toast.makeText(DetailPostActivity.this, R.string.post_was_delete, Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(this, NavigationActivity.class);
+                        setResult(2, intent);
                         finish();
                     } else {
                         Toast.makeText(DetailPostActivity.this, R.string.errorServer, Toast.LENGTH_SHORT).show();

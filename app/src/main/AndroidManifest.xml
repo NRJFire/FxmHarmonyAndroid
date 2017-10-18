@@ -39,6 +39,7 @@
 
         <activity
             android:name=".view.SplashActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -48,14 +49,24 @@
         </activity>
         <activity
             android:name=".view.LoginActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".view.DetailPushMessageActivity" />
-        <activity android:name=".view.CreatePost" />
-        <activity android:name=".view.ChangePost" />
-        <activity android:name=".view.TranslatePost" />
+        <activity
+            android:name=".view.DetailPushMessageActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".view.CreatePost"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".view.ChangePost"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".view.TranslatePost"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".view.DetailPostActivity"
-            android:logo="@drawable/keyboard_backspace" />
+            android:logo="@drawable/keyboard_backspace"
+            android:screenOrientation="portrait" />
 
         <!-- Push Google Cloud Messaging services -->
         <service android:name=".util.googleFirebaseService.MyFirebaseInstanceIDService">
@@ -72,24 +83,27 @@
         <activity
             android:name=".view.NavigationActivity"
             android:label="@string/title_activity_navigation"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".view.SettingsActivity"
             android:label="@string/title_activity_settings"
-            android:logo="@drawable/keyboard_backspace" />
-
+            android:logo="@drawable/keyboard_backspace"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".view.PreviewPhotoActivity"
             android:logo="@drawable/keyboard_backspace"
+            android:screenOrientation="portrait"
             android:theme="@style/Black" />
-
         <activity
             android:name=".view.PreviewVideoActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:logo="@drawable/keyboard_backspace"
             android:screenOrientation="portrait"
-            android:theme="@style/Black" /> <!-- or android:screenOrientation="landscape"-->
-
+            android:theme="@style/Black" /> <!-- or android:screenOrientation="landscape" -->
+        <activity
+            android:name=".view.ProfileActivity"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>
