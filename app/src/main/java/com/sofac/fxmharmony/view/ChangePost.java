@@ -279,13 +279,16 @@ public class ChangePost extends BaseActivity implements View.OnClickListener {
     public View createViewFileFromURL(final String nameFile) {
         final View view = getLayoutInflater().inflate(R.layout.item_file_create_post, null);
 
+        Uri fileUri = Uri.parse(BASE_URL + PART_POST + nameFile);
+        listFiles.add(fileUri);
         ((TextView) view.findViewById(R.id.idTextFile)).setText(nameFile);
         ((TextView) view.findViewById(R.id.idSizeFile)).setText("Size file: none");
 
         (view.findViewById(idButtonDeleting)).setOnClickListener(v -> {
             linearLayoutFiles.removeView(view); //TODO Нюанс, нельзя убрать вью, не с чего проверить что осталось в файлах (Обдумать)
             listDeleting.add(nameFile);
-            //if (listFiles.isEmpty()) linearLayoutFiles.setVisibility(View.GONE);
+            listFiles.remove(fileUri);
+            if (listFiles.isEmpty()) linearLayoutFiles.setVisibility(View.GONE);
         });
         return view;
     }
@@ -301,10 +304,11 @@ public class ChangePost extends BaseActivity implements View.OnClickListener {
         Long sizeFile = returnCursor.getLong(sizeIndex);
         if (sizeFile > 1024L) sizeFile = sizeFile / 1024L;
         ((TextView) view.findViewById(R.id.idSizeFile)).setText(String.format(Locale.ENGLISH, "Size file: %,d KB", sizeFile));
+
         (view.findViewById(idButtonDeleting)).setOnClickListener(v -> {
             linearLayoutFiles.removeView(view);
             listFiles.remove(fileUri);
-            //if (listFiles.isEmpty()) linearLayoutFiles.setVisibility(View.GONE);
+            if (listFiles.isEmpty()) linearLayoutFiles.setVisibility(View.GONE);
         });
         return view;
     }
