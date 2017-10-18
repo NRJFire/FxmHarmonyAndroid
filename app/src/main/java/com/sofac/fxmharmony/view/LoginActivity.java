@@ -17,8 +17,7 @@ import com.sofac.fxmharmony.dto.CustomerDTO;
 import com.sofac.fxmharmony.dto.ManagerDTO;
 import com.sofac.fxmharmony.dto.StaffDTO;
 import com.sofac.fxmharmony.dto.UserDTO;
-import com.sofac.fxmharmony.server.Server;
-import com.sofac.fxmharmony.server.type.ServerResponse;
+import com.sofac.fxmharmony.server.Connection;
 import com.sofac.fxmharmony.util.AppUserID;
 import com.sofac.fxmharmony.util.CheckAuthorization;
 
@@ -69,25 +68,22 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
             Toast.makeText(LoginActivity.this, getString(R.string.fieldEmpty), Toast.LENGTH_SHORT).show();
         } else {
             SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(LoginActivity.this);
-            new Server<UserDTO>().authorizationUser(new AuthorizationDTO(editLogin.getText().toString(), editPassword.getText().toString(), sharedPref.getString(Constants.GOOGLE_CLOUD_PREFERENCE, "")), new Server.AnswerServerResponse<UserDTO>() {
-                @Override
-                public void processFinish(Boolean isSuccess, ServerResponse<UserDTO> answerServerResponse) {
-                    if (isSuccess) {
+            new Connection<UserDTO>().authorizationUser(new AuthorizationDTO(editLogin.getText().toString(), editPassword.getText().toString(), sharedPref.getString(Constants.GOOGLE_CLOUD_PREFERENCE, "")), (isSuccess, answerServerResponse) -> {
+                if (isSuccess) {
 
-                        UserDTO userDTO = answerServerResponse.getDataTransferObject();
-                        userDTO.save();
+                    UserDTO userDTO1 = answerServerResponse.getDataTransferObject();
+                    userDTO1.save();
 
-                        new CheckAuthorization(LoginActivity.this).setAuthorization(true);
-                        new AppUserID(LoginActivity.this).setID(userDTO.getId());
+                    new CheckAuthorization(LoginActivity.this).setAuthorization(true);
+                    new AppUserID(LoginActivity.this).setID(userDTO1.getId());
 
-                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                        progressBar.dismissView();
-                        startActivity(intent);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    progressBar.dismissView();
+                    startActivity(intent);
 
-                    } else {
-                        progressBar.dismissView();
-                        Toast.makeText(LoginActivity.this, R.string.errorConnection, Toast.LENGTH_SHORT).show();
-                    }
+                } else {
+                    progressBar.dismissView();
+                    Toast.makeText(LoginActivity.this, R.string.errorConnection, Toast.LENGTH_SHORT).show();
                 }
             });
         }

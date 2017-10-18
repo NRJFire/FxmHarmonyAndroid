@@ -32,7 +32,7 @@ import timber.log.Timber;
  * Created by Maxim on 03.08.2017.
  */
 
-public class Server<T> {
+public class Connection<T> {
 
     private AnswerServerResponse answerServerResponse;
 

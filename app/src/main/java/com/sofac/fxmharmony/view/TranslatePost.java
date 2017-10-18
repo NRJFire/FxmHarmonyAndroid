@@ -1,5 +1,6 @@
 package com.sofac.fxmharmony.view;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.Menu;
@@ -11,7 +12,12 @@ import android.widget.Toast;
 
 import com.sofac.fxmharmony.R;
 import com.sofac.fxmharmony.dto.PostDTO;
+import com.sofac.fxmharmony.server.Connection;
 import com.sofac.fxmharmony.util.ConvertorHTML;
+
+import java.util.ArrayList;
+
+import timber.log.Timber;
 
 import static com.sofac.fxmharmony.Constants.POST_ID;
 
@@ -33,7 +39,7 @@ public class TranslatePost extends BaseActivity {
         setTitle(getString(R.string.translate_post));
 
 
-        postDTO = PostDTO.findById(PostDTO.class, getIntent().getLongExtra(POST_ID,0L));
+        postDTO = PostDTO.findById(PostDTO.class, getIntent().getLongExtra(POST_ID, 0L));
         preferences = getSharedPreferences(USER_SERVICE, MODE_PRIVATE);
 
         //TextView
@@ -104,19 +110,22 @@ public class TranslatePost extends BaseActivity {
                 postDTO.setBody_en(postTextEng.getText().toString());
                 postDTO.setBody_ko(postTextKor.getText().toString());
 
-//                new Server<String>().updatePost(postDTO, new Server.AnswerServerResponse<String>() {
-//                    @Override
-//                    public void processFinish(Boolean isSuccess, ServerResponse<String> answerServerResponse) {
-//                        if(isSuccess){
-//                            postDTO.save();
-//                            Intent intent = new Intent(TranslatePost.this, DetailPostActivity.class);
-//                            setResult(2, intent);
-//                            finish();
-//                        }else{
-//                            toastUpdateTranslateError();
-//                        }
-//                    }
-//                });
+                new Connection<String>().updatePost(this, postDTO, new ArrayList<>(), new ArrayList<>(), (isSuccess, answerServerResponse) -> {
+                    if (isSuccess) {
+                        postDTO.save();
+                        Intent intent = new Intent(TranslatePost.this, NavigationActivity.class);
+                        setResult(2, intent);
+                        finish();
+                    } else {
+                        if (answerServerResponse != null) {
+                            Timber.e(answerServerResponse.toString());
+                        } else {
+                            Timber.e("SOME PROBLEM TO REQUEST ANSWER : null = answerServerResponse,       on up, check the log");
+                        }
+                        toastUpdateTranslateError();
+                    }
+                    progressBar.dismissView();
+                });
 
                 return true;
             default:
@@ -124,7 +133,7 @@ public class TranslatePost extends BaseActivity {
         }
     }
 
-    public void toastUpdateTranslateError(){
+    public void toastUpdateTranslateError() {
         Toast.makeText(this, "Can't to save translate!", Toast.LENGTH_SHORT).show();
     }
 }

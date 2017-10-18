@@ -43,10 +43,7 @@ public class DetailPushMessageActivity extends BaseActivity {
 
         setTitle(getString(R.string.push_message));
 
-
-
-        Intent intent = getIntent();
-        PushMessage pushMessage = (PushMessage) intent.getSerializableExtra(ONE_PUSH_MESSAGE_DATA);
+        PushMessage pushMessage = (PushMessage) getIntent().getSerializableExtra(ONE_PUSH_MESSAGE_DATA);
 
         /* Translate */
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
@@ -56,19 +53,16 @@ public class DetailPushMessageActivity extends BaseActivity {
         final Translation translation = translate.translate(ConvertorHTML.fromHTML(pushMessage.getMessage()), Translate.TranslateOption.targetLanguage(Locale.getDefault().getLanguage()));
         final Drawable drawable = getResources().getDrawable(R.drawable.verticalline);
 
-        if(pushMessage!=null){
-            titleDetailPushMessage.setText(pushMessage.getTitle());
-            dateDetailPushMessage.setText(pushMessage.getDate());
-            messageDetailPushMessage.setText(ConvertorHTML.fromHTML(pushMessage.getMessage()));
-        }
 
-        buttonTranslatePushMessage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                messageTranslatePushMessage.setText(translation.getTranslatedText());
-                messageTranslatePushMessage.setBackground(drawable);
-                buttonTranslatePushMessage.setVisibility(View.GONE);
-            }
+        titleDetailPushMessage.setText(pushMessage.getTitle());
+        dateDetailPushMessage.setText(pushMessage.getDate());
+        messageDetailPushMessage.setText(ConvertorHTML.fromHTML(pushMessage.getMessage()));
+
+
+        buttonTranslatePushMessage.setOnClickListener(v -> {
+            messageTranslatePushMessage.setText(translation.getTranslatedText());
+            messageTranslatePushMessage.setBackground(drawable);
+            buttonTranslatePushMessage.setVisibility(View.GONE);
         });
     }
 

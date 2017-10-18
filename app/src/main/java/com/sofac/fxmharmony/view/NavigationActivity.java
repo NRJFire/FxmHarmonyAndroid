@@ -26,8 +26,7 @@ import com.sofac.fxmharmony.Constants;
 import com.sofac.fxmharmony.R;
 import com.sofac.fxmharmony.dto.ManagerDTO;
 import com.sofac.fxmharmony.dto.PostDTO;
-import com.sofac.fxmharmony.server.Server;
-import com.sofac.fxmharmony.server.type.ServerResponse;
+import com.sofac.fxmharmony.server.Connection;
 import com.sofac.fxmharmony.util.CheckAuthorization;
 import com.sofac.fxmharmony.view.fragment.ContentFragment;
 import com.sofac.fxmharmony.view.fragment.GroupFragment;
@@ -86,30 +85,24 @@ public class NavigationActivity extends BaseActivity implements NavigationView.O
         tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(viewPager);
 
-        new Server<ManagerDTO>().getManagerInfo(userDTO.getId(), new Server.AnswerServerResponse<ManagerDTO>() {
-            @Override
-            public void processFinish(Boolean isSuccess, ServerResponse<ManagerDTO> answerServerResponse) {
-                if(isSuccess){
-                    setupUserInfoInHeader(BASE_URL + PART_AVATAR + answerServerResponse.getDataTransferObject().getAvatar(), answerServerResponse.getDataTransferObject().getName(), userDTO.getRole());
-                } else {
-                    setupUserInfoInHeader(BASE_URL + PART_AVATAR + "man-03.jpg", "Name", userDTO.getRole());
-                }
+        new Connection<ManagerDTO>().getManagerInfo(userDTO.getId(), (isSuccess, answerServerResponse) -> {
+            if(isSuccess){
+                setupUserInfoInHeader(BASE_URL + PART_AVATAR + answerServerResponse.getDataTransferObject().getAvatar(), answerServerResponse.getDataTransferObject().getName(), userDTO.getRole());
+            } else {
+                setupUserInfoInHeader(BASE_URL + PART_AVATAR + "man-03.jpg", "Name", userDTO.getRole());
             }
         });
 
-        new Server<ArrayList<PostDTO>>().getListPosts("", new Server.AnswerServerResponse<ArrayList<PostDTO>>() {
-            @Override
-            public void processFinish(Boolean isSuccess, ServerResponse<ArrayList<PostDTO>> answerServerResponse) {
-                progressBar.dismissView();
-                if(isSuccess) {
-                    if (answerServerResponse.getDataTransferObject() != null) {
-                        PostDTO.deleteAll(PostDTO.class);
-                        PostDTO.saveInTx(answerServerResponse.getDataTransferObject());
-                        setupViewPager(viewPager);
-                    }
-                } else {
-                    Toast.makeText(NavigationActivity.this, "Connection error", Toast.LENGTH_SHORT).show();
+        new Connection<ArrayList<PostDTO>>().getListPosts("", (isSuccess, answerServerResponse) -> {
+            progressBar.dismissView();
+            if(isSuccess) {
+                if (answerServerResponse.getDataTransferObject() != null) {
+                    PostDTO.deleteAll(PostDTO.class);
+                    PostDTO.saveInTx(answerServerResponse.getDataTransferObject());
+                    setupViewPager(viewPager);
                 }
+            } else {
+                Toast.makeText(NavigationActivity.this, "Connection error", Toast.LENGTH_SHORT).show();
             }
         });
     }

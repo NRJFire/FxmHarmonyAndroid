@@ -23,8 +23,7 @@ import com.sofac.fxmharmony.R;
 import com.sofac.fxmharmony.adapter.AdapterCreatePostMovies;
 import com.sofac.fxmharmony.adapter.AdapterCreatePostPhotos;
 import com.sofac.fxmharmony.dto.PostDTO;
-import com.sofac.fxmharmony.server.Server;
-import com.sofac.fxmharmony.server.type.ServerResponse;
+import com.sofac.fxmharmony.server.Connection;
 import com.sofac.fxmharmony.util.ConvertorHTML;
 
 import org.apache.commons.io.FilenameUtils;
@@ -46,26 +45,15 @@ import static com.sofac.fxmharmony.R.id.idButtonDeleting;
 public class ChangePost extends BaseActivity implements View.OnClickListener {
 
     private PostDTO postDTO;
-
     private EditText postTextInput;
-    public String stringTypeGroup = "membergroup";
     private FloatingActionMenu menuButton;
 
-    public ArrayList<Uri> listPhoto;
-    public ArrayList<Uri> listMovies;
-    public ArrayList<Uri> listFiles;
+    public ArrayList<Uri> listPhoto, listMovies, listFiles;
     public ArrayList<String> listDeleting;
 
-    FloatingActionButton buttonAddFiles;
-    FloatingActionButton buttonAddMovies;
-    FloatingActionButton buttonAddPhotos;
-
-    LinearLayout linearLayoutPhoto;
-    LinearLayout linearLayoutMovies;
-    LinearLayout linearLayoutFiles;
-
-    RecyclerView recyclerViewPhoto;
-    RecyclerView recyclerViewMovie;
+    FloatingActionButton buttonAddFiles, buttonAddMovies, buttonAddPhotos;
+    LinearLayout linearLayoutPhoto, linearLayoutMovies,linearLayoutFiles;
+    RecyclerView recyclerViewPhoto, recyclerViewMovie;
 
     AdapterCreatePostPhotos adapterCreatePostPhotos;
     AdapterCreatePostMovies adapterCreatePostMovies;
@@ -87,12 +75,7 @@ public class ChangePost extends BaseActivity implements View.OnClickListener {
         listDeleting = new ArrayList<>();
 
         ScrollView scrollView = (ScrollView) findViewById(R.id.idScrollViewEditPost);
-        scrollView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                postTextInput.setFocusable(true);
-            }
-        });
+        scrollView.setOnClickListener(v -> postTextInput.setFocusable(true));
 
 
         buttonAddFiles = (FloatingActionButton) findViewById(R.id.buttonAddFiles);
@@ -139,18 +122,15 @@ public class ChangePost extends BaseActivity implements View.OnClickListener {
         }
 
         adapterCreatePostPhotos = new AdapterCreatePostPhotos(listPhoto);
-        adapterCreatePostPhotos.setItemClickListener(new AdapterCreatePostPhotos.ClickListener() {
-            @Override
-            public void onMyClick(View view, int position) {
-                switch (view.getId()) {
-                    case idButtonDeleting:
-                        if (listPhoto.get(position).toString().contains("http://"))
-                            listDeleting.add(FilenameUtils.getName(listPhoto.get(position).getPath()));
-                        listPhoto.remove(position);
-                        adapterCreatePostPhotos.notifyDataSetChanged();
-                        if (listPhoto.isEmpty()) linearLayoutPhoto.setVisibility(View.GONE);
-                        break;
-                }
+        adapterCreatePostPhotos.setItemClickListener((view, position) -> {
+            switch (view.getId()) {
+                case idButtonDeleting:
+                    if (listPhoto.get(position).toString().contains("http://"))
+                        listDeleting.add(FilenameUtils.getName(listPhoto.get(position).getPath()));
+                    listPhoto.remove(position);
+                    adapterCreatePostPhotos.notifyDataSetChanged();
+                    if (listPhoto.isEmpty()) linearLayoutPhoto.setVisibility(View.GONE);
+                    break;
             }
         });
 
@@ -159,20 +139,18 @@ public class ChangePost extends BaseActivity implements View.OnClickListener {
         recyclerViewPhoto.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
 
         adapterCreatePostMovies = new AdapterCreatePostMovies(listMovies);
-        adapterCreatePostMovies.setItemClickListener(new AdapterCreatePostMovies.ClickListener() {
-            @Override
-            public void onMyClick(View view, int position) {
-                switch (view.getId()) {
-                    case idButtonDeleting:
-                        if (listMovies.get(position).toString().contains("http://"))
-                            listDeleting.add(FilenameUtils.getName(listMovies.get(position).getPath()));
-                        listMovies.remove(position);
-                        adapterCreatePostMovies.notifyDataSetChanged();
-                        if (listMovies.isEmpty()) linearLayoutMovies.setVisibility(View.GONE);
-                        break;
-                }
+        adapterCreatePostMovies.setItemClickListener((view, position) -> {
+            switch (view.getId()) {
+                case idButtonDeleting:
+                    if (listMovies.get(position).toString().contains("http://"))
+                        listDeleting.add(FilenameUtils.getName(listMovies.get(position).getPath()));
+                    listMovies.remove(position);
+                    adapterCreatePostMovies.notifyDataSetChanged();
+                    if (listMovies.isEmpty()) linearLayoutMovies.setVisibility(View.GONE);
+                    break;
             }
         });
+
         recyclerViewMovie.setAdapter(adapterCreatePostMovies);
         recyclerViewMovie.setHasFixedSize(true);
         recyclerViewMovie.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
@@ -191,7 +169,8 @@ public class ChangePost extends BaseActivity implements View.OnClickListener {
             case R.id.send_post_button:
                 if (!postTextInput.getText().toString().equals("")) {
                     progressBar.showView();
-                    PostDTO newPostDTO = new PostDTO(postDTO.getId(), postDTO.getUser_id(), "", "", ConvertorHTML.toHTML(postTextInput.getText().toString()), postDTO.getBody_ru(), postDTO.getBody_en(), postDTO.getBody_ko(), "", "", postDTO.getType());
+
+                    postDTO.setBody_original(ConvertorHTML.toHTML(postTextInput.getText().toString()));
 
                     ArrayList<Uri> arrayListAll = new ArrayList<>();
                     for (Uri uriPhoto : listPhoto) {
@@ -203,24 +182,32 @@ public class ChangePost extends BaseActivity implements View.OnClickListener {
 
                     arrayListAll.addAll(listFiles);
 
-                    new Server<String>().updatePost(this, newPostDTO, arrayListAll, listDeleting, new Server.AnswerServerResponse<String>() {
-                        @Override
-                        public void processFinish(Boolean isSuccess, ServerResponse<String> answerServerResponse) {
-                            if (isSuccess) {
-                                Intent intent = new Intent(ChangePost.this, NavigationActivity.class);
-                                setResult(2, intent);
-                                finish();
-                                toastFinishTrans();
-                            } else {
-                                if (answerServerResponse != null) {
-                                    Timber.e(answerServerResponse.toString());
+                    new Connection<String>().updatePost(this, postDTO, arrayListAll, listDeleting, (isSuccess, answerServerResponse) -> {
+                        if (isSuccess) {
+
+                            PostDTO.deleteAll(PostDTO.class, "type = ?", postDTO.getType());
+                            new Connection<ArrayList<PostDTO>>().getListPosts(postDTO.getType(), (isSuccess1, answerServerResponse1) -> {
+                                if (isSuccess1 && answerServerResponse1 != null) {
+                                    PostDTO.saveInTx(answerServerResponse1.getDataTransferObject());
+                                    Intent intent = new Intent(ChangePost.this, NavigationActivity.class);
+                                    setResult(2, intent);
+                                    progressBar.dismissView();
+                                    finish();
+                                    toastFinishTrans();
                                 } else {
-                                    Timber.e("SOME PROBLEM TO REQUEST ANSWER : null = answerServerResponse,       on up, check the log");
+                                    progressBar.dismissView();
                                 }
-                                toastCantCreatePost();
+                            });
+                        } else {
+                            if (answerServerResponse != null) {
+                                Timber.e(answerServerResponse.toString());
+                            } else {
+                                Timber.e("SOME PROBLEM TO REQUEST ANSWER : null = answerServerResponse,       on up, check the log");
                             }
+                            toastCantCreatePost();
                             progressBar.dismissView();
                         }
+
                     });
 
                 } else {
@@ -295,13 +282,10 @@ public class ChangePost extends BaseActivity implements View.OnClickListener {
         ((TextView) view.findViewById(R.id.idTextFile)).setText(nameFile);
         ((TextView) view.findViewById(R.id.idSizeFile)).setText("Size file: none");
 
-        (view.findViewById(idButtonDeleting)).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                linearLayoutFiles.removeView(view); //TODO Нюанс, нельзя убрать вью, не с чего проверить что осталось в файлах (Обдумать)
-                listDeleting.add(nameFile);
-                //if (listFiles.isEmpty()) linearLayoutFiles.setVisibility(View.GONE);
-            }
+        (view.findViewById(idButtonDeleting)).setOnClickListener(v -> {
+            linearLayoutFiles.removeView(view); //TODO Нюанс, нельзя убрать вью, не с чего проверить что осталось в файлах (Обдумать)
+            listDeleting.add(nameFile);
+            //if (listFiles.isEmpty()) linearLayoutFiles.setVisibility(View.GONE);
         });
         return view;
     }
@@ -317,13 +301,10 @@ public class ChangePost extends BaseActivity implements View.OnClickListener {
         Long sizeFile = returnCursor.getLong(sizeIndex);
         if (sizeFile > 1024L) sizeFile = sizeFile / 1024L;
         ((TextView) view.findViewById(R.id.idSizeFile)).setText(String.format(Locale.ENGLISH, "Size file: %,d KB", sizeFile));
-        (view.findViewById(idButtonDeleting)).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                linearLayoutFiles.removeView(view);
-                listFiles.remove(fileUri);
-                //if (listFiles.isEmpty()) linearLayoutFiles.setVisibility(View.GONE);
-            }
+        (view.findViewById(idButtonDeleting)).setOnClickListener(v -> {
+            linearLayoutFiles.removeView(view);
+            listFiles.remove(fileUri);
+            //if (listFiles.isEmpty()) linearLayoutFiles.setVisibility(View.GONE);
         });
         return view;
     }

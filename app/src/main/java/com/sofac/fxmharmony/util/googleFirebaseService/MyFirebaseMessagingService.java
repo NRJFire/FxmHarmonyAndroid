@@ -55,7 +55,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         builder = new NotificationCompat.Builder(this);
         builder.setContentTitle(title);
         builder.setContentText(Html.fromHtml(messageText).toString())
-                .setSmallIcon(getNotificationIcon())
+                .setSmallIcon(R.drawable.ic_stat_onesignal_default)
               /*  .setStyle(bigPictureStyle)*/
                 .setAutoCancel(true)
                 .setContentIntent(
@@ -70,9 +70,9 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
     }
 
-    private int getNotificationIcon() {
-        boolean useWhiteIcon = (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP);
-        return useWhiteIcon ? R.drawable.ic_stat_icon_silhouette : R.drawable.icon;
-    }
+//    private int getNotificationIcon() {
+//        boolean useWhiteIcon = (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP);
+//        return useWhiteIcon ? R.drawable.ic_stat_onesignal_default : R.drawable.icon;
+//    }
 
 }

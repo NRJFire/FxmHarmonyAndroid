@@ -42,4 +42,28 @@
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/fab_margin"
         app:srcCompat="@drawable/pencil" />
+
+    <LinearLayout
+        android:id="@+id/id_recycler_empty"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center_vertical|center_horizontal"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:gravity="center"
+            app:srcCompat="@drawable/logo" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/list_push_empty"
+            android:textColor="@color/colorItemContext"
+            android:textSize="15sp" />
+
+    </LinearLayout>
 </android.support.design.widget.CoordinatorLayout>

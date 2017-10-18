@@ -3,7 +3,6 @@ package com.sofac.fxmharmony.view;
 import android.app.AlertDialog;
 import android.content.ClipData;
 import android.content.ClipboardManager;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
@@ -37,8 +36,7 @@ import com.sofac.fxmharmony.adapter.AdapterCommentsGroup;
 import com.sofac.fxmharmony.dto.CommentDTO;
 import com.sofac.fxmharmony.dto.PostDTO;
 import com.sofac.fxmharmony.dto.UserDTO;
-import com.sofac.fxmharmony.server.Server;
-import com.sofac.fxmharmony.server.type.ServerResponse;
+import com.sofac.fxmharmony.server.Connection;
 import com.sofac.fxmharmony.util.AppMethods;
 import com.sofac.fxmharmony.util.AppUserID;
 import com.sofac.fxmharmony.util.ConvertorHTML;
@@ -111,105 +109,84 @@ public class DetailPostActivity extends BaseActivity {
         editTextComment = (EditText) findViewById(R.id.edit_text_comment);
         listViewComments = (ListView) findViewById(R.id.idListViewComments);
 
-        listViewComments.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View itemClicked, int position, long id) {
-                if (arrayListComments != null) {
-                    if (position > 0) {
-                        editTextComment.append(arrayListComments.get(position - 1).getName() + ", ");
-                    }
-                }
-            }
-        });
-
-        listViewComments.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-            @Override
-            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+        listViewComments.setOnItemClickListener((parent, itemClicked, position, id) -> {
+            if (arrayListComments != null) {
                 if (position > 0) {
-                    commentDTO = arrayListComments.get(position - 1);
-                    if (commentDTO.getId() != null) {
-                        DetailPostActivity.idComment = commentDTO.getId();
-                        if (commentDTO.getUser_id().equals(appUserID.getID())) {
-                            AlertDialog.Builder builder = new AlertDialog.Builder(DetailPostActivity.this);
-                            builder.setItems(R.array.choice_double_click_post, new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-
-                                    switch (which) {
-                                        case 0: //Edit
-                                            editTextComment.setText("");
-                                            editTextComment.append(commentDTO.getBody());
-                                            isCreatingComment = false;
-                                            break;
-                                        case 1: //Delete
-                                            progressBar.showView();
-                                            new Server<String>().deleteComment(commentDTO, new Server.AnswerServerResponse<String>() {
-                                                @Override
-                                                public void processFinish(Boolean isSuccess, ServerResponse<String> answerServerResponse) {
-                                                    if (isSuccess) {
-                                                        updateListView();
-                                                        Toast.makeText(DetailPostActivity.this, R.string.comment_was_delete, Toast.LENGTH_SHORT).show();
-                                                    } else {
-                                                        Toast.makeText(DetailPostActivity.this, "Error deleting!", Toast.LENGTH_SHORT).show();
-                                                    }
-                                                    progressBar.dismissView();
-                                                }
-                                            });
-                                            break;
-                                    }
-                                }
-                            });
-                            builder.show();
-                        }
-                    } else {
-                        Toast.makeText(DetailPostActivity.this, R.string.problem_with_ID_comment, Toast.LENGTH_SHORT).show();
-                    }
+                    editTextComment.append(arrayListComments.get(position - 1).getName() + ", ");
                 }
-
-                return true;
             }
         });
 
-        buttonSend.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (!(editTextComment.getText().toString()).isEmpty()) {
-                    progressBar.showView();
-                    if (isCreatingComment) { //Создание коментария
+        listViewComments.setOnItemLongClickListener((parent, view, position, id) -> {
+            if (position > 0) {
+                commentDTO = arrayListComments.get(position - 1);
+                if (commentDTO.getId() != null) {
+                    DetailPostActivity.idComment = commentDTO.getId();
+                    if (commentDTO.getUser_id().equals(appUserID.getID())) {
+                        AlertDialog.Builder builder = new AlertDialog.Builder(DetailPostActivity.this);
+                        builder.setItems(R.array.choice_double_click_post, (dialog, which) -> {
 
-                        new Server<String>().createComment(new CommentDTO(1L, appUserID.getID(), postDTO.getId(), editTextComment.getText().toString(), "", "", ""), new Server.AnswerServerResponse<String>() {
-                            @Override
-                            public void processFinish(Boolean isSuccess, ServerResponse<String> answerServerResponse) {
-                                if (isSuccess) {
-                                    updateListView();
+                            switch (which) {
+                                case 0: //Edit
                                     editTextComment.setText("");
-                                } else {
-                                    Toast.makeText(DetailPostActivity.this, R.string.create_comment_error, Toast.LENGTH_SHORT).show();
-                                }
-                                progressBar.dismissView();
+                                    editTextComment.append(commentDTO.getBody());
+                                    isCreatingComment = false;
+                                    break;
+                                case 1: //Delete
+                                    progressBar.showView();
+                                    new Connection<String>().deleteComment(commentDTO, (isSuccess, answerServerResponse) -> {
+                                        if (isSuccess) {
+                                            updateListView();
+                                            Toast.makeText(DetailPostActivity.this, R.string.comment_was_delete, Toast.LENGTH_SHORT).show();
+                                        } else {
+                                            Toast.makeText(DetailPostActivity.this, "Error deleting!", Toast.LENGTH_SHORT).show();
+                                        }
+                                        progressBar.dismissView();
+                                    });
+                                    break;
                             }
                         });
-
-                    } else { // Редактирование коментария
-                        commentDTO.setBody(editTextComment.getText().toString());
-                        new Server<String>().updateComment(commentDTO, new Server.AnswerServerResponse<String>() {
-                            @Override
-                            public void processFinish(Boolean isSuccess, ServerResponse<String> answerServerResponse) {
-                                if (isSuccess) {
-                                    updateListView();
-                                    editTextComment.setText("");
-                                    isCreatingComment = true;
-                                } else {
-                                    Toast.makeText(DetailPostActivity.this, R.string.edit_comment_error, Toast.LENGTH_SHORT).show();
-                                }
-                                progressBar.dismissView();
-                            }
-                        });
+                        builder.show();
                     }
-
                 } else {
-                    Toast.makeText(DetailPostActivity.this, R.string.field_empty, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(DetailPostActivity.this, R.string.problem_with_ID_comment, Toast.LENGTH_SHORT).show();
                 }
+            }
+
+            return true;
+        });
+
+        buttonSend.setOnClickListener(v -> {
+            if (!(editTextComment.getText().toString()).isEmpty()) {
+                progressBar.showView();
+                if (isCreatingComment) { //Создание коментария
+
+                    new Connection<String>().createComment(new CommentDTO(1L, appUserID.getID(), postDTO.getId(), editTextComment.getText().toString(), "", "", ""), (isSuccess, answerServerResponse) -> {
+                        if (isSuccess) {
+                            updateListView();
+                            editTextComment.setText("");
+                        } else {
+                            Toast.makeText(DetailPostActivity.this, R.string.create_comment_error, Toast.LENGTH_SHORT).show();
+                        }
+                        progressBar.dismissView();
+                    });
+
+                } else { // Редактирование коментария
+                    commentDTO.setBody(editTextComment.getText().toString());
+                    new Connection<String>().updateComment(commentDTO, (isSuccess, answerServerResponse) -> {
+                        if (isSuccess) {
+                            updateListView();
+                            editTextComment.setText("");
+                            isCreatingComment = true;
+                        } else {
+                            Toast.makeText(DetailPostActivity.this, R.string.edit_comment_error, Toast.LENGTH_SHORT).show();
+                        }
+                        progressBar.dismissView();
+                    });
+                }
+
+            } else {
+                Toast.makeText(DetailPostActivity.this, R.string.field_empty, Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -238,7 +215,7 @@ public class DetailPostActivity extends BaseActivity {
         if (!stringsSpinnerLanguage.isEmpty())
             stringsSpinnerLanguage.add(0, getString(R.string.original_spinner));
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.spinner_layout, stringsSpinnerLanguage);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, R.layout.spinner_layout, stringsSpinnerLanguage);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
         spinnerLanguage.setAdapter(adapter);
@@ -307,14 +284,11 @@ public class DetailPostActivity extends BaseActivity {
                         .placeholder(R.drawable.no_image)
                         .into(imageView);
                 linearLayoutPhotos.addView(photoItemView, lParams);
-                photoItemView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Intent intentPhoto = new Intent(DetailPostActivity.this, PreviewPhotoActivity.class);
-                        intentPhoto.putExtra(LINK_IMAGE, ("" + BASE_URL + PART_POST + imageName));
-                        intentPhoto.putExtra(NAME_IMAGE, ("" + imageName));
-                        startActivity(intentPhoto);
-                    }
+                photoItemView.setOnClickListener(v13 -> {
+                    Intent intentPhoto = new Intent(DetailPostActivity.this, PreviewPhotoActivity.class);
+                    intentPhoto.putExtra(LINK_IMAGE, ("" + BASE_URL + PART_POST + imageName));
+                    intentPhoto.putExtra(NAME_IMAGE, ("" + imageName));
+                    startActivity(intentPhoto);
                 });
             }
 
@@ -341,14 +315,11 @@ public class DetailPostActivity extends BaseActivity {
                         .into(imageVideoView);
                 linearLayoutVideos.addView(videoItemView, lParams);
 
-                videoItemView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Intent intentVideo = new Intent(DetailPostActivity.this, PreviewVideoActivity.class);
-                        intentVideo.putExtra(LINK_VIDEO, ("" + BASE_URL + PART_POST + videoName));
-                        intentVideo.putExtra(NAME_VIDEO, ("" + videoName));
-                        startActivity(intentVideo);
-                    }
+                videoItemView.setOnClickListener(v12 -> {
+                    Intent intentVideo = new Intent(DetailPostActivity.this, PreviewVideoActivity.class);
+                    intentVideo.putExtra(LINK_VIDEO, ("" + BASE_URL + PART_POST + videoName));
+                    intentVideo.putExtra(NAME_VIDEO, ("" + videoName));
+                    startActivity(intentVideo);
                 });
             }
 
@@ -367,35 +338,32 @@ public class DetailPostActivity extends BaseActivity {
                 TextView textView = (TextView) fileItemView.findViewById(R.id.idNameFile);
                 textView.setText(fileName);
 
-                fileItemView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        if (isStoragePermissionGranted()) {
-                            new FileLoadingTask(
-                                    BASE_URL + PART_POST + fileName,
-                                    new File(Environment.getExternalStorageDirectory() + "/Download/" + fileName),
-                                    new FileLoadingListener() {
-                                        @Override
-                                        public void onBegin() {
-                                            Toast.makeText(DetailPostActivity.this, "Begin download", Toast.LENGTH_SHORT).show();
-                                        }
+                fileItemView.setOnClickListener(v1 -> {
+                    if (isStoragePermissionGranted()) {
+                        new FileLoadingTask(
+                                BASE_URL + PART_POST + fileName,
+                                new File(Environment.getExternalStorageDirectory() + "/Download/" + fileName),
+                                new FileLoadingListener() {
+                                    @Override
+                                    public void onBegin() {
+                                        Toast.makeText(DetailPostActivity.this, "Begin download", Toast.LENGTH_SHORT).show();
+                                    }
 
-                                        @Override
-                                        public void onSuccess() {
-                                            Toast.makeText(DetailPostActivity.this, "Successful download", Toast.LENGTH_SHORT).show();
-                                        }
+                                    @Override
+                                    public void onSuccess() {
+                                        Toast.makeText(DetailPostActivity.this, "Successful download", Toast.LENGTH_SHORT).show();
+                                    }
 
-                                        @Override
-                                        public void onFailure(Throwable cause) {
-                                            Toast.makeText(DetailPostActivity.this, "Error download", Toast.LENGTH_SHORT).show();
-                                        }
+                                    @Override
+                                    public void onFailure(Throwable cause) {
+                                        Toast.makeText(DetailPostActivity.this, "Error download", Toast.LENGTH_SHORT).show();
+                                    }
 
-                                        @Override
-                                        public void onEnd() {
+                                    @Override
+                                    public void onEnd() {
 
-                                        }
-                                    }).execute();
-                        }
+                                    }
+                                }).execute();
                     }
                 });
                 linearLayoutFiles.addView(fileItemView, lParams);
@@ -417,25 +385,19 @@ public class DetailPostActivity extends BaseActivity {
         final Translation translation = translate.translate(messageTextView.getText().toString(), Translate.TranslateOption.targetLanguage(Locale.getDefault().getLanguage()));
         final Drawable drawable = getResources().getDrawable(R.drawable.verticalline);
 
-        buttonTranslatePushMessage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                messageTranslatePushMessage.setVisibility(View.VISIBLE);
-                messageTranslatePushMessage.setText(translation.getTranslatedText());
-                messageTranslatePushMessage.setBackground(drawable);
-                buttonTranslatePushMessage.setVisibility(View.GONE);
-            }
+        buttonTranslatePushMessage.setOnClickListener(v14 -> {
+            messageTranslatePushMessage.setVisibility(View.VISIBLE);
+            messageTranslatePushMessage.setText(translation.getTranslatedText());
+            messageTranslatePushMessage.setBackground(drawable);
+            buttonTranslatePushMessage.setVisibility(View.GONE);
         });
 
-        messageTextView.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                String text = messageTextView.getText().toString();
-                clipData = ClipData.newPlainText("text", text);
-                clipboardManager.setPrimaryClip(clipData);
-                Toast.makeText(DetailPostActivity.this, "Text Copied", Toast.LENGTH_SHORT).show();
-                return false;
-            }
+        messageTextView.setOnLongClickListener(v15 -> {
+            String text = messageTextView.getText().toString();
+            clipData = ClipData.newPlainText("text", text);
+            clipboardManager.setPrimaryClip(clipData);
+            Toast.makeText(DetailPostActivity.this, "Text Copied", Toast.LENGTH_SHORT).show();
+            return false;
         });
 
         linearLayout.addView(v);
@@ -445,19 +407,16 @@ public class DetailPostActivity extends BaseActivity {
 
     public void updateListView() {
         progressBar.showView();
-        new Server<ArrayList<CommentDTO>>().getListComments(postDTO.getId(), new Server.AnswerServerResponse<ArrayList<CommentDTO>>() {
-            @Override
-            public void processFinish(Boolean isSuccess, ServerResponse<ArrayList<CommentDTO>> answerServerResponse) {
-                if (isSuccess) {
-                    arrayListComments = answerServerResponse.getDataTransferObject();
-                    adapterCommentsGroup = new AdapterCommentsGroup(DetailPostActivity.this, arrayListComments);
-                    listViewComments.setAdapter(adapterCommentsGroup);
-                    adapterCommentsGroup.notifyDataSetChanged();
-                } else {
-                    Toast.makeText(DetailPostActivity.this, getString(R.string.errorServer), Toast.LENGTH_SHORT).show();
-                }
-                progressBar.dismissView();
+        new Connection<ArrayList<CommentDTO>>().getListComments(postDTO.getId(), (isSuccess, answerServerResponse) -> {
+            if (isSuccess) {
+                arrayListComments = answerServerResponse.getDataTransferObject();
+                adapterCommentsGroup = new AdapterCommentsGroup(DetailPostActivity.this, arrayListComments);
+                listViewComments.setAdapter(adapterCommentsGroup);
+                adapterCommentsGroup.notifyDataSetChanged();
+            } else {
+                Toast.makeText(DetailPostActivity.this, getString(R.string.errorServer), Toast.LENGTH_SHORT).show();
             }
+            progressBar.dismissView();
         });
     }
 
@@ -501,15 +460,12 @@ public class DetailPostActivity extends BaseActivity {
                 changePost(postDTO.getId());
                 return true;
             case R.id.menu_delete:
-                new Server<String>().deletePost(postDTO, new Server.AnswerServerResponse<String>() {
-                    @Override
-                    public void processFinish(Boolean isSuccess, ServerResponse<String> answerServerResponse) {
-                        if (isSuccess) {
-                            Toast.makeText(DetailPostActivity.this, R.string.post_was_delete, Toast.LENGTH_SHORT).show();
-                            finish();
-                        } else {
-                            Toast.makeText(DetailPostActivity.this, R.string.errorServer, Toast.LENGTH_SHORT).show();
-                        }
+                new Connection<String>().deletePost(postDTO, (isSuccess, answerServerResponse) -> {
+                    if (isSuccess) {
+                        Toast.makeText(DetailPostActivity.this, R.string.post_was_delete, Toast.LENGTH_SHORT).show();
+                        finish();
+                    } else {
+                        Toast.makeText(DetailPostActivity.this, R.string.errorServer, Toast.LENGTH_SHORT).show();
                     }
                 });
                 return true;

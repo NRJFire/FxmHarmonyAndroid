@@ -23,8 +23,7 @@ import com.sofac.fxmharmony.R;
 import com.sofac.fxmharmony.adapter.AdapterCreatePostMovies;
 import com.sofac.fxmharmony.adapter.AdapterCreatePostPhotos;
 import com.sofac.fxmharmony.dto.PostDTO;
-import com.sofac.fxmharmony.server.Server;
-import com.sofac.fxmharmony.server.type.ServerResponse;
+import com.sofac.fxmharmony.server.Connection;
 import com.sofac.fxmharmony.util.ConvertorHTML;
 
 import java.util.ArrayList;
@@ -157,24 +156,21 @@ public class CreatePost extends BaseActivity implements View.OnClickListener {
                     arrayListAll.addAll(listMovies);
                     arrayListAll.addAll(listFiles);
 
-                    new Server<String>().createPost(this, postDTO, arrayListAll, new Server.AnswerServerResponse<String>() {
-                        @Override
-                        public void processFinish(Boolean isSuccess, ServerResponse<String> answerServerResponse) {
-                            if (isSuccess) {
-                                Intent intent = new Intent(CreatePost.this, NavigationActivity.class);
-                                setResult(2, intent);
-                                finish();
-                                toastFinishTrans();
+                    new Connection<String>().createPost(this, postDTO, arrayListAll, (isSuccess, answerServerResponse) -> {
+                        if (isSuccess) {
+                            Intent intent = new Intent(CreatePost.this, NavigationActivity.class);
+                            setResult(2, intent);
+                            finish();
+                            toastFinishTrans();
+                        } else {
+                            if(answerServerResponse != null){
+                                Timber.e(answerServerResponse.toString());
                             } else {
-                                if(answerServerResponse != null){
-                                    Timber.e(answerServerResponse.toString());
-                                } else {
-                                    Timber.e("SOME PROBLEM TO REQUEST ANSWER : null = answerServerResponse,       on up, check the log");
-                                }
-                                toastCantCreatePost();
+                                Timber.e("SOME PROBLEM TO REQUEST ANSWER : null = answerServerResponse,       on up, check the log");
                             }
-                            progressBar.dismissView();
+                            toastCantCreatePost();
                         }
+                        progressBar.dismissView();
                     });
 
                 } else {

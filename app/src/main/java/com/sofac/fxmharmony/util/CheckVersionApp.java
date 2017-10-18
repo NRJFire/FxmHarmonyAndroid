@@ -3,7 +3,6 @@ package com.sofac.fxmharmony.util;
 import android.app.AlertDialog;
 import android.content.ComponentName;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageInfo;
@@ -11,9 +10,9 @@ import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.net.Uri;
 import android.widget.Toast;
+
 import com.sofac.fxmharmony.dto.AppVersionDTO;
-import com.sofac.fxmharmony.server.Server;
-import com.sofac.fxmharmony.server.type.ServerResponse;
+import com.sofac.fxmharmony.server.Connection;
 
 import java.util.List;
 
@@ -44,55 +43,34 @@ public class CheckVersionApp {
             e.printStackTrace();
         }
 
-        new Server<AppVersionDTO>().getCorrectVersion(new Server.AnswerServerResponse<AppVersionDTO>() {
-            @Override
-            public void processFinish(Boolean isSuccess, ServerResponse<AppVersionDTO> serverResponse) {
-                if (isSuccess) {
-                    if (versionCode < serverResponse.getDataTransferObject().getVersion_code()) {
-                        if (serverResponse.getDataTransferObject().getImportant()) { // Important
-                            builder.setCancelable(false);
-                            builder.setOnCancelListener(null);
-                            builder.setTitle("Check version");
-                            builder.setMessage("This is important update, you can't use app. Please update your application from PlayMarket.\n \nNew version: " + serverResponse.getDataTransferObject().getVersion_name() + "\nYour version: " + versionName);
-                            builder.setPositiveButton("Update from PlayMarket", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    openAppRating();
-                                    myFinishCheckVersion.processFinish(true);
-                                }
-                            });
-                            builder.show();
-                        } else { // Not important
-                            builder.setCancelable(true);
-                            builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
-                                @Override
-                                public void onDismiss(DialogInterface dialog) {
-                                    myFinishCheckVersion.processFinish(false);
-                                }
-                            });
-                            builder.setTitle("Check version");
-                            builder.setMessage("Please update your application from PlayMarket. \n \nNew version: " + serverResponse.getDataTransferObject().getVersion_name() + "\nYour version: " + versionName);
-                            builder.setPositiveButton("Update from PlayMarket", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    openAppRating();
-                                }
-                            });
-                            builder.setNegativeButton("Remember me later", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    myFinishCheckVersion.processFinish(false);
-                                }
-                            });
-                            builder.show();
-                        }
-                    } else {
-                        myFinishCheckVersion.processFinish(false);
+        new Connection<AppVersionDTO>().getCorrectVersion((isSuccess, serverResponse) -> {
+            if (isSuccess) {
+                if (versionCode < serverResponse.getDataTransferObject().getVersion_code()) {
+                    if (serverResponse.getDataTransferObject().getImportant()) { // Important
+                        builder.setCancelable(false);
+                        builder.setOnCancelListener(null);
+                        builder.setTitle("Check version");
+                        builder.setMessage("This is important update, you can't use app. Please update your application from PlayMarket.\n \nNew version: " + serverResponse.getDataTransferObject().getVersion_name() + "\nYour version: " + versionName);
+                        builder.setPositiveButton("Update from PlayMarket", (dialog, which) -> {
+                            openAppRating();
+                            myFinishCheckVersion.processFinish(true);
+                        });
+                        builder.show();
+                    } else { // Not important
+                        builder.setCancelable(true);
+                        builder.setOnDismissListener(dialog -> myFinishCheckVersion.processFinish(false));
+                        builder.setTitle("Check version");
+                        builder.setMessage("Please update your application from PlayMarket. \n \nNew version: " + serverResponse.getDataTransferObject().getVersion_name() + "\nYour version: " + versionName);
+                        builder.setPositiveButton("Update from PlayMarket", (dialog, which) -> openAppRating());
+                        builder.setNegativeButton("Remember me later", (dialog, which) -> myFinishCheckVersion.processFinish(false));
+                        builder.show();
                     }
-
                 } else {
-                    toastConnectionError();
+                    myFinishCheckVersion.processFinish(false);
                 }
+
+            } else {
+                toastConnectionError();
             }
         });
     }

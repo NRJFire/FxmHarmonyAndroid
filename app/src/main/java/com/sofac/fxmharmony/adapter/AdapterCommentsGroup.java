@@ -82,18 +82,10 @@ public class AdapterCommentsGroup extends BaseAdapter {
                 .bitmapTransform(new CropCircleTransformation(ctx))
                 .into(avatar);
 
-        //Translate comment
-        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-        StrictMode.setThreadPolicy(policy);
-        TranslateOptions options = TranslateOptions.newBuilder().setApiKey(Constants.CLOUD_API_KEY).build();
-        Translate translate = options.getService();
-        final Translation translation = translate.translate((commentDTO.getBody()).replaceAll("<(.*?)>", " "), Translate.TranslateOption.targetLanguage(Locale.getDefault().getLanguage()));
-
         //String postComment = commentDTO.getCommentText().replaceAll("<(.*?)>", "");
         ((TextView) view.findViewById(R.id.idNameUserComment)).setText(commentDTO.getName());
         ((TextView) view.findViewById(R.id.idDateComment)).setText(new SimpleDateFormat("d MMM yyyy HH:mm", Locale.GERMAN).format(commentDTO.getDate())); //"d MMM yyyy HH:mm:ss"
         ((TextView) view.findViewById(R.id.idMessageItemComment)).setText(commentDTO.getBody().replaceAll("<(.*?)>", ""));//postDTO.getPostTextOriginal().replaceAll("<(.*?)>"," ")  translation.getTranslatedText()
-
 
         final LinearLayout linearLayout = (LinearLayout) view.findViewById(R.id.commentLiner);
 
@@ -105,18 +97,18 @@ public class AdapterCommentsGroup extends BaseAdapter {
         textMessageLink.setTextColor(view.getResources().getColor(R.color.commentTranslate));
         final Drawable drawable = view.getResources().getDrawable(R.drawable.verticalline);
 
-
         linearLayout.addView(textMessageLink);
 
+        textMessageLink.setOnClickListener(v -> {
 
-        textMessageLink.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                linearLayout.removeView(textMessageLink);
-                linearLayout.addView(translateTextView);
-                translateTextView.setText(translation.getTranslatedText());
-                linearLayout.setBackground(drawable);
-            }
+            TranslateOptions options = TranslateOptions.newBuilder().setApiKey(Constants.CLOUD_API_KEY).build();
+            Translate translate = options.getService();
+            Translation translation = translate.translate((commentDTO.getBody()).replaceAll("<(.*?)>", " "), Translate.TranslateOption.targetLanguage(Locale.getDefault().getLanguage()));
+
+            linearLayout.removeView(textMessageLink);
+            linearLayout.addView(translateTextView);
+            translateTextView.setText(translation.getTranslatedText());
+            linearLayout.setBackground(drawable);
         });
 
         return view;

@@ -22,8 +22,7 @@ import com.sofac.fxmharmony.adapter.AdapterPostGroup;
 import com.sofac.fxmharmony.adapter.RecyclerItemClickListener;
 import com.sofac.fxmharmony.dto.PostDTO;
 import com.sofac.fxmharmony.dto.UserDTO;
-import com.sofac.fxmharmony.server.Server;
-import com.sofac.fxmharmony.server.type.ServerResponse;
+import com.sofac.fxmharmony.server.Connection;
 import com.sofac.fxmharmony.util.AppUserID;
 import com.sofac.fxmharmony.util.ProgressBar;
 import com.sofac.fxmharmony.view.BaseFragment;
@@ -89,6 +88,7 @@ public class GroupFragment extends BaseFragment implements SwipeRefreshLayout.On
         recyclerViewPost = (RecyclerView) rootView.findViewById(R.id.idListGroup);
         recyclerViewPost.setHasFixedSize(true);
         recyclerViewPost.setLayoutManager(mLayoutManager);
+        //recyclerViewPost.setEmptyView(rootView.findViewById(R.id.id_list_empty));
 
         postDTOs = (ArrayList<PostDTO>) PostDTO.find(PostDTO.class, "type = ?", stringTypeGroup);
         Collections.sort(postDTOs, new Comparator<PostDTO>() {
@@ -104,12 +104,7 @@ public class GroupFragment extends BaseFragment implements SwipeRefreshLayout.On
         setHasOptionsMenu(true);
 
         floatingActionButton = (FloatingActionButton) rootView.findViewById(R.id.fab);
-        floatingActionButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                createPost();
-            }
-        });
+        floatingActionButton.setOnClickListener(view -> createPost());
 
         recyclerViewPost.addOnItemTouchListener(new RecyclerItemClickListener(getContext(), recyclerViewPost, new RecyclerItemClickListener.OnItemClickListener() {
             @Override
@@ -152,27 +147,21 @@ public class GroupFragment extends BaseFragment implements SwipeRefreshLayout.On
 
     public void loadUpdate() {
         PostDTO.deleteAll(PostDTO.class, "type = ?", stringTypeGroup);
-        new Server<ArrayList<PostDTO>>().getListPosts(stringTypeGroup, new Server.AnswerServerResponse<ArrayList<PostDTO>>() {
-            @Override
-            public void processFinish(Boolean isSuccess, ServerResponse<ArrayList<PostDTO>> answerServerResponse) {
-                if (isSuccess && answerServerResponse != null) {
-                    PostDTO.saveInTx(answerServerResponse.getDataTransferObject());
-                    refreshRecyclerView();
-                }
-                groupSwipeRefreshLayout.setRefreshing(false);
-                progressBar.dismissView();
+        new Connection<ArrayList<PostDTO>>().getListPosts(stringTypeGroup, (isSuccess, answerServerResponse) -> {
+            if (isSuccess && answerServerResponse != null) {
+                PostDTO.saveInTx(answerServerResponse.getDataTransferObject());
+                refreshRecyclerView();
             }
+            groupSwipeRefreshLayout.setRefreshing(false);
+            progressBar.dismissView();
         });
     }
 
     public void refreshRecyclerView() {
         postDTOs.clear();
+
         postDTOs.addAll(PostDTO.find(PostDTO.class, "type = ?", stringTypeGroup));
-        Collections.sort(postDTOs, new Comparator<PostDTO>() {
-            public int compare(PostDTO o1, PostDTO o2) {
-                return o2.getDate().compareTo(o1.getDate());
-            }
-        });
+        Collections.sort(postDTOs, (o1, o2) -> o2.getDate().compareTo(o1.getDate()));
         adapterPostGroup.notifyDataSetChanged();
     }
 
@@ -187,20 +176,17 @@ public class GroupFragment extends BaseFragment implements SwipeRefreshLayout.On
         startActivityForResult(intentButtonAdd, 1);
     }
 
-    public void deletePost(){
+    public void deletePost() {
         progressBar.showView();
-        new Server<String>().deletePost(postDTO, new Server.AnswerServerResponse<String>() {
-            @Override
-            public void processFinish(Boolean isSuccess, ServerResponse<String> answerServerResponse) {
-                if (isSuccess) {
-                    postDTO.delete();
-                    refreshRecyclerView();
-                    Toast.makeText(getActivity(), R.string.post_was_delete, Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(getActivity(), R.string.errorServer, Toast.LENGTH_SHORT).show();
-                }
-                progressBar.dismissView();
+        new Connection<String>().deletePost(postDTO, (isSuccess, answerServerResponse) -> {
+            if (isSuccess) {
+                postDTO.delete();
+                refreshRecyclerView();
+                Toast.makeText(getActivity(), R.string.post_was_delete, Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(getActivity(), R.string.errorServer, Toast.LENGTH_SHORT).show();
             }
+            progressBar.dismissView();
         });
     }
 
