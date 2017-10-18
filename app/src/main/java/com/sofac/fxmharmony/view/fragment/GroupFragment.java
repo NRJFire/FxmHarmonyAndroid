@@ -139,9 +139,9 @@ public class GroupFragment extends BaseFragment implements SwipeRefreshLayout.On
     }
 
     public void loadUpdate() {
-        PostDTO.deleteAll(PostDTO.class, "type = ?", stringTypeGroup);
         new Connection<ArrayList<PostDTO>>().getListPosts(stringTypeGroup, (isSuccess, answerServerResponse) -> {
             if (isSuccess && answerServerResponse != null) {
+                PostDTO.deleteAll(PostDTO.class, "type = ?", stringTypeGroup);
                 PostDTO.saveInTx(answerServerResponse.getDataTransferObject());
                 refreshRecyclerView();
             }

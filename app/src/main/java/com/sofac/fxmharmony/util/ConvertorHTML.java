@@ -6,10 +6,10 @@ package com.sofac.fxmharmony.util;
 
 public class ConvertorHTML {
     public static String fromHTML(String html) {
-        return ((html
-                .replaceAll("<(.*?)br(.*?)>", "\n"))
-                .replaceAll("</(.*?)p(.*?)>", "\n")
-                .replaceAll("<(.*?)>", " ")
+        return (html
+                .replaceAll("<(.*?)br(.*?)>", "\n")
+//                .replaceAll("</(.*?)p(.*?)>", "\n")
+                .replaceAll("<(.*?)>", "")
                 .replaceAll("&nbsp;"," ")
                 .replaceAll("&lt;","<")
                 .replaceAll("&gt;",">")

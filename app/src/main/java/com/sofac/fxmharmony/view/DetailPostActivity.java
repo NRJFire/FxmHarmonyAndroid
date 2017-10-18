@@ -84,7 +84,6 @@ public class DetailPostActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        Timber.e("                  DetailPostActivity.onCreate()!!! ");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail_post);
         setTitle(getString(R.string.FXM_group));
@@ -92,6 +91,7 @@ public class DetailPostActivity extends BaseActivity {
         intentChangePost = new Intent(this, ChangePost.class);
 
         Long id_post = getIntent().getLongExtra(POST_ID, 1);
+        Timber.e("DetailPostActivity -> id_post = " + id_post);
         postDTO = PostDTO.findById(PostDTO.class, id_post);
 
         if (state != null) {
@@ -407,6 +407,10 @@ public class DetailPostActivity extends BaseActivity {
 
     public void updateListView() {
         progressBar.showView();
+        if (postDTO == null) {
+            finish();
+            return;
+        }
         new Connection<ArrayList<CommentDTO>>().getListComments(postDTO.getId(), (isSuccess, answerServerResponse) -> {
             if (isSuccess) {
                 arrayListComments = answerServerResponse.getDataTransferObject();
