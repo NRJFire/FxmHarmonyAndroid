@@ -12,7 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="190dp"
         android:layout_gravity="start"
-        android:background="@color/dark_transpar"
+        android:background="@color/dark_header_transparent"
         android:orientation="vertical"
         android:paddingBottom="@dimen/activity_vertical_margin"
         android:paddingLeft="@dimen/activity_horizontal_margin"
@@ -37,8 +37,12 @@
             android:lines="1"
             android:padding="0dp"
             android:paddingTop="@dimen/nav_header_vertical_spacing"
+            android:shadowColor="#3e3e3e"
+            android:shadowDx="1"
+            android:shadowDy="1"
+            android:shadowRadius="1"
             android:text="Max"
-            android:textColor="@color/white"
+            android:textColor="@color/white_header"
             android:textSize="16sp"
             android:textStyle="bold" />
 
@@ -48,8 +52,12 @@
             android:layout_height="wrap_content"
             android:ellipsize="end"
             android:lines="1"
+            android:shadowColor="#3e3e3e"
+            android:shadowDx="1"
+            android:shadowDy="1"
+            android:shadowRadius="1"
             android:text="@string/manager"
-            android:textColor="@color/white_transpar" />
+            android:textColor="@color/white_header_transparent" />
 
     </LinearLayout>
 
