@@ -1,7 +1,5 @@
 package com.sofac.fxmharmony.util.googleFirebaseService;
 
-
-
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
@@ -24,7 +22,6 @@ public class MyFirebaseInstanceIDService extends FirebaseInstanceIdService {
         // manage this apps subscriptions on the server side, send the
         // Instance ID token to your app server.
         saveCloudMessageIdToPreferences(refreshedToken);
-
     }
 
     private void saveCloudMessageIdToPreferences(String token) {

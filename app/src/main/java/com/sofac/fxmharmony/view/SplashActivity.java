@@ -17,14 +17,11 @@ public class SplashActivity extends BaseActivity {
     }
 
     public void checkVersion() {
-        new CheckVersionApp(this, new CheckVersionApp.FinishCheckVersion() {
-            @Override
-            public void processFinish(Boolean isFinishActivity) {
-                if (isFinishActivity) {
-                    finishAffinity();
-                } else {
-                    checkAuthorization();
-                }
+        new CheckVersionApp(this, isFinishActivity -> {
+            if (isFinishActivity) {
+                finishAffinity();
+            } else {
+                checkAuthorization();
             }
         });
     }

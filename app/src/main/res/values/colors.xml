@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="colorPrimary">#1d9db4</color>
-    <color name="colorPrimaryDark">#064c58</color>
+    <color name="colorPrimaryDark">#095360</color>
     <color name="colorAccent">#0d7689</color>
     <color name="colorHint">#739297</color>
     <color name="colorText">#075f6e</color>
@@ -11,7 +11,6 @@
     <color name="colorItemDateComment">#b9b9b9</color>
     <color name="colorItemContext">#979797</color>
     <color name="colorBGItemNoRead">#e6e6e6</color>
-
 
     <color name="tabsScrollColor">#004d40</color>
 

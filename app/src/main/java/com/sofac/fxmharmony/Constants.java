@@ -44,9 +44,6 @@ public class Constants {
     //NavActivity
     public final static String TYPE_GROUP = "TYPE_GROUP";
 
-    // Push message types
-    public final static String GROUP_PUSH_TYPE = "GROUP_PUSH_TYPE";
-
     // Push message state
     public final static int PUSH_ON = 10001;
     public final static int PUSH_OFF = 10002;

@@ -26,6 +26,8 @@ import com.sofac.fxmharmony.dto.PostDTO;
 import com.sofac.fxmharmony.server.Connection;
 import com.sofac.fxmharmony.util.ConvertorHTML;
 
+import org.apache.commons.io.FilenameUtils;
+
 import java.util.ArrayList;
 import java.util.Locale;
 
@@ -75,14 +77,6 @@ public class CreatePost extends BaseActivity implements View.OnClickListener {
         listMovies = new ArrayList<>();
         listFiles = new ArrayList<>();
 
-        ScrollView scrollView = (ScrollView) findViewById(R.id.idScrollViewEditPost);
-        scrollView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                postTextInput.setFocusable(true);
-            }
-        });
-
         postTextInput = (EditText) findViewById(R.id.post_text_input);
         buttonAddFiles = (FloatingActionButton) findViewById(R.id.buttonAddFiles);
         buttonAddMovies = (FloatingActionButton) findViewById(R.id.buttonAddMovies);
@@ -102,33 +96,28 @@ public class CreatePost extends BaseActivity implements View.OnClickListener {
         menuButton.setClosedOnTouchOutside(true);
 
         adapterCreatePostPhotos = new AdapterCreatePostPhotos(listPhoto);
-        adapterCreatePostPhotos.setItemClickListener(new AdapterCreatePostPhotos.ClickListener() {
-            @Override
-            public void onMyClick(View view, int position) {
-                switch (view.getId()) {
-                    case idButtonDeleting:
-                        listPhoto.remove(position);
-                        adapterCreatePostPhotos.notifyDataSetChanged();
-                        if (listPhoto.isEmpty()) linearLayoutPhoto.setVisibility(View.GONE);
-                        break;
-                }
+        adapterCreatePostPhotos.setItemClickListener((view, position) -> {
+            switch (view.getId()) {
+                case idButtonDeleting:
+                    listPhoto.remove(position);
+                    adapterCreatePostPhotos.notifyDataSetChanged();
+                    if (listPhoto.isEmpty()) linearLayoutPhoto.setVisibility(View.GONE);
+                    break;
             }
         });
+
         recyclerViewPhoto.setAdapter(adapterCreatePostPhotos);
         recyclerViewPhoto.setHasFixedSize(true);
         recyclerViewPhoto.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
 
         adapterCreatePostMovies = new AdapterCreatePostMovies(listMovies);
-        adapterCreatePostMovies.setItemClickListener(new AdapterCreatePostMovies.ClickListener() {
-            @Override
-            public void onMyClick(View view, int position) {
-                switch (view.getId()) {
-                    case idButtonDeleting:
-                        listMovies.remove(position);
-                        adapterCreatePostMovies.notifyDataSetChanged();
-                        if (listMovies.isEmpty()) linearLayoutMovies.setVisibility(View.GONE);
-                        break;
-                }
+        adapterCreatePostMovies.setItemClickListener((view, position) -> {
+            switch (view.getId()) {
+                case idButtonDeleting:
+                    listMovies.remove(position);
+                    adapterCreatePostMovies.notifyDataSetChanged();
+                    if (listMovies.isEmpty()) linearLayoutMovies.setVisibility(View.GONE);
+                    break;
             }
         });
         recyclerViewMovie.setAdapter(adapterCreatePostMovies);
@@ -220,7 +209,7 @@ public class CreatePost extends BaseActivity implements View.OnClickListener {
                     linearLayoutMovies.setVisibility(View.VISIBLE);
 
                 } else if (requestCode == REQUEST_TAKE_FILE) {
-
+                    Timber.e("ChangePost -> fileUri   " +  fileUri.toString());
                     for (Uri urlFiles : listFiles) {
                         if (fileUri.equals(urlFiles)) return;
                     }
@@ -241,22 +230,25 @@ public class CreatePost extends BaseActivity implements View.OnClickListener {
     public View createViewFile(final Uri fileUri) {
         final View view = getLayoutInflater().inflate(R.layout.item_file_create_post, null);
 
-        Cursor returnCursor = getContentResolver().query(fileUri, null, null, null, null);
-        int nameIndex = returnCursor.getColumnIndex(OpenableColumns.DISPLAY_NAME);
-        int sizeIndex = returnCursor.getColumnIndex(OpenableColumns.SIZE);
-        returnCursor.moveToFirst();
-        ((TextView) view.findViewById(R.id.idTextFile)).setText(returnCursor.getString(nameIndex));
-        Long sizeFile = returnCursor.getLong(sizeIndex);
-        if (sizeFile > 1024L) sizeFile = sizeFile / 1024L;
-        ((TextView) view.findViewById(R.id.idSizeFile)).setText(String.format(Locale.ENGLISH, "Size file: %,d KB", sizeFile));
+//        Cursor returnCursor = getContentResolver().query(fileUri, null, null, null, null);
+//        assert returnCursor != null;
+//        int nameIndex = returnCursor.getColumnIndex(OpenableColumns.DISPLAY_NAME);
+//        int sizeIndex = returnCursor.getColumnIndex(OpenableColumns.SIZE);
+//        returnCursor.moveToFirst();
+//        ((TextView) view.findViewById(R.id.idTextFile)).setText(returnCursor.getString(nameIndex));
+//        Long sizeFile = returnCursor.getLong(sizeIndex);
+//        returnCursor.close();
 
-        (view.findViewById(R.id.idButtonDeleting)).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                linearLayoutFiles.removeView(view);
-                listFiles.remove(fileUri);
-                if (listFiles.isEmpty()) linearLayoutFiles.setVisibility(View.GONE);
-            }
+        ((TextView) view.findViewById(R.id.idTextFile)).setText(FilenameUtils.getName(fileUri.toString()));
+//        Long sizeFile = 1500L;
+
+//        if (sizeFile > 1024L) sizeFile = sizeFile / 1024L;
+//        ((TextView) view.findViewById(R.id.idSizeFile)).setText(String.format(Locale.ENGLISH, "Size file: %,d KB", sizeFile));
+
+        (view.findViewById(R.id.idButtonDeleting)).setOnClickListener(v -> {
+            linearLayoutFiles.removeView(view);
+            listFiles.remove(fileUri);
+            if (listFiles.isEmpty()) linearLayoutFiles.setVisibility(View.GONE);
         });
         return view;
     }

@@ -1,4 +1,5 @@
 package com.sofac.fxmharmony;
+
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
@@ -10,7 +11,9 @@ import com.orm.SugarApp;
 import com.orm.SugarContext;
 import com.orm.SugarDb;
 import com.sofac.fxmharmony.util.FakeCrashLibrary;
+
 import java.util.Locale;
+
 import timber.log.Timber;
 
 /**
@@ -18,7 +21,7 @@ import timber.log.Timber;
  * Always starting when app is start
  */
 
-public class FXMHarmony  extends SugarApp {
+public class FXMHarmony extends SugarApp {
 
     @Override
     protected void attachBaseContext(Context context) {

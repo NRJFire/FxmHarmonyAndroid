@@ -46,16 +46,13 @@ public class Connection<T> {
     public void authorizationUser(AuthorizationDTO authorizationDTO, AnswerServerResponse<T> async) { //Change name request / Change data in method parameters
         answerServerResponse = async;
         new ManagerRetrofit<AuthorizationDTO>().sendRequest(authorizationDTO, new Object() {// Change type Object sending / Change data sending
-        }.getClass().getEnclosingMethod().getName(), new ManagerRetrofit.AsyncAnswerString() {
-            @Override
-            public void processFinish(Boolean isSuccess, String answerString) {
-                if (isSuccess) {
-                    Type typeAnswer = new TypeToken<ServerResponse<UserDTO>>() { //Change type response
-                    }.getType();
-                    tryParsing(answerString, typeAnswer);
-                } else {
-                    answerServerResponse.processFinish(false, null);
-                }
+        }.getClass().getEnclosingMethod().getName(), (isSuccess, answerString) -> {
+            if (isSuccess) {
+                Type typeAnswer = new TypeToken<ServerResponse<UserDTO>>() { //Change type response
+                }.getType();
+                tryParsing(answerString, typeAnswer);
+            } else {
+                answerServerResponse.processFinish(false, null);
             }
         });
     }
@@ -66,16 +63,13 @@ public class Connection<T> {
     public void getCorrectVersion(AnswerServerResponse<T> async) { //Change name request() / Change data in method parameters
         answerServerResponse = async;
         new ManagerRetrofit<String>().sendRequest("", new Object() {// Change type Object sending / Change data sending
-        }.getClass().getEnclosingMethod().getName(), new ManagerRetrofit.AsyncAnswerString() {
-            @Override
-            public void processFinish(Boolean isSuccess, String answerString) {
-                if (isSuccess) {
-                    Type typeAnswer = new TypeToken<ServerResponse<AppVersionDTO>>() { //Change type response
-                    }.getType();
-                    tryParsing(answerString, typeAnswer);
-                } else {
-                    answerServerResponse.processFinish(false, null);
-                }
+        }.getClass().getEnclosingMethod().getName(), (isSuccess, answerString) -> {
+            if (isSuccess) {
+                Type typeAnswer = new TypeToken<ServerResponse<AppVersionDTO>>() { //Change type response
+                }.getType();
+                tryParsing(answerString, typeAnswer);
+            } else {
+                answerServerResponse.processFinish(false, null);
             }
         });
     }
@@ -93,16 +87,13 @@ public class Connection<T> {
     public void getManagerInfo(Long idManager, AnswerServerResponse<T> async) {
         answerServerResponse = async;
         new ManagerRetrofit<Long>().sendRequest(idManager, new Object() {// Change type Object sending / Change data sending
-        }.getClass().getEnclosingMethod().getName(), new ManagerRetrofit.AsyncAnswerString() {
-            @Override
-            public void processFinish(Boolean isSuccess, String answerString) {
-                if (isSuccess) {
-                    Type typeAnswer = new TypeToken<ServerResponse<ManagerDTO>>() { //Change type response
-                    }.getType();
-                    tryParsing(answerString, typeAnswer);
-                } else {
-                    answerServerResponse.processFinish(false, null);
-                }
+        }.getClass().getEnclosingMethod().getName(), (isSuccess, answerString) -> {
+            if (isSuccess) {
+                Type typeAnswer = new TypeToken<ServerResponse<ManagerDTO>>() { //Change type response
+                }.getType();
+                tryParsing(answerString, typeAnswer);
+            } else {
+                answerServerResponse.processFinish(false, null);
             }
         });
     }
@@ -130,16 +121,13 @@ public class Connection<T> {
     public void getListComments(Long postId, AnswerServerResponse<T> async) {
         answerServerResponse = async;
         new ManagerRetrofit<Long>().sendRequest(postId, new Object() {// Change (type sending) / (data sending)
-        }.getClass().getEnclosingMethod().getName(), new ManagerRetrofit.AsyncAnswerString() {
-            @Override
-            public void processFinish(Boolean isSuccess, String answerString) {
-                if (isSuccess) {
-                    Type typeAnswer = new TypeToken<ServerResponse<ArrayList<CommentDTO>>>() { //Change type response(тип ответа)
-                    }.getType();
-                    tryParsing(answerString, typeAnswer);
-                } else {
-                    answerServerResponse.processFinish(false, null);
-                }
+        }.getClass().getEnclosingMethod().getName(), (isSuccess, answerString) -> {
+            if (isSuccess) {
+                Type typeAnswer = new TypeToken<ServerResponse<ArrayList<CommentDTO>>>() { //Change type response(тип ответа)
+                }.getType();
+                tryParsing(answerString, typeAnswer);
+            } else {
+                answerServerResponse.processFinish(false, null);
             }
         });
     }
@@ -148,16 +136,13 @@ public class Connection<T> {
     public void getListPosts(String stringTypeGroup, AnswerServerResponse<T> async) {
         answerServerResponse = async;
         new ManagerRetrofit<String>().sendRequest(stringTypeGroup, new Object() {// Change (type sending) / (data sending)
-        }.getClass().getEnclosingMethod().getName(), new ManagerRetrofit.AsyncAnswerString() {
-            @Override
-            public void processFinish(Boolean isSuccess, String answerString) {
-                if (isSuccess) {
-                    Type typeAnswer = new TypeToken<ServerResponse<List<PostDTO>>>() { //Change type response(тип ответа)
-                    }.getType();
-                    tryParsing(answerString, typeAnswer);
-                } else {
-                    answerServerResponse.processFinish(false, null);
-                }
+        }.getClass().getEnclosingMethod().getName(), (isSuccess, answerString) -> {
+            if (isSuccess) {
+                Type typeAnswer = new TypeToken<ServerResponse<List<PostDTO>>>() { //Change type response(тип ответа)
+                }.getType();
+                tryParsing(answerString, typeAnswer);
+            } else {
+                answerServerResponse.processFinish(false, null);
             }
         });
     }
@@ -167,16 +152,13 @@ public class Connection<T> {
         answerServerResponse = async;
 
         new ManagerRetrofit<PostDTO>().sendMultiPartRequest(postDTO, new Object() {// Change (type sending) / (data sending)
-        }.getClass().getEnclosingMethod().getName(), generateMultiPartList(listUri, context), new ManagerRetrofit.AsyncAnswerString() {
-            @Override
-            public void processFinish(Boolean isSuccess, String answerString) {
-                if (isSuccess) {
-                    Type typeAnswer = new TypeToken<ServerResponse>() { //Change type response(тип ответа)
-                    }.getType();
-                    tryParsing(answerString, typeAnswer);
-                } else {
-                    answerServerResponse.processFinish(false, null);
-                }
+        }.getClass().getEnclosingMethod().getName(), generateMultiPartList(listUri, context), (isSuccess, answerString) -> {
+            if (isSuccess) {
+                Type typeAnswer = new TypeToken<ServerResponse>() { //Change type response(тип ответа)
+                }.getType();
+                tryParsing(answerString, typeAnswer);
+            } else {
+                answerServerResponse.processFinish(false, null);
             }
         });
 
@@ -187,17 +169,14 @@ public class Connection<T> {
     public void updatePost(Context context, PostDTO postDTO, ArrayList<Uri> listUri, ArrayList<String> listDeletingFiles, AnswerServerResponse<T> async) {
         answerServerResponse = async;
 
-        new ManagerRetrofit<PostDTO>().sendMultiPartWhithTwoObj(postDTO, new Object() {// Change (type sending) / (data sending)
-        }.getClass().getEnclosingMethod().getName(), generateMultiPartList(listUri, context), listDeletingFiles, new ManagerRetrofit.AsyncAnswerString() {
-            @Override
-            public void processFinish(Boolean isSuccess, String answerString) {
-                if (isSuccess) {
-                    Type typeAnswer = new TypeToken<ServerResponse>() { //Change type response(тип ответа)
-                    }.getType();
-                    tryParsing(answerString, typeAnswer);
-                } else {
-                    answerServerResponse.processFinish(false, null);
-                }
+        new ManagerRetrofit<PostDTO>().sendMultiPartWithTwoObj(postDTO, new Object() {// Change (type sending) / (data sending)
+        }.getClass().getEnclosingMethod().getName(), generateMultiPartList(listUri, context), listDeletingFiles, (isSuccess, answerString) -> {
+            if (isSuccess) {
+                Type typeAnswer = new TypeToken<ServerResponse>() { //Change type response(тип ответа)
+                }.getType();
+                tryParsing(answerString, typeAnswer);
+            } else {
+                answerServerResponse.processFinish(false, null);
             }
         });
 
@@ -220,16 +199,13 @@ public class Connection<T> {
     public void deletePost(PostDTO postDTO, AnswerServerResponse<T> async) {
         answerServerResponse = async;
         new ManagerRetrofit<Long>().sendRequest(postDTO.getId(), new Object() {// Change (type sending) / (data sending)
-        }.getClass().getEnclosingMethod().getName(), new ManagerRetrofit.AsyncAnswerString() {
-            @Override
-            public void processFinish(Boolean isSuccess, String answerString) {
-                if (isSuccess) {
-                    Type typeAnswer = new TypeToken<ServerResponse>() { //Change type response(тип ответа)
-                    }.getType();
-                    tryParsing(answerString, typeAnswer);
-                } else {
-                    answerServerResponse.processFinish(false, null);
-                }
+        }.getClass().getEnclosingMethod().getName(), (isSuccess, answerString) -> {
+            if (isSuccess) {
+                Type typeAnswer = new TypeToken<ServerResponse>() { //Change type response(тип ответа)
+                }.getType();
+                tryParsing(answerString, typeAnswer);
+            } else {
+                answerServerResponse.processFinish(false, null);
             }
         });
     }
@@ -240,16 +216,13 @@ public class Connection<T> {
     public void createComment(CommentDTO commentDTO, AnswerServerResponse<T> async) {
         answerServerResponse = async;
         new ManagerRetrofit<CommentDTO>().sendRequest(commentDTO, new Object() {// Change (type sending) / (data sending)
-        }.getClass().getEnclosingMethod().getName(), new ManagerRetrofit.AsyncAnswerString() {
-            @Override
-            public void processFinish(Boolean isSuccess, String answerString) {
-                if (isSuccess) {
-                    Type typeAnswer = new TypeToken<ServerResponse>() { //Change type response(тип ответа)
-                    }.getType();
-                    tryParsing(answerString, typeAnswer);
-                } else {
-                    answerServerResponse.processFinish(false, null);
-                }
+        }.getClass().getEnclosingMethod().getName(), (isSuccess, answerString) -> {
+            if (isSuccess) {
+                Type typeAnswer = new TypeToken<ServerResponse>() { //Change type response(тип ответа)
+                }.getType();
+                tryParsing(answerString, typeAnswer);
+            } else {
+                answerServerResponse.processFinish(false, null);
             }
         });
     }
@@ -258,16 +231,13 @@ public class Connection<T> {
     public void updateComment(CommentDTO commentDTO, AnswerServerResponse<T> async) {
         answerServerResponse = async;
         new ManagerRetrofit<CommentDTO>().sendRequest(commentDTO, new Object() {// Change (type sending) / (data sending)
-        }.getClass().getEnclosingMethod().getName(), new ManagerRetrofit.AsyncAnswerString() {
-            @Override
-            public void processFinish(Boolean isSuccess, String answerString) {
-                if (isSuccess) {
-                    Type typeAnswer = new TypeToken<ServerResponse>() { //Change type response(тип ответа)
-                    }.getType();
-                    tryParsing(answerString, typeAnswer);
-                } else {
-                    answerServerResponse.processFinish(false, null);
-                }
+        }.getClass().getEnclosingMethod().getName(), (isSuccess, answerString) -> {
+            if (isSuccess) {
+                Type typeAnswer = new TypeToken<ServerResponse>() { //Change type response(тип ответа)
+                }.getType();
+                tryParsing(answerString, typeAnswer);
+            } else {
+                answerServerResponse.processFinish(false, null);
             }
         });
     }
@@ -276,16 +246,13 @@ public class Connection<T> {
     public void deleteComment(CommentDTO commentDTO, AnswerServerResponse<T> async) {
         answerServerResponse = async;
         new ManagerRetrofit<Long>().sendRequest(commentDTO.getId(), new Object() {// Change (type sending) / (data sending)
-        }.getClass().getEnclosingMethod().getName(), new ManagerRetrofit.AsyncAnswerString() {
-            @Override
-            public void processFinish(Boolean isSuccess, String answerString) {
-                if (isSuccess) {
-                    Type typeAnswer = new TypeToken<ServerResponse>() { //Change type response(тип ответа)
-                    }.getType();
-                    tryParsing(answerString, typeAnswer);
-                } else {
-                    answerServerResponse.processFinish(false, null);
-                }
+        }.getClass().getEnclosingMethod().getName(), (isSuccess, answerString) -> {
+            if (isSuccess) {
+                Type typeAnswer = new TypeToken<ServerResponse>() { //Change type response(тип ответа)
+                }.getType();
+                tryParsing(answerString, typeAnswer);
+            } else {
+                answerServerResponse.processFinish(false, null);
             }
         });
     }
@@ -298,6 +265,7 @@ public class Connection<T> {
     public ArrayList<MultipartBody.Part> generateMultiPartList(ArrayList<Uri> listFileUri, Context context) {
         ArrayList<MultipartBody.Part> arrayListMulti = new ArrayList<>();
         for (int i = 0; i < listFileUri.size(); i++) {
+            Timber.e("listFileUri.get(i).toString()  " + listFileUri.get(i).toString());
             try {
                 File file = new File(PathUtil.getPath(context, listFileUri.get(i)));
                 arrayListMulti.add(MultipartBody.Part.createFormData("files[" + i + "]", file.getName(), RequestBody.create(MediaType.parse("multipart/form-data"), file)));

@@ -74,10 +74,6 @@ public class ChangePost extends BaseActivity implements View.OnClickListener {
         listFiles = new ArrayList<>();
         listDeleting = new ArrayList<>();
 
-        ScrollView scrollView = (ScrollView) findViewById(R.id.idScrollViewEditPost);
-        scrollView.setOnClickListener(v -> postTextInput.setFocusable(true));
-
-
         buttonAddFiles = (FloatingActionButton) findViewById(R.id.buttonAddFiles);
         buttonAddMovies = (FloatingActionButton) findViewById(R.id.buttonAddMovies);
         buttonAddPhotos = (FloatingActionButton) findViewById(R.id.buttonAddPhotos);
@@ -259,7 +255,7 @@ public class ChangePost extends BaseActivity implements View.OnClickListener {
                     linearLayoutMovies.setVisibility(View.VISIBLE);
 
                 } else if (requestCode == REQUEST_TAKE_FILE) {
-
+                    Timber.e("ChangePost -> fileUri   " +  fileUri.toString());
                     for (Uri urlFiles : listFiles) {
                         if (fileUri.equals(urlFiles)) return;
                     }
@@ -282,10 +278,10 @@ public class ChangePost extends BaseActivity implements View.OnClickListener {
         Uri fileUri = Uri.parse(BASE_URL + PART_POST + nameFile);
         listFiles.add(fileUri);
         ((TextView) view.findViewById(R.id.idTextFile)).setText(nameFile);
-        ((TextView) view.findViewById(R.id.idSizeFile)).setText("Size file: none");
+        //((TextView) view.findViewById(R.id.idSizeFile)).setText("Size file: none");
 
         (view.findViewById(idButtonDeleting)).setOnClickListener(v -> {
-            linearLayoutFiles.removeView(view); //TODO Нюанс, нельзя убрать вью, не с чего проверить что осталось в файлах (Обдумать)
+            linearLayoutFiles.removeView(view);
             listDeleting.add(nameFile);
             listFiles.remove(fileUri);
             if (listFiles.isEmpty()) linearLayoutFiles.setVisibility(View.GONE);
@@ -296,14 +292,18 @@ public class ChangePost extends BaseActivity implements View.OnClickListener {
     public View createViewFileFromContent(final Uri fileUri) {
         final View view = getLayoutInflater().inflate(R.layout.item_file_create_post, null);
 
-        Cursor returnCursor = getContentResolver().query(fileUri, null, null, null, null);
-        int nameIndex = returnCursor.getColumnIndex(OpenableColumns.DISPLAY_NAME);
-        int sizeIndex = returnCursor.getColumnIndex(OpenableColumns.SIZE);
-        returnCursor.moveToFirst();
-        ((TextView) view.findViewById(R.id.idTextFile)).setText(returnCursor.getString(nameIndex));
-        Long sizeFile = returnCursor.getLong(sizeIndex);
-        if (sizeFile > 1024L) sizeFile = sizeFile / 1024L;
-        ((TextView) view.findViewById(R.id.idSizeFile)).setText(String.format(Locale.ENGLISH, "Size file: %,d KB", sizeFile));
+//        Cursor returnCursor = getContentResolver().query(fileUri, null, null, null, null);
+//        assert returnCursor != null;
+//        int nameIndex = returnCursor.getColumnIndex(OpenableColumns.DISPLAY_NAME);
+//        int sizeIndex = returnCursor.getColumnIndex(OpenableColumns.SIZE);
+//        returnCursor.moveToFirst();
+//        ((TextView) view.findViewById(R.id.idTextFile)).setText(returnCursor.getString(nameIndex));
+//        Long sizeFile = returnCursor.getLong(sizeIndex);
+//        returnCursor.close();
+        ((TextView) view.findViewById(R.id.idTextFile)).setText(FilenameUtils.getName(fileUri.toString()));
+
+//        if (sizeFile > 1024L) sizeFile = sizeFile / 1024L;
+//        ((TextView) view.findViewById(R.id.idSizeFile)).setText(String.format(Locale.ENGLISH, "Size file: %,d KB", sizeFile));
 
         (view.findViewById(idButtonDeleting)).setOnClickListener(v -> {
             linearLayoutFiles.removeView(view);

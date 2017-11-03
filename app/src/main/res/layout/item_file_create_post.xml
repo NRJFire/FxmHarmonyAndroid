@@ -34,14 +34,14 @@
             android:textSize="12sp"
             android:text="Some text file" />
 
-        <TextView
-            android:id="@+id/idSizeFile"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="11sp"
-            android:maxLines="1"
-            android:textColor="@color/colorItemDate"
-            android:text="Some size file" />
+        <!--<TextView-->
+            <!--android:id="@+id/idSizeFile"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:textSize="11sp"-->
+            <!--android:maxLines="1"-->
+            <!--android:textColor="@color/colorItemDate"-->
+            <!--android:text="Some size file" />-->
 
     </LinearLayout>
 

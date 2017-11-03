@@ -152,9 +152,7 @@ public class SettingsActivity extends BaseActivity implements DialogInterface.On
             }
         });
 
-        pushMessageSwitch.setOnClickListener(new View.OnClickListener()
-
-        {
+        pushMessageSwitch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (AppMethods.getPushState(SettingsActivity.this) != Constants.PUSH_ON) {
@@ -175,14 +173,7 @@ public class SettingsActivity extends BaseActivity implements DialogInterface.On
             pushMessageSwitch.setChecked(false);
         }
 
-        languageButton.setOnClickListener(new View.OnClickListener()
-
-        {
-            @Override
-            public void onClick(View v) {
-                changeLanguageFragmentDialog.show(getFragmentManager().beginTransaction(), "ChangeLanguageFragmentDialog");
-            }
-        });
+        languageButton.setOnClickListener(v -> changeLanguageFragmentDialog.show(getFragmentManager().beginTransaction(), "ChangeLanguageFragmentDialog"));
 
         currentLanguage.setText(Locale.getDefault().
 

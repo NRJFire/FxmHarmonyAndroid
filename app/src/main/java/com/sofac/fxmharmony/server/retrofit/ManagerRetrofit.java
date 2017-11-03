@@ -124,11 +124,10 @@ public class ManagerRetrofit<T> {
      * Get Callback<ResponseBody> for this Request;
      */
     @SuppressWarnings("unchecked")
-    public void sendMultiPartWhithTwoObj(T object, String requestType, ArrayList<MultipartBody.Part> partArrayList, ArrayList<String> listDeletingFiles, AsyncAnswerString asyncAnswer) {
+    public void sendMultiPartWithTwoObj(T object, String requestType, ArrayList<MultipartBody.Part> partArrayList, ArrayList<String> listDeletingFiles, AsyncAnswerString asyncAnswer) {
         serverRequest = new ServerRequest(requestType, object);
         answerString = asyncAnswer;
         logServerRequest(serverRequest);
-
 
         GsonBuilder builder = new GsonBuilder();
         Gson gson = builder.create();
