@@ -1,7 +1,9 @@
 package com.sofac.fxmharmony.view.fragment;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -9,16 +11,20 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ListView;
 
+import com.sofac.fxmharmony.Constants;
 import com.sofac.fxmharmony.R;
 import com.sofac.fxmharmony.adapter.AdapterPushListView;
+import com.sofac.fxmharmony.dto.PushGetDTO;
 import com.sofac.fxmharmony.dto.PushMessage;
+import com.sofac.fxmharmony.server.Connection;
+import com.sofac.fxmharmony.util.AppUserID;
 import com.sofac.fxmharmony.view.BaseFragment;
 import com.sofac.fxmharmony.view.DetailPushMessageActivity;
-
 import java.util.ArrayList;
+
+import timber.log.Timber;
 
 import static com.orm.SugarRecord.listAll;
 import static com.sofac.fxmharmony.Constants.ONE_PUSH_MESSAGE_DATA;
@@ -48,13 +54,10 @@ public class ContentFragment extends BaseFragment implements SwipeRefreshLayout.
 
         listViewPush.setEmptyView(rootView.findViewById(R.id.id_list_empty));
 
-        listViewPush.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View itemClicked, int position, long id) {
-                if (pushMessages != null) {
-                    intentDetailTaskActivity.putExtra(ONE_PUSH_MESSAGE_DATA, pushMessages.get(position));
-                    startActivity(intentDetailTaskActivity);
-                }
+        listViewPush.setOnItemClickListener((parent, itemClicked, position, id) -> {
+            if (pushMessages != null) {
+                intentDetailTaskActivity.putExtra(ONE_PUSH_MESSAGE_DATA, pushMessages.get(position));
+                startActivity(intentDetailTaskActivity);
             }
         });
         return rootView;
@@ -62,10 +65,23 @@ public class ContentFragment extends BaseFragment implements SwipeRefreshLayout.
 
     @Override
     public void onResume() {
-        updateViewList();
+        loadData();
         super.onResume();
     }
 
+    public void loadData(){
+        AppUserID appUserID = new AppUserID(this.getActivity());
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this.getActivity());
+        new Connection<ArrayList<PushMessage>>().getListPush(new PushGetDTO(appUserID.getID(), sharedPref.getString(Constants.GOOGLE_CLOUD_PREFERENCE, "")), (isSuccess, answerServerResponse) -> {
+            if (isSuccess) {
+                PushMessage.saveInTx(answerServerResponse.getDataTransferObject());
+                updateViewList();
+                Timber.e("update Push ViewList OK");
+            } else {
+                Timber.e("update Push ViewList ERROR!!");
+            }
+        });
+    }
 
     protected void updateViewList() {
         pushMessages = (ArrayList<PushMessage>) listAll(PushMessage.class);
@@ -99,7 +115,7 @@ public class ContentFragment extends BaseFragment implements SwipeRefreshLayout.
     @Override
     public void onRefresh() {
         groupSwipeRefreshLayout.setRefreshing(true);
-        updateViewList();
+        loadData();
 
     }
 

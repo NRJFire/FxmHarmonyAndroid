@@ -11,6 +11,8 @@ import com.sofac.fxmharmony.dto.AuthorizationDTO;
 import com.sofac.fxmharmony.dto.CommentDTO;
 import com.sofac.fxmharmony.dto.ManagerDTO;
 import com.sofac.fxmharmony.dto.PostDTO;
+import com.sofac.fxmharmony.dto.PushGetDTO;
+import com.sofac.fxmharmony.dto.PushMessage;
 import com.sofac.fxmharmony.dto.UserDTO;
 import com.sofac.fxmharmony.server.retrofit.ManagerRetrofit;
 import com.sofac.fxmharmony.server.type.ServerResponse;
@@ -32,7 +34,7 @@ import timber.log.Timber;
  * Created by Maxim on 03.08.2017.
  */
 
-public class Connection<T> {
+public class Connection<T> { // Set type to getting object
 
     private AnswerServerResponse answerServerResponse;
 
@@ -49,6 +51,20 @@ public class Connection<T> {
         }.getClass().getEnclosingMethod().getName(), (isSuccess, answerString) -> {
             if (isSuccess) {
                 Type typeAnswer = new TypeToken<ServerResponse<UserDTO>>() { //Change type response
+                }.getType();
+                tryParsing(answerString, typeAnswer);
+            } else {
+                answerServerResponse.processFinish(false, null);
+            }
+        });
+    }
+
+    public void getListPush(PushGetDTO pushGetDTO, AnswerServerResponse<T> async) { //Change name request / Change data in method parameters
+        answerServerResponse = async;
+        new ManagerRetrofit<PushGetDTO>().sendRequest(pushGetDTO, new Object() {// Change type Object sending / Change data sending
+        }.getClass().getEnclosingMethod().getName(), (isSuccess, answerString) -> {
+            if (isSuccess) {
+                Type typeAnswer = new TypeToken<ServerResponse<ArrayList<PushMessage>>>() { //Change type response
                 }.getType();
                 tryParsing(answerString, typeAnswer);
             } else {
