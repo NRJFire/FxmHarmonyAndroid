@@ -3,7 +3,6 @@ package com.sofac.fxmharmony;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
-import android.support.multidex.MultiDex;
 import android.util.Log;
 
 import com.orm.SchemaGenerator;
@@ -26,7 +25,7 @@ public class FXMHarmony extends SugarApp {
     @Override
     protected void attachBaseContext(Context context) {
         super.attachBaseContext(context);
-        MultiDex.install(this);
+       // MultiDex.install(this);
 
     }
 
