@@ -2,6 +2,7 @@ package com.sofac.fxmharmony.server;
 
 import android.content.Context;
 import android.net.Uri;
+import android.util.Log;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
@@ -281,7 +282,6 @@ public class Connection<T> { // Set type to getting object
     public ArrayList<MultipartBody.Part> generateMultiPartList(ArrayList<Uri> listFileUri, Context context) {
         ArrayList<MultipartBody.Part> arrayListMulti = new ArrayList<>();
         for (int i = 0; i < listFileUri.size(); i++) {
-            Timber.e("listFileUri.get(i).toString()  " + listFileUri.get(i).toString());
             try {
                 File file = new File(PathUtil.getPath(context, listFileUri.get(i)));
                 arrayListMulti.add(MultipartBody.Part.createFormData("files[" + i + "]", file.getName(), RequestBody.create(MediaType.parse("multipart/form-data"), file)));
