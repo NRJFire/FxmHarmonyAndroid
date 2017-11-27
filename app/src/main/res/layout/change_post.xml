@@ -17,7 +17,6 @@
         android:layout_height="match_parent">
 
         <LinearLayout
-            android:id="@+id/relativeLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
@@ -38,66 +37,6 @@
                 android:textSize="14sp">
 
             </EditText>
-
-            <!--<TextView-->
-            <!--android:id="@+id/image_gallery_name"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:padding="5dp"-->
-            <!--android:text="@string/images" />-->
-
-            <!--<HorizontalScrollView-->
-            <!--android:id="@+id/horizontal_image_scroll"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content">-->
-
-            <!--<com.sofac.fxmharmony.view.customView.LinearLayoutGallery-->
-            <!--android:id="@+id/image_gallery_layout"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:orientation="horizontal">-->
-
-            <!--</com.sofac.fxmharmony.view.customView.LinearLayoutGallery>-->
-
-            <!--</HorizontalScrollView>-->
-
-            <!--<TextView-->
-            <!--android:id="@+id/video_gallery_name"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:padding="5dp"-->
-            <!--android:text="@string/videos" />-->
-
-            <!--<HorizontalScrollView-->
-            <!--android:id="@+id/horizontal_video_scroll"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content">-->
-
-            <!--<com.sofac.fxmharmony.view.customView.LinearLayoutGallery-->
-            <!--android:id="@+id/video_gallery_layout"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:orientation="horizontal">-->
-
-            <!--</com.sofac.fxmharmony.view.customView.LinearLayoutGallery>-->
-
-            <!--</HorizontalScrollView>-->
-
-            <!--<TextView-->
-            <!--android:id="@+id/file_gallery_name"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:padding="5dp"-->
-            <!--android:text="@string/files" />-->
-
-            <!--<com.sofac.fxmharmony.view.customView.LinearLayoutGallery-->
-            <!--android:id="@+id/file_gallery_layout"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:orientation="vertical">-->
-
-            <!--</com.sofac.fxmharmony.view.customView.LinearLayoutGallery>-->
-
 
             <LinearLayout
                 android:id="@+id/idLayoutPhotos"

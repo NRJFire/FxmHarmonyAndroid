@@ -47,39 +47,36 @@ public class ChangePost extends BaseActivity {
 
 
     private PostDTO postDTO;
-
     private FloatingActionMenu menuButton;
 
-    public ArrayList<Uri> listPhoto, listMovies, listFiles;
-    public ArrayList<String> listDeleting;
+    public ArrayList<Uri> listPhoto = new ArrayList<>();
+    public ArrayList<Uri> listMovies = new ArrayList<>();
+    public ArrayList<Uri> listFiles = new ArrayList<>();
+    public ArrayList<String> listDeleting = new ArrayList<>();
 
     AdapterCreatePostPhotos adapterCreatePostPhotos;
     AdapterCreatePostMovies adapterCreatePostMovies;
 
     @BindView(R.id.post_text_input)
     EditText postTextInput;
+
     @BindView(R.id.idListPhotos)
     RecyclerView idListPhotos;
+
     @BindView(R.id.idLayoutPhotos)
-    LinearLayout idLayoutPhotos;
-    @BindView(R.id.idListMovies)
     RecyclerView idListMovies;
+
     @BindView(R.id.idLayoutMovies)
+    LinearLayout idLayoutPhotos;
+
+    @BindView(R.id.idListMovies)
     LinearLayout idLayoutMovies;
-    @BindView(R.id.idListFiles)
-    LinearLayout idListFiles;
+
     @BindView(R.id.idLayoutFiles)
     LinearLayout idLayoutFiles;
-    @BindView(R.id.relativeLayout)
-    LinearLayout relativeLayout;
-    @BindView(R.id.idScrollViewEditPost)
-    ScrollView idScrollViewEditPost;
+
     @BindView(R.id.idMenuButton)
     FloatingActionMenu idMenuButton;
-
-
-    LinearLayout linearLayoutPhoto, linearLayoutMovies, linearLayoutFiles;
-    RecyclerView recyclerViewPhoto, recyclerViewMovie;
 
 
     @Override
@@ -93,19 +90,9 @@ public class ChangePost extends BaseActivity {
         postDTO = PostDTO.findById(PostDTO.class, getIntent().getLongExtra(POST_ID, 0));
         Timber.e(postDTO.toString());
 
-        listPhoto = new ArrayList<>();
-        listMovies = new ArrayList<>();
-        listFiles = new ArrayList<>();
-        listDeleting = new ArrayList<>();
 
-        menuButton = (FloatingActionMenu) findViewById(R.id.idMenuButton);
-        linearLayoutPhoto = (LinearLayout) findViewById(R.id.idLayoutPhotos);
-        linearLayoutMovies = (LinearLayout) findViewById(R.id.idLayoutMovies);
-        linearLayoutFiles = (LinearLayout) findViewById(R.id.idLayoutFiles);
-        recyclerViewPhoto = (RecyclerView) findViewById(R.id.idListPhotos);
-        recyclerViewMovie = (RecyclerView) findViewById(R.id.idListMovies);
 
-        menuButton.setClosedOnTouchOutside(true);
+        idMenuButton.setClosedOnTouchOutside(true);
 
         if (postDTO != null) {
             postTextInput.setText(ConvertorHTML.fromHTML(postDTO.getBody_original()));
@@ -114,7 +101,7 @@ public class ChangePost extends BaseActivity {
                 for (String uriString : postDTO.getImages()) {
                     listPhoto.add(Uri.parse(BASE_URL + PART_POST + uriString));
                 }
-                linearLayoutPhoto.setVisibility(View.VISIBLE);
+                idLayoutPhotos.setVisibility(View.VISIBLE);
             }
 
             if (postDTO.getMovies() != null && !postDTO.getMovies().isEmpty()) {
@@ -122,14 +109,14 @@ public class ChangePost extends BaseActivity {
                     listMovies.add(Uri.parse(BASE_URL + PART_POST + uriString));
 
                 }
-                linearLayoutMovies.setVisibility(View.VISIBLE);
+                idLayoutMovies.setVisibility(View.VISIBLE);
             }
 
             if (postDTO.getDocs() != null && !postDTO.getDocs().isEmpty()) {
                 for (String nameFile : postDTO.getDocs()) {
-                    linearLayoutFiles.addView(createViewFileFromURL(nameFile));
+                    idLayoutFiles.addView(createViewFileFromURL(nameFile));
                 }
-                linearLayoutFiles.setVisibility(View.VISIBLE);
+                idLayoutFiles.setVisibility(View.VISIBLE);
             }
         }
 
@@ -141,14 +128,14 @@ public class ChangePost extends BaseActivity {
                         listDeleting.add(FilenameUtils.getName(listPhoto.get(position).getPath()));
                     listPhoto.remove(position);
                     adapterCreatePostPhotos.notifyDataSetChanged();
-                    if (listPhoto.isEmpty()) linearLayoutPhoto.setVisibility(View.GONE);
+                    if (listPhoto.isEmpty()) idLayoutPhotos.setVisibility(View.GONE);
                     break;
             }
         });
 
-        recyclerViewPhoto.setAdapter(adapterCreatePostPhotos);
-        recyclerViewPhoto.setHasFixedSize(true);
-        recyclerViewPhoto.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+        idListPhotos.setAdapter(adapterCreatePostPhotos);
+        idListPhotos.setHasFixedSize(true);
+        idListPhotos.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
 
         adapterCreatePostMovies = new AdapterCreatePostMovies(listMovies);
         adapterCreatePostMovies.setItemClickListener((view, position) -> {
@@ -158,14 +145,14 @@ public class ChangePost extends BaseActivity {
                         listDeleting.add(FilenameUtils.getName(listMovies.get(position).getPath()));
                     listMovies.remove(position);
                     adapterCreatePostMovies.notifyDataSetChanged();
-                    if (listMovies.isEmpty()) linearLayoutMovies.setVisibility(View.GONE);
+                    if (listMovies.isEmpty()) idLayoutMovies.setVisibility(View.GONE);
                     break;
             }
         });
 
-        recyclerViewMovie.setAdapter(adapterCreatePostMovies);
-        recyclerViewMovie.setHasFixedSize(true);
-        recyclerViewMovie.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+        idListMovies.setAdapter(adapterCreatePostMovies);
+        idListMovies.setHasFixedSize(true);
+        idListMovies.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
 
     }
 
@@ -196,7 +183,6 @@ public class ChangePost extends BaseActivity {
 
                     new Connection<String>().updatePost(this, postDTO, arrayListAll, listDeleting, (isSuccess, answerServerResponse) -> {
                         if (isSuccess) {
-
                             PostDTO.deleteAll(PostDTO.class, "type = ?", postDTO.getType());
                             new Connection<ArrayList<PostDTO>>().getListPosts(postDTO.getType(), (isSuccess1, answerServerResponse1) -> {
                                 if (isSuccess1 && answerServerResponse1 != null) {
@@ -250,7 +236,7 @@ public class ChangePost extends BaseActivity {
                         }
                         listPhoto.add(fileUri);
                         adapterCreatePostPhotos.notifyDataSetChanged();
-                        linearLayoutPhoto.setVisibility(View.VISIBLE);
+                        idLayoutPhotos.setVisibility(View.VISIBLE);
                         break;
 
                     case REQUEST_TAKE_GALLERY_VIDEO:
@@ -260,7 +246,7 @@ public class ChangePost extends BaseActivity {
 
                         listMovies.add(fileUri);
                         adapterCreatePostMovies.notifyDataSetChanged();
-                        linearLayoutMovies.setVisibility(View.VISIBLE);
+                        idLayoutMovies.setVisibility(View.VISIBLE);
                         break;
 
                     case REQUEST_TAKE_FILE:
@@ -269,8 +255,8 @@ public class ChangePost extends BaseActivity {
                         }
 
                         listFiles.add(fileUri);
-                        linearLayoutFiles.addView(createViewFileFromContent(fileUri));
-                        linearLayoutFiles.setVisibility(View.VISIBLE);
+                        idLayoutFiles.addView(createViewFileFromContent(fileUri));
+                        idLayoutFiles.setVisibility(View.VISIBLE);
                         break;
                 }
 
@@ -289,10 +275,10 @@ public class ChangePost extends BaseActivity {
         //((TextView) view.findViewById(R.id.idSizeFile)).setText("Size file: none");
 
         (view.findViewById(idButtonDeleting)).setOnClickListener(v -> {
-            linearLayoutFiles.removeView(view);
+            idLayoutFiles.removeView(view);
             listDeleting.add(nameFile);
             listFiles.remove(fileUri);
-            if (listFiles.isEmpty()) linearLayoutFiles.setVisibility(View.GONE);
+            if (listFiles.isEmpty()) idLayoutFiles.setVisibility(View.GONE);
         });
         return view;
     }
@@ -302,9 +288,9 @@ public class ChangePost extends BaseActivity {
         ((TextView) view.findViewById(R.id.idTextFile)).setText(FilenameUtils.getName(fileUri.toString()));
 
         (view.findViewById(idButtonDeleting)).setOnClickListener(v -> {
-            linearLayoutFiles.removeView(view);
+            idLayoutFiles.removeView(view);
             listFiles.remove(fileUri);
-            if (listFiles.isEmpty()) linearLayoutFiles.setVisibility(View.GONE);
+            if (listFiles.isEmpty()) idLayoutFiles.setVisibility(View.GONE);
         });
         return view;
     }
@@ -316,6 +302,7 @@ public class ChangePost extends BaseActivity {
 
             switch (v.getId()) {
                 case R.id.buttonAddFiles:
+
                     Intent takeFileIntent = new Intent(Intent.ACTION_GET_CONTENT);
                     takeFileIntent.setType("*/*");
                     startActivityForResult(takeFileIntent, REQUEST_TAKE_FILE);
