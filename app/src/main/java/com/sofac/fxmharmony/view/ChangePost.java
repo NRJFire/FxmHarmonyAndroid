@@ -1,23 +1,22 @@
 package com.sofac.fxmharmony.view;
 
 import android.app.Activity;
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
-import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.OpenableColumns;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
 import com.sofac.fxmharmony.R;
 import com.sofac.fxmharmony.adapter.AdapterCreatePostMovies;
@@ -29,8 +28,10 @@ import com.sofac.fxmharmony.util.ConvertorHTML;
 import org.apache.commons.io.FilenameUtils;
 
 import java.util.ArrayList;
-import java.util.Locale;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 import timber.log.Timber;
 
 import static com.sofac.fxmharmony.Constants.BASE_URL;
@@ -42,29 +43,52 @@ import static com.sofac.fxmharmony.Constants.REQUEST_TAKE_PHOTO;
 import static com.sofac.fxmharmony.R.id.idButtonDeleting;
 
 
-public class ChangePost extends BaseActivity implements View.OnClickListener {
+public class ChangePost extends BaseActivity {
+
 
     private PostDTO postDTO;
-    private EditText postTextInput;
+
     private FloatingActionMenu menuButton;
 
     public ArrayList<Uri> listPhoto, listMovies, listFiles;
     public ArrayList<String> listDeleting;
 
-    FloatingActionButton buttonAddFiles, buttonAddMovies, buttonAddPhotos;
-    LinearLayout linearLayoutPhoto, linearLayoutMovies,linearLayoutFiles;
-    RecyclerView recyclerViewPhoto, recyclerViewMovie;
-
     AdapterCreatePostPhotos adapterCreatePostPhotos;
     AdapterCreatePostMovies adapterCreatePostMovies;
+
+    @BindView(R.id.post_text_input)
+    EditText postTextInput;
+    @BindView(R.id.idListPhotos)
+    RecyclerView idListPhotos;
+    @BindView(R.id.idLayoutPhotos)
+    LinearLayout idLayoutPhotos;
+    @BindView(R.id.idListMovies)
+    RecyclerView idListMovies;
+    @BindView(R.id.idLayoutMovies)
+    LinearLayout idLayoutMovies;
+    @BindView(R.id.idListFiles)
+    LinearLayout idListFiles;
+    @BindView(R.id.idLayoutFiles)
+    LinearLayout idLayoutFiles;
+    @BindView(R.id.relativeLayout)
+    LinearLayout relativeLayout;
+    @BindView(R.id.idScrollViewEditPost)
+    ScrollView idScrollViewEditPost;
+    @BindView(R.id.idMenuButton)
+    FloatingActionMenu idMenuButton;
+
+
+    LinearLayout linearLayoutPhoto, linearLayoutMovies, linearLayoutFiles;
+    RecyclerView recyclerViewPhoto, recyclerViewMovie;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.change_post);
+        ButterKnife.bind(this);
+
         setTitle(getString(R.string.change_post_activity_name));
-        postTextInput = (EditText) findViewById(R.id.post_text_input);
 
         postDTO = PostDTO.findById(PostDTO.class, getIntent().getLongExtra(POST_ID, 0));
         Timber.e(postDTO.toString());
@@ -74,21 +98,13 @@ public class ChangePost extends BaseActivity implements View.OnClickListener {
         listFiles = new ArrayList<>();
         listDeleting = new ArrayList<>();
 
-        buttonAddFiles = (FloatingActionButton) findViewById(R.id.buttonAddFiles);
-        buttonAddMovies = (FloatingActionButton) findViewById(R.id.buttonAddMovies);
-        buttonAddPhotos = (FloatingActionButton) findViewById(R.id.buttonAddPhotos);
         menuButton = (FloatingActionMenu) findViewById(R.id.idMenuButton);
-
         linearLayoutPhoto = (LinearLayout) findViewById(R.id.idLayoutPhotos);
         linearLayoutMovies = (LinearLayout) findViewById(R.id.idLayoutMovies);
         linearLayoutFiles = (LinearLayout) findViewById(R.id.idLayoutFiles);
-
         recyclerViewPhoto = (RecyclerView) findViewById(R.id.idListPhotos);
         recyclerViewMovie = (RecyclerView) findViewById(R.id.idListMovies);
 
-        buttonAddFiles.setOnClickListener(this);
-        buttonAddMovies.setOnClickListener(this);
-        buttonAddPhotos.setOnClickListener(this);
         menuButton.setClosedOnTouchOutside(true);
 
         if (postDTO != null) {
@@ -189,7 +205,7 @@ public class ChangePost extends BaseActivity implements View.OnClickListener {
                                     setResult(2, intent);
                                     progressBar.dismissView();
                                     finish();
-                                    toastFinishTrans();
+                                    toastShow("Finished edit post!");
                                 } else {
                                     progressBar.dismissView();
                                 }
@@ -200,14 +216,14 @@ public class ChangePost extends BaseActivity implements View.OnClickListener {
                             } else {
                                 Timber.e("SOME PROBLEM TO REQUEST ANSWER : null = answerServerResponse,       on up, check the log");
                             }
-                            toastCantCreatePost();
+                            toastShow("Some problem with editing post!");
                             progressBar.dismissView();
                         }
 
                     });
 
                 } else {
-                    Toast.makeText(this, "Please input text post", Toast.LENGTH_SHORT).show();
+                    toastShow("Please input text post");
                 }
                 return true;
             default:
@@ -215,13 +231,8 @@ public class ChangePost extends BaseActivity implements View.OnClickListener {
         }
     }
 
-
-    public void toastCantCreatePost() {
-        Toast.makeText(this, "Some problem with editing post!", Toast.LENGTH_SHORT).show();
-    }
-
-    public void toastFinishTrans() {
-        Toast.makeText(this, "Finished edit post!", Toast.LENGTH_SHORT).show();
+    public void toastShow(String str){
+        Toast.makeText(this, str, Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -229,41 +240,38 @@ public class ChangePost extends BaseActivity implements View.OnClickListener {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (resultCode == Activity.RESULT_OK) {
-
             if (data != null) {
-
                 final Uri fileUri = data.getData();
+                switch (requestCode) {
 
-                if (requestCode == REQUEST_TAKE_PHOTO) {
+                    case REQUEST_TAKE_PHOTO:
+                        for (Uri urlPhoto : listPhoto) {
+                            if (fileUri.equals(urlPhoto)) return;
+                        }
+                        listPhoto.add(fileUri);
+                        adapterCreatePostPhotos.notifyDataSetChanged();
+                        linearLayoutPhoto.setVisibility(View.VISIBLE);
+                        break;
 
-                    for (Uri urlPhoto : listPhoto) {
-                        if (fileUri.equals(urlPhoto)) return;
-                    }
+                    case REQUEST_TAKE_GALLERY_VIDEO:
+                        for (Uri urlMovie : listMovies) {
+                            if (fileUri.equals(urlMovie)) return;
+                        }
 
-                    listPhoto.add(fileUri);
-                    adapterCreatePostPhotos.notifyDataSetChanged();
-                    linearLayoutPhoto.setVisibility(View.VISIBLE);
+                        listMovies.add(fileUri);
+                        adapterCreatePostMovies.notifyDataSetChanged();
+                        linearLayoutMovies.setVisibility(View.VISIBLE);
+                        break;
 
-                } else if (requestCode == REQUEST_TAKE_GALLERY_VIDEO) {
+                    case REQUEST_TAKE_FILE:
+                        for (Uri urlFiles : listFiles) {
+                            if (fileUri.equals(urlFiles)) return;
+                        }
 
-                    for (Uri urlMovie : listMovies) {
-                        if (fileUri.equals(urlMovie)) return;
-                    }
-
-                    listMovies.add(fileUri);
-                    adapterCreatePostMovies.notifyDataSetChanged();
-                    linearLayoutMovies.setVisibility(View.VISIBLE);
-
-                } else if (requestCode == REQUEST_TAKE_FILE) {
-                    Timber.e("ChangePost -> fileUri   " +  fileUri.toString());
-                    for (Uri urlFiles : listFiles) {
-                        if (fileUri.equals(urlFiles)) return;
-                    }
-
-                    listFiles.add(fileUri);
-                    linearLayoutFiles.addView(createViewFileFromContent(fileUri));
-                    linearLayoutFiles.setVisibility(View.VISIBLE);
-
+                        listFiles.add(fileUri);
+                        linearLayoutFiles.addView(createViewFileFromContent(fileUri));
+                        linearLayoutFiles.setVisibility(View.VISIBLE);
+                        break;
                 }
 
             }
@@ -291,19 +299,7 @@ public class ChangePost extends BaseActivity implements View.OnClickListener {
 
     public View createViewFileFromContent(final Uri fileUri) {
         final View view = getLayoutInflater().inflate(R.layout.item_file_create_post, null);
-
-//        Cursor returnCursor = getContentResolver().query(fileUri, null, null, null, null);
-//        assert returnCursor != null;
-//        int nameIndex = returnCursor.getColumnIndex(OpenableColumns.DISPLAY_NAME);
-//        int sizeIndex = returnCursor.getColumnIndex(OpenableColumns.SIZE);
-//        returnCursor.moveToFirst();
-//        ((TextView) view.findViewById(R.id.idTextFile)).setText(returnCursor.getString(nameIndex));
-//        Long sizeFile = returnCursor.getLong(sizeIndex);
-//        returnCursor.close();
         ((TextView) view.findViewById(R.id.idTextFile)).setText(FilenameUtils.getName(fileUri.toString()));
-
-//        if (sizeFile > 1024L) sizeFile = sizeFile / 1024L;
-//        ((TextView) view.findViewById(R.id.idSizeFile)).setText(String.format(Locale.ENGLISH, "Size file: %,d KB", sizeFile));
 
         (view.findViewById(idButtonDeleting)).setOnClickListener(v -> {
             linearLayoutFiles.removeView(view);
@@ -313,12 +309,13 @@ public class ChangePost extends BaseActivity implements View.OnClickListener {
         return view;
     }
 
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.buttonAddFiles:
-                if (isStoragePermissionGranted()) {
+    @OnClick({R.id.buttonAddFiles, R.id.buttonAddPhotos, R.id.buttonAddMovies})
+    void onButtonsClick(View v) {
 
+        if (isStoragePermissionGranted()) {
+
+            switch (v.getId()) {
+                case R.id.buttonAddFiles:
                     Intent takeFileIntent = new Intent(Intent.ACTION_GET_CONTENT);
                     takeFileIntent.setType("*/*");
                     startActivityForResult(takeFileIntent, REQUEST_TAKE_FILE);
@@ -343,32 +340,31 @@ public class ChangePost extends BaseActivity implements View.OnClickListener {
 
                     try {
                         startActivityForResult(chooserIntent, REQUEST_TAKE_FILE);
-                    } catch (android.content.ActivityNotFoundException ex) {
+                    } catch (ActivityNotFoundException ex) {
                         Toast.makeText(getApplicationContext(), "No suitable File Manager was found.", Toast.LENGTH_SHORT).show();
                     }
-                    menuButton.toggle(true);
-                }
-                break;
-            case R.id.buttonAddPhotos:
-                if (isStoragePermissionGranted()) {
+                    break;
+
+                case R.id.buttonAddPhotos:
                     Intent takePhotoIntent = new Intent(Intent.ACTION_GET_CONTENT);
                     takePhotoIntent.setType("image/*");
                     startActivityForResult(takePhotoIntent, REQUEST_TAKE_PHOTO);
-                    menuButton.toggle(true);
-                }
-                break;
-            case R.id.buttonAddMovies:
-                if (isStoragePermissionGranted()) {
+                    break;
+
+                case R.id.buttonAddMovies:
                     Intent takeVideoIntent = new Intent();
                     takeVideoIntent.setType("video/*");
                     takeVideoIntent.setAction(Intent.ACTION_GET_CONTENT);
                     startActivityForResult(Intent.createChooser(takeVideoIntent, "Select Video"), REQUEST_TAKE_GALLERY_VIDEO);
-                    menuButton.toggle(true);
-                }
-                break;
+                    break;
+            }
+            menuButton.toggle(true);
         }
     }
+
+
 }
+
 
 
 
