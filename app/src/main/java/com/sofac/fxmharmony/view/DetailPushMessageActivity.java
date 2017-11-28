@@ -1,6 +1,5 @@
 package com.sofac.fxmharmony.view;
 
-import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.StrictMode;
@@ -50,13 +49,13 @@ public class DetailPushMessageActivity extends BaseActivity {
         StrictMode.setThreadPolicy(policy);
         TranslateOptions options = TranslateOptions.newBuilder().setApiKey(Constants.CLOUD_API_KEY).build();
         Translate translate = options.getService();
-        final Translation translation = translate.translate(ConvertorHTML.fromHTML(pushMessage.getMessage()), Translate.TranslateOption.targetLanguage(Locale.getDefault().getLanguage()));
+        final Translation translation = translate.translate(ConvertorHTML.fromHTML(pushMessage.getBody()), Translate.TranslateOption.targetLanguage(Locale.getDefault().getLanguage()));
         final Drawable drawable = getResources().getDrawable(R.drawable.verticalline);
 
 
         titleDetailPushMessage.setText(pushMessage.getTitle());
         dateDetailPushMessage.setText(pushMessage.getDate());
-        messageDetailPushMessage.setText(ConvertorHTML.fromHTML(pushMessage.getMessage()));
+        messageDetailPushMessage.setText(ConvertorHTML.fromHTML(pushMessage.getBody()));
 
 
         buttonTranslatePushMessage.setOnClickListener(v -> {

@@ -10,10 +10,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -63,13 +61,13 @@ public class ChangePost extends BaseActivity {
     @BindView(R.id.idListPhotos)
     RecyclerView idListPhotos;
 
-    @BindView(R.id.idLayoutPhotos)
+    @BindView(R.id.idListMovies)
     RecyclerView idListMovies;
 
-    @BindView(R.id.idLayoutMovies)
+    @BindView(R.id.idLayoutPhotos)
     LinearLayout idLayoutPhotos;
 
-    @BindView(R.id.idListMovies)
+    @BindView(R.id.idLayoutMovies)
     LinearLayout idLayoutMovies;
 
     @BindView(R.id.idLayoutFiles)

@@ -53,6 +53,7 @@ public class ContentFragment extends BaseFragment implements SwipeRefreshLayout.
         setHasOptionsMenu(true);
 
         listViewPush.setEmptyView(rootView.findViewById(R.id.id_list_empty));
+        listViewPush.setDivider(null);
 
         listViewPush.setOnItemClickListener((parent, itemClicked, position, id) -> {
             if (pushMessages != null) {

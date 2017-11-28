@@ -10,45 +10,48 @@ import java.io.Serializable;
 
 public class PushMessage extends SugarRecord implements Serializable {
         private String title;
-        private String message;
+        private String body;
         private String date;
 
-        public PushMessage(){}
+    public PushMessage(){}
 
-        public PushMessage(String title, String message, String date) {
-            this.title = title;
-            this.message = message;
-            this.date = date;
-        }
+    public PushMessage(String title, String body, String date) {
+        this.title = title;
+        this.body = body;
+        this.date = date;
+    }
 
-        public String getMessage() {
-            return message;
-        }
+    public String getTitle() {
+        return title;
+    }
 
-        public void setMessage(String message) {
-            this.message = message;
-        }
+    public void setTitle(String title) {
+        this.title = title;
+    }
 
-        public String getDate() {
-            return date;
-        }
+    public String getBody() {
+        return body;
+    }
 
-        public void setDate(String date) {
-            this.date = date;
-        }
+    public void setBody(String body) {
+        this.body = body;
+    }
 
-        public String getTitle() { return title; }
+    public String getDate() {
+        return date;
+    }
 
-        public void setTitle(String title) {
-            this.title = title;
-        }
+    public void setDate(String date) {
+        this.date = date;
+    }
 
-        @Override
-        public String toString() {
-            return "PushMessage{" +
-                    "title='" + title + '\'' +
-                    ", message='" + message + '\'' +
-                    ", date='" + date + '\'' +
-                    '}';
-        }
+    @Override
+    public String toString() {
+        return "PushMessage{" +
+                "title='" + title + '\'' +
+                ", body='" + body + '\'' +
+                ", date='" + date + '\'' +
+                '}';
+    }
+
 }

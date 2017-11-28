@@ -30,20 +30,14 @@ import static com.sofac.fxmharmony.Constants.BASE_URL;
 
 public class ManagerRetrofit<T> {
 
-    private static final String SERVER_RESPONSE_ERROR = "SERVER_RESPONSE_ERROR";
-    private static final String SERVER_RESPONSE_SUCCESS = "SERVER_RESPONSE_SUCCESS";
-
-    //Константы
-    private String serverResponseError = SERVER_RESPONSE_ERROR;
-    private String serverResponseSuccess = SERVER_RESPONSE_SUCCESS;
+    private String serverResponseError = "SERVER_RESPONSE_ERROR";
+    private String serverResponseSuccess = "SERVER_RESPONSE_SUCCESS";
     private String serverResponse = serverResponseError;
     private String baseUrl = BASE_URL;
 
-    //Данные
     private ServiceRetrofit serviceRetrofit;
     private ServerRequest serverRequest;
 
-    //Обработчики
     private AsyncAnswerString answerString = null;
 
     /**
@@ -121,7 +115,7 @@ public class ManagerRetrofit<T> {
     }
 
     /**
-     * Get Callback<ResponseBody> for this Request;
+     * Get Callback <ResponseBody> for this Request;
      */
     @SuppressWarnings("unchecked")
     public void sendMultiPartWithTwoObj(T object, String requestType, ArrayList<MultipartBody.Part> partArrayList, ArrayList<String> listDeletingFiles, AsyncAnswerString asyncAnswer) {
@@ -136,8 +130,6 @@ public class ManagerRetrofit<T> {
         for(String str : listDeletingFiles){
             stringDeleting = stringDeleting + ";" + str;
         }
-
-        Timber.e("JSON DEL >>>>>>>>> " + stringDeleting);
 
         ServiceRetrofit serviceUploading = ServiceGenerator.createService(ServiceRetrofit.class);
 

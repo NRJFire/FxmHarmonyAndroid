@@ -2,7 +2,6 @@ package com.sofac.fxmharmony.server;
 
 import android.content.Context;
 import android.net.Uri;
-import android.util.Log;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
@@ -35,7 +34,7 @@ import timber.log.Timber;
  * Created by Maxim on 03.08.2017.
  */
 
-public class Connection<T> { // Set type to getting object
+public class Connection<T> {
 
     private AnswerServerResponse answerServerResponse;
 
@@ -92,13 +91,6 @@ public class Connection<T> { // Set type to getting object
     }
 
     /**
-     * Get List VERSIONS history from Server
-     */
-    public void getVersionsHistory(AnswerServerResponse<T> async) {
-
-    }
-
-    /**
      * Get MANAGER info from server
      */
     public void getManagerInfo(Long idManager, AnswerServerResponse<T> async) {
@@ -113,26 +105,6 @@ public class Connection<T> { // Set type to getting object
                 answerServerResponse.processFinish(false, null);
             }
         });
-    }
-
-    /**
-     * Get CUSTOMER info from server
-     */
-    public void getCustomerInfo(Long idCustomer, AnswerServerResponse<T> async) {
-    }
-
-    /**
-     * Get STAFF info from server
-     */
-    public void getStaffInfo(Long idStaff, AnswerServerResponse<T> async) {
-    }
-
-
-    /**
-     * Get SETTINGS from Server
-     */
-    public void getSettings() {
-
     }
 
     public void getListComments(Long postId, AnswerServerResponse<T> async) {
@@ -197,19 +169,6 @@ public class Connection<T> { // Set type to getting object
             }
         });
 
-//        new ManagerRetrofit<PostDTO>().sendRequest(postDTO, new Object() {// Change (type sending) / (data sending)
-//        }.getClass().getEnclosingMethod().getName(), new ManagerRetrofit.AsyncAnswerString() {
-//            @Override
-//            public void processFinish(Boolean isSuccess, String answerString) {
-//                if (isSuccess) {
-//                    Type typeAnswer = new TypeToken<ServerResponse>() { //Change type response(тип ответа)
-//                    }.getType();
-//                    tryParsing(answerString, typeAnswer);
-//                } else {
-//                    answerServerResponse.processFinish(false, null);
-//                }
-//            }
-//        });
     }
 
     /**   */

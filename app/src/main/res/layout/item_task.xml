@@ -1,52 +1,75 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/itemLayout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:padding="10dp">
+    android:orientation="vertical">
 
-    <LinearLayout
-        android:id="@+id/text"
+    <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:card_view="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/card_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:paddingBottom="3dp">
 
-        <TextView
-            android:id="@+id/idTitleItemTask"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:ellipsize="end"
-            android:maxLines="1"
-            android:text="Title"
-            android:textColor="@color/colorItemTitle"
-            android:textSize="18sp"
-            android:textStyle="bold" />
+        android:layout_marginBottom="4dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="4dp"
 
-        <TextView
-            android:id="@+id/idDateItemTask"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:gravity="end"
-            android:text="date"
-            android:textColor="@color/colorItemDate" />
-    </LinearLayout>
+        card_view:cardCornerRadius="4dp"
+        card_view:cardElevation="2dp"
+        card_view:contentPadding="0dp">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <TextView
-            android:id="@+id/idMessageItemTask"
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:ellipsize="end"
-            android:maxLines="1"
-            android:textColor="@color/colorItemContext" />
-
-    </LinearLayout>
+            android:orientation="vertical"
+            android:padding="10dp">
 
 
+            <LinearLayout
+                android:id="@+id/text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingBottom="3dp">
+
+                <TextView
+                    android:id="@+id/idTitleItemTask"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:text="Title"
+                    android:textColor="@color/colorItemTitle"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/idDateItemTask"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="end"
+                    android:text="date"
+                    android:textColor="@color/colorItemDate" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/idMessageItemTask"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:text="Body message"
+                    android:textColor="@color/colorItemContext" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </android.support.v7.widget.CardView>
 </LinearLayout>

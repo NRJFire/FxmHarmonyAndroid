@@ -23,11 +23,7 @@ public class AdapterPushListView extends BaseAdapter {
     public AdapterPushListView(Context context, ArrayList<PushMessage> pushMessageArrayList) {
         if (pushMessageArrayList != null) {
             if (pushMessageArrayList.size() > 1) {
-                Collections.sort(pushMessageArrayList, new Comparator<PushMessage>() {
-                    public int compare(PushMessage o1, PushMessage o2) {
-                        return o2.getDate().compareTo(o1.getDate());
-                    }
-                });
+                Collections.sort(pushMessageArrayList, (o1, o2) -> o2.getDate().compareTo(o1.getDate()));
             }
         }
         this.pushMessageArrayList = pushMessageArrayList;
@@ -61,9 +57,12 @@ public class AdapterPushListView extends BaseAdapter {
 
         PushMessage pushMessage = getPushMessage(position);
 
+        if(pushMessage.getTitle()!=null)
         ((TextView) view.findViewById(R.id.idTitleItemTask)).setText(pushMessage.getTitle());
+        if(pushMessage.getDate()!=null)
         ((TextView) view.findViewById(R.id.idDateItemTask)).setText(pushMessage.getDate());
-        ((TextView) view.findViewById(R.id.idMessageItemTask)).setText(Html.fromHtml(pushMessage.getMessage()));
+        if(pushMessage.getBody()!=null)
+        ((TextView) view.findViewById(R.id.idMessageItemTask)).setText(Html.fromHtml(pushMessage.getBody()));
 
         return view;
     }

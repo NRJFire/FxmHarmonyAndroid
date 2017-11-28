@@ -29,7 +29,7 @@
             android:value="database.db" />
         <meta-data
             android:name="VERSION"
-            android:value="21" />
+            android:value="22" />
         <meta-data
             android:name="QUERY_LOG"
             android:value="true" />
@@ -74,6 +74,7 @@
                 <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
             </intent-filter>
         </service>
+
         <service android:name=".util.googleFirebaseService.MyFirebaseMessagingService">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
@@ -86,11 +87,6 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".view.SettingsActivity"
-            android:label="@string/title_activity_settings"
-            android:logo="@drawable/keyboard_backspace"
-            android:screenOrientation="portrait" />
-        <activity
             android:name=".view.PreviewPhotoActivity"
             android:logo="@drawable/keyboard_backspace"
             android:screenOrientation="portrait"
@@ -101,9 +97,6 @@
             android:logo="@drawable/keyboard_backspace"
             android:screenOrientation="portrait"
             android:theme="@style/Black" /> <!-- or android:screenOrientation="landscape" -->
-        <activity
-            android:name=".view.ProfileActivity"
-            android:screenOrientation="portrait" />
     </application>
 
 </manifest>
