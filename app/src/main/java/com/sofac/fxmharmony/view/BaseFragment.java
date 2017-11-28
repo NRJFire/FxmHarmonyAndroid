@@ -7,14 +7,7 @@ import android.support.v4.app.Fragment;
  */
 public class BaseFragment extends Fragment {
 
-   // public AppUserID appUserID;
-    //public UserDTO userDTO;
-    //public ProgressBar progressBar;
-
     public BaseFragment() {
-        //progressBar = new ProgressBar(this.getContext());
-        //appUserID = new AppUserID(this.getContext());
-        //userDTO = findById(UserDTO.class, appUserID.getID());
 
     }
 }

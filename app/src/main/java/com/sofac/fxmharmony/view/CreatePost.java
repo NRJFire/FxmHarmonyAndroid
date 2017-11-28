@@ -71,7 +71,7 @@ public class CreatePost extends BaseActivity implements View.OnClickListener {
 
         Intent intent = getIntent();
         stringTypeGroup = intent.getStringExtra(TYPE_GROUP);
-        setTitle("Create post (" + stringTypeGroup + ")");
+        setTitle(String.format("Create post (%s)", stringTypeGroup));
 
         listPhoto = new ArrayList<>();
         listMovies = new ArrayList<>();
@@ -150,32 +150,25 @@ public class CreatePost extends BaseActivity implements View.OnClickListener {
                             Intent intent = new Intent(CreatePost.this, NavigationActivity.class);
                             setResult(2, intent);
                             finish();
-                            toastFinishTrans();
+                            showToast("Finished creating post!");
                         } else {
                             if(answerServerResponse != null){
                                 Timber.e(answerServerResponse.toString());
                             } else {
                                 Timber.e("SOME PROBLEM TO REQUEST ANSWER : null = answerServerResponse,       on up, check the log");
                             }
-                            toastCantCreatePost();
+                            showToast("Some problem with creating post!");
                         }
                         progressBar.dismissView();
                     });
 
                 } else {
-                    Toast.makeText(this, "Please input text post", Toast.LENGTH_SHORT).show();
+                    showToast("Please input text post");
                 }
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
-    }
-
-    public void toastCantCreatePost() {
-        Toast.makeText(this, "Some problem with creating post!", Toast.LENGTH_SHORT).show();
-    }
-    public void toastFinishTrans() {
-        Toast.makeText(this, "Finished creating post!", Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -226,24 +219,10 @@ public class CreatePost extends BaseActivity implements View.OnClickListener {
 
     }
 
-
     public View createViewFile(final Uri fileUri) {
         final View view = getLayoutInflater().inflate(R.layout.item_file_create_post, null);
 
-//        Cursor returnCursor = getContentResolver().query(fileUri, null, null, null, null);
-//        assert returnCursor != null;
-//        int nameIndex = returnCursor.getColumnIndex(OpenableColumns.DISPLAY_NAME);
-//        int sizeIndex = returnCursor.getColumnIndex(OpenableColumns.SIZE);
-//        returnCursor.moveToFirst();
-//        ((TextView) view.findViewById(R.id.idTextFile)).setText(returnCursor.getString(nameIndex));
-//        Long sizeFile = returnCursor.getLong(sizeIndex);
-//        returnCursor.close();
-
         ((TextView) view.findViewById(R.id.idTextFile)).setText(FilenameUtils.getName(fileUri.toString()));
-//        Long sizeFile = 1500L;
-
-//        if (sizeFile > 1024L) sizeFile = sizeFile / 1024L;
-//        ((TextView) view.findViewById(R.id.idSizeFile)).setText(String.format(Locale.ENGLISH, "Size file: %,d KB", sizeFile));
 
         (view.findViewById(R.id.idButtonDeleting)).setOnClickListener(v -> {
             linearLayoutFiles.removeView(view);

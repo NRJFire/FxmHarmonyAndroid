@@ -91,7 +91,6 @@ public class ChangePost extends BaseActivity {
         Timber.e(postDTO.toString());
 
 
-
         idMenuButton.setClosedOnTouchOutside(true);
 
         if (postDTO != null) {
@@ -191,7 +190,7 @@ public class ChangePost extends BaseActivity {
                                     setResult(2, intent);
                                     progressBar.dismissView();
                                     finish();
-                                    toastShow("Finished edit post!");
+                                    showToast("Finished edit post!");
                                 } else {
                                     progressBar.dismissView();
                                 }
@@ -202,14 +201,14 @@ public class ChangePost extends BaseActivity {
                             } else {
                                 Timber.e("SOME PROBLEM TO REQUEST ANSWER : null = answerServerResponse,       on up, check the log");
                             }
-                            toastShow("Some problem with editing post!");
+                            showToast("Some problem with editing post!");
                             progressBar.dismissView();
                         }
 
                     });
 
                 } else {
-                    toastShow("Please input text post");
+                    showToast("Please input text post");
                 }
                 return true;
             default:
@@ -217,49 +216,43 @@ public class ChangePost extends BaseActivity {
         }
     }
 
-    public void toastShow(String str){
-        Toast.makeText(this, str, Toast.LENGTH_SHORT).show();
-    }
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (resultCode == Activity.RESULT_OK) {
-            if (data != null) {
-                final Uri fileUri = data.getData();
-                switch (requestCode) {
+        if (resultCode == Activity.RESULT_OK && data != null) {
 
-                    case REQUEST_TAKE_PHOTO:
-                        for (Uri urlPhoto : listPhoto) {
-                            if (fileUri.equals(urlPhoto)) return;
-                        }
-                        listPhoto.add(fileUri);
-                        adapterCreatePostPhotos.notifyDataSetChanged();
-                        idLayoutPhotos.setVisibility(View.VISIBLE);
-                        break;
+            final Uri fileUri = data.getData();
 
-                    case REQUEST_TAKE_GALLERY_VIDEO:
-                        for (Uri urlMovie : listMovies) {
-                            if (fileUri.equals(urlMovie)) return;
-                        }
+            switch (requestCode) {
+                case REQUEST_TAKE_PHOTO:
+                    for (Uri urlPhoto : listPhoto) {
+                        if (fileUri.equals(urlPhoto)) return;
+                    }
+                    listPhoto.add(fileUri);
+                    adapterCreatePostPhotos.notifyDataSetChanged();
+                    idLayoutPhotos.setVisibility(View.VISIBLE);
+                    break;
 
-                        listMovies.add(fileUri);
-                        adapterCreatePostMovies.notifyDataSetChanged();
-                        idLayoutMovies.setVisibility(View.VISIBLE);
-                        break;
+                case REQUEST_TAKE_GALLERY_VIDEO:
+                    for (Uri urlMovie : listMovies) {
+                        if (fileUri.equals(urlMovie)) return;
+                    }
 
-                    case REQUEST_TAKE_FILE:
-                        for (Uri urlFiles : listFiles) {
-                            if (fileUri.equals(urlFiles)) return;
-                        }
+                    listMovies.add(fileUri);
+                    adapterCreatePostMovies.notifyDataSetChanged();
+                    idLayoutMovies.setVisibility(View.VISIBLE);
+                    break;
 
-                        listFiles.add(fileUri);
-                        idLayoutFiles.addView(createViewFileFromContent(fileUri));
-                        idLayoutFiles.setVisibility(View.VISIBLE);
-                        break;
-                }
+                case REQUEST_TAKE_FILE:
+                    for (Uri urlFiles : listFiles) {
+                        if (fileUri.equals(urlFiles)) return;
+                    }
 
+                    listFiles.add(fileUri);
+                    idLayoutFiles.addView(createViewFileFromContent(fileUri));
+                    idLayoutFiles.setVisibility(View.VISIBLE);
+                    break;
             }
 
         }
@@ -299,10 +292,8 @@ public class ChangePost extends BaseActivity {
     void onButtonsClick(View v) {
 
         if (isStoragePermissionGranted()) {
-
             switch (v.getId()) {
                 case R.id.buttonAddFiles:
-
                     Intent takeFileIntent = new Intent(Intent.ACTION_GET_CONTENT);
                     takeFileIntent.setType("*/*");
                     startActivityForResult(takeFileIntent, REQUEST_TAKE_FILE);

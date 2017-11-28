@@ -9,6 +9,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.widget.Toast;
 
 import com.sofac.fxmharmony.dto.UserDTO;
 import com.sofac.fxmharmony.util.AppUserID;
@@ -30,6 +31,10 @@ public class BaseActivity extends AppCompatActivity {
         progressBar = new ProgressBar(this);
         appUserID = new AppUserID(this);
         userDTO = findById(UserDTO.class, appUserID.getID());
+    }
+
+    public void showToast(String str) {
+        Toast.makeText(this, str, Toast.LENGTH_SHORT).show();
     }
 
 
