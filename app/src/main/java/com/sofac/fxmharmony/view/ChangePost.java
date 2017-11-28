@@ -88,7 +88,6 @@ public class ChangePost extends BaseActivity {
         postDTO = PostDTO.findById(PostDTO.class, getIntent().getLongExtra(POST_ID, 0));
         Timber.e(postDTO.toString());
 
-
         idMenuButton.setClosedOnTouchOutside(true);
 
         if (postDTO != null) {
