@@ -11,8 +11,9 @@ import com.sofac.fxmharmony.dto.AuthorizationDTO;
 import com.sofac.fxmharmony.dto.CommentDTO;
 import com.sofac.fxmharmony.dto.ManagerDTO;
 import com.sofac.fxmharmony.dto.PostDTO;
-import com.sofac.fxmharmony.dto.PushGetDTO;
 import com.sofac.fxmharmony.dto.PushMessage;
+import com.sofac.fxmharmony.dto.SenderContainerDTO;
+import com.sofac.fxmharmony.dto.TossDTO;
 import com.sofac.fxmharmony.dto.UserDTO;
 import com.sofac.fxmharmony.server.retrofit.ManagerRetrofit;
 import com.sofac.fxmharmony.server.type.ServerResponse;
@@ -36,7 +37,7 @@ import timber.log.Timber;
 
 public class Connection<T> {
 
-    private AnswerServerResponse answerServerResponse;
+    private AnswerServerResponse<T> answerServerResponse;
 
     public interface AnswerServerResponse<T> {
         void processFinish(Boolean isSuccess, ServerResponse<T> answerServerResponse);
@@ -59,9 +60,9 @@ public class Connection<T> {
         });
     }
 
-    public void getListPush(PushGetDTO pushGetDTO, AnswerServerResponse<T> async) { //Change name request / Change data in method parameters
+    public void getListPush(SenderContainerDTO senderContainerDTO, AnswerServerResponse<T> async) { //Change name request / Change data in method parameters
         answerServerResponse = async;
-        new ManagerRetrofit<PushGetDTO>().sendRequest(pushGetDTO, new Object() {// Change type Object sending / Change data sending
+        new ManagerRetrofit<SenderContainerDTO>().sendRequest(senderContainerDTO, new Object() {// Change type Object sending / Change data sending
         }.getClass().getEnclosingMethod().getName(), (isSuccess, answerString) -> {
             if (isSuccess) {
                 Type typeAnswer = new TypeToken<ServerResponse<ArrayList<PushMessage>>>() { //Change type response
@@ -107,6 +108,9 @@ public class Connection<T> {
         });
     }
 
+    /**
+     * LIST COMMENTS
+     */
     public void getListComments(Long postId, AnswerServerResponse<T> async) {
         answerServerResponse = async;
         new ManagerRetrofit<Long>().sendRequest(postId, new Object() {// Change (type sending) / (data sending)
@@ -121,7 +125,9 @@ public class Connection<T> {
         });
     }
 
-    /**   */
+    /**
+     * LIST POSTS
+     */
     public void getListPosts(String stringTypeGroup, AnswerServerResponse<T> async) {
         answerServerResponse = async;
         new ManagerRetrofit<String>().sendRequest(stringTypeGroup, new Object() {// Change (type sending) / (data sending)
@@ -136,7 +142,25 @@ public class Connection<T> {
         });
     }
 
-    /**   */
+    /**
+     * LIST TOSSES
+     */
+    public void getListToss(SenderContainerDTO senderContainerDTO, AnswerServerResponse<T> async) {
+        answerServerResponse = async;
+        new ManagerRetrofit<SenderContainerDTO>().sendRequest(senderContainerDTO, new Object() {// Change (type sending) / (data sending)
+        }.getClass().getEnclosingMethod().getName(), (isSuccess, answerString) -> {
+            if (isSuccess) {
+                Type typeAnswer = new TypeToken<ServerResponse<ArrayList<TossDTO>>>() { //Change type response(тип ответа)
+                }.getType();
+                tryParsing(answerString, typeAnswer);
+            } else {
+                answerServerResponse.processFinish(false, null);
+            }
+        });
+    }
+    /**
+     * CREATE POST
+     */
     public void createPost(Context context, PostDTO postDTO, ArrayList<Uri> listUri, AnswerServerResponse<T> async) {
         answerServerResponse = async;
 
@@ -154,7 +178,9 @@ public class Connection<T> {
     }
 
 
-    /**   */
+    /**
+     * UPDATE POST
+     */
     public void updatePost(Context context, PostDTO postDTO, ArrayList<Uri> listUri, ArrayList<String> listDeletingFiles, AnswerServerResponse<T> async) {
         answerServerResponse = async;
 
@@ -171,7 +197,9 @@ public class Connection<T> {
 
     }
 
-    /**   */
+    /**
+     * DELETE POST
+     */
     public void deletePost(PostDTO postDTO, AnswerServerResponse<T> async) {
         answerServerResponse = async;
         new ManagerRetrofit<Long>().sendRequest(postDTO.getId(), new Object() {// Change (type sending) / (data sending)
@@ -203,7 +231,9 @@ public class Connection<T> {
         });
     }
 
-    /** */
+    /**
+     * UPDATE COMMENT
+     */
     public void updateComment(CommentDTO commentDTO, AnswerServerResponse<T> async) {
         answerServerResponse = async;
         new ManagerRetrofit<CommentDTO>().sendRequest(commentDTO, new Object() {// Change (type sending) / (data sending)
@@ -218,7 +248,9 @@ public class Connection<T> {
         });
     }
 
-    /**   */
+    /**
+     * DELETE COMMENT
+     */
     public void deleteComment(CommentDTO commentDTO, AnswerServerResponse<T> async) {
         answerServerResponse = async;
         new ManagerRetrofit<Long>().sendRequest(commentDTO.getId(), new Object() {// Change (type sending) / (data sending)
@@ -235,7 +267,7 @@ public class Connection<T> {
 
 
     /**
-     * Dop methods
+     * Supporting methods
      */
 
     public ArrayList<MultipartBody.Part> generateMultiPartList(ArrayList<Uri> listFileUri, Context context) {

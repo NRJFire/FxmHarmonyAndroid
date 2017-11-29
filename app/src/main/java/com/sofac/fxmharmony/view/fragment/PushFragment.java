@@ -16,12 +16,13 @@ import android.widget.ListView;
 import com.sofac.fxmharmony.Constants;
 import com.sofac.fxmharmony.R;
 import com.sofac.fxmharmony.adapter.AdapterPushListView;
-import com.sofac.fxmharmony.dto.PushGetDTO;
 import com.sofac.fxmharmony.dto.PushMessage;
+import com.sofac.fxmharmony.dto.SenderContainerDTO;
 import com.sofac.fxmharmony.server.Connection;
 import com.sofac.fxmharmony.util.AppUserID;
 import com.sofac.fxmharmony.view.BaseFragment;
 import com.sofac.fxmharmony.view.DetailPushMessageActivity;
+
 import java.util.ArrayList;
 
 import timber.log.Timber;
@@ -29,7 +30,7 @@ import timber.log.Timber;
 import static com.orm.SugarRecord.listAll;
 import static com.sofac.fxmharmony.Constants.ONE_PUSH_MESSAGE_DATA;
 
-public class ContentFragment extends BaseFragment implements SwipeRefreshLayout.OnRefreshListener {
+public class PushFragment extends BaseFragment implements SwipeRefreshLayout.OnRefreshListener {
 
     public Intent intentDetailTaskActivity;
     public SwipeRefreshLayout groupSwipeRefreshLayout;
@@ -70,18 +71,20 @@ public class ContentFragment extends BaseFragment implements SwipeRefreshLayout.
         super.onResume();
     }
 
-    public void loadData(){
+    public void loadData() {
         AppUserID appUserID = new AppUserID(this.getActivity());
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this.getActivity());
-        new Connection<ArrayList<PushMessage>>().getListPush(new PushGetDTO(appUserID.getID(), sharedPref.getString(Constants.GOOGLE_CLOUD_PREFERENCE, "")), (isSuccess, answerServerResponse) -> {
-            if (isSuccess) {
-                PushMessage.saveInTx(answerServerResponse.getDataTransferObject());
-                updateViewList();
-                Timber.e("update Push ViewList OK");
-            } else {
-                Timber.e("update Push ViewList ERROR!!");
-            }
-        });
+        new Connection<ArrayList<PushMessage>>().getListPush(
+                new SenderContainerDTO(appUserID.getID(), sharedPref.getString(Constants.GOOGLE_CLOUD_PREFERENCE, "")),
+                (isSuccess, answerServerResponse) -> {
+                    if (isSuccess) {
+                        PushMessage.saveInTx(answerServerResponse.getDataTransferObject());
+                        updateViewList();
+                        Timber.e("update Push ViewList OK");
+                    } else {
+                        Timber.e("update Push ViewList ERROR!!");
+                    }
+                });
     }
 
     protected void updateViewList() {

@@ -13,9 +13,7 @@ import android.widget.Toast;
 import com.sofac.fxmharmony.Constants;
 import com.sofac.fxmharmony.R;
 import com.sofac.fxmharmony.dto.AuthorizationDTO;
-import com.sofac.fxmharmony.dto.CustomerDTO;
 import com.sofac.fxmharmony.dto.ManagerDTO;
-import com.sofac.fxmharmony.dto.StaffDTO;
 import com.sofac.fxmharmony.dto.UserDTO;
 import com.sofac.fxmharmony.server.Connection;
 import com.sofac.fxmharmony.util.AppUserID;
@@ -44,8 +42,6 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         // Cleaning DataBase
         try {
             ManagerDTO.deleteAll(UserDTO.class);
-            CustomerDTO.deleteAll(UserDTO.class);
-            StaffDTO.deleteAll(UserDTO.class);
             UserDTO.deleteAll(UserDTO.class);
         } catch (Exception e) {
             e.printStackTrace();

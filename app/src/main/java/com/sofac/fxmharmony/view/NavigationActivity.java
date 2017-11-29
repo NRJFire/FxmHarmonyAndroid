@@ -28,8 +28,9 @@ import com.sofac.fxmharmony.dto.ManagerDTO;
 import com.sofac.fxmharmony.dto.PostDTO;
 import com.sofac.fxmharmony.server.Connection;
 import com.sofac.fxmharmony.util.CheckAuthorization;
-import com.sofac.fxmharmony.view.fragment.ContentFragment;
+import com.sofac.fxmharmony.view.fragment.PushFragment;
 import com.sofac.fxmharmony.view.fragment.GroupFragment;
+import com.sofac.fxmharmony.view.fragment.TossFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -130,7 +131,7 @@ public class NavigationActivity extends BaseActivity implements NavigationView.O
     private void setupViewPager(ViewPager viewPager) { // Заполнение ViewPager
 
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
-        adapter.addFragment(new ContentFragment(), "PUSH");
+        adapter.addFragment(new PushFragment(), "PUSH");
 
         if (userDTO.isAdmin() || userDTO.isAccessLeaderGroup()) {
             Bundle bundleGroupLeader = new Bundle();
@@ -153,6 +154,8 @@ public class NavigationActivity extends BaseActivity implements NavigationView.O
             groupFragmentStaff.setArguments(bundleGroupLeader);
             adapter.addFragment(groupFragmentStaff, "staff\ngroup");
         }
+
+        adapter.addFragment(new TossFragment(), "TOSS");
 
         viewPager.setAdapter(adapter);
     }

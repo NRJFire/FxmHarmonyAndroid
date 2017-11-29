@@ -54,7 +54,7 @@ public class AdapterPostGroup extends RecyclerView.Adapter<AdapterPostGroup.View
     @Override
     public void onBindViewHolder(ViewHolder view, int position) {
 
-        PostDTO postDTO = getPostDTO(position);
+        PostDTO postDTO = postDTOArrayList.get(position);
         ArrayList<String> listImage = new ArrayList<>();
 
         LinearLayout.LayoutParams lParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);///////////////
@@ -108,14 +108,6 @@ public class AdapterPostGroup extends RecyclerView.Adapter<AdapterPostGroup.View
     @Override
     public int getItemCount() {
         return postDTOArrayList.size();
-    }
-
-    public Object getItem(int position) {
-        return postDTOArrayList.get(position);
-    }
-
-    PostDTO getPostDTO(int position) {
-        return ((PostDTO) getItem(position));
     }
 
     // CLASS VIEW HOLDER

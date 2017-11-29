@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!--TODO need refactoring-->
     <color name="colorPrimary">#1d9db4</color>
     <color name="colorPrimaryDark">#095360</color>
     <color name="colorAccent">#0d7689</color>
+
     <color name="colorHint">#739297</color>
     <color name="colorText">#075f6e</color>
     <color name="colorWhite">#ffffff</color>
@@ -11,9 +13,7 @@
     <color name="colorItemDateComment">#b9b9b9</color>
     <color name="colorItemContext">#979797</color>
     <color name="colorBGItemNoRead">#e6e6e6</color>
-
     <color name="tabsScrollColor">#004d40</color>
-
     <color name="transparent">#00000000</color>
     <color name="colorTextDark">#515151</color>
     <color name="colorCommentsBackground">#ececec</color>
@@ -21,24 +21,30 @@
     <color name="colorTextDarkPostDetail">#414141</color>
     <color name="colorTextDarkPostComment">#787878</color>
     <color name="colorGroupBackground">#dfdfdf</color>
-
     <color name="FileName">#9b9b9b</color>
     <color name="lineView">#e6e6e6</color>
     <color name="lineViewFiles">#e5e5e5</color>
     <color name="lineViewDownPost">#c4c4c4</color>
-
     <color name="black">#000</color>
-
-
     <color name="commentTranslate">#0992a9</color>
-
     <color name="white_header">#ffffff</color>
     <color name="white_header_transparent">#e2ffffff</color>
     <color name="dark_header_transparent">#60006c7c</color>
-
     <color name="white">#fafafa</color>
     <color name="white_pressed">#f1f1f1</color>
     <color name="black_semi_transparent">#B2000000</color>
     <color name="half_black">#808080</color>
+
+    <!--New color-->
+    <color name="ColorWhite">#ffffff</color>
+    <color name="ColorGrey">#848484</color>
+    <color name="ColorGreyLight">#bababa</color>
+    <color name="ColorDark">#000000</color>
+    <color name="ColorBlue">#007eaf</color>
+
+    <!--Statuses TOSS-->
+    <color name="ColorRed">#ed9898</color>
+    <color name="ColorGreen">#c0f0a1</color>
+    <color name="ColorYellow">#fdfd98</color>
 
 </resources>
