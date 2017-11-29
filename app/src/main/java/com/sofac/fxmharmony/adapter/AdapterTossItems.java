@@ -70,7 +70,8 @@ public class AdapterTossItems extends RecyclerView.Adapter<AdapterTossItems.Toss
             for(ResponsibleUserDTO responsibleUserDTO : tossDTO.getResponsible()){
                 stringBuilder.append(String.format("%s, ",responsibleUserDTO.getName()));
             }
-            viewNamesTo.setText(stringBuilder.replace(stringBuilder.length()-3,stringBuilder.length()-1,stringBuilder.toString()));
+            stringBuilder.delete(stringBuilder.length()-3,stringBuilder.length()-1);
+            viewNamesTo.setText(stringBuilder.toString());
 
             switch (tossDTO.getStatus()){
                 case "closed":
