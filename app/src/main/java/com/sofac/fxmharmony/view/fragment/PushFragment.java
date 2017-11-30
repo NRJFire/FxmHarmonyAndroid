@@ -6,11 +6,9 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 
 import com.sofac.fxmharmony.Constants;
@@ -25,18 +23,25 @@ import com.sofac.fxmharmony.view.DetailPushMessageActivity;
 
 import java.util.ArrayList;
 
-import timber.log.Timber;
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.Unbinder;
 
-import static com.orm.SugarRecord.listAll;
 import static com.sofac.fxmharmony.Constants.ONE_PUSH_MESSAGE_DATA;
 
 public class PushFragment extends BaseFragment implements SwipeRefreshLayout.OnRefreshListener {
 
     public Intent intentDetailTaskActivity;
-    public SwipeRefreshLayout groupSwipeRefreshLayout;
     public AdapterPushListView adapterTasksListView;
-    public ListView listViewPush;
-    public ArrayList<PushMessage> pushMessages;
+    public ArrayList<PushMessage> pushMessages = new ArrayList<>();
+    @BindView(R.id.idListPost)
+    ListView listViewPush;
+    @BindView(R.id.idRefresh)
+    SwipeRefreshLayout groupSwipeRefreshLayout;
+    Unbinder unbinder;
+    @BindView(R.id.id_list_empty)
+    LinearLayout idListEmpty;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -46,22 +51,22 @@ public class PushFragment extends BaseFragment implements SwipeRefreshLayout.OnR
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
         View rootView = inflater.inflate(R.layout.fragment_push, container, false);
-        listViewPush = rootView.findViewById(R.id.idListPost);
-        groupSwipeRefreshLayout = rootView.findViewById(R.id.idRefresh);
+        unbinder = ButterKnife.bind(this, rootView);
+
         groupSwipeRefreshLayout.setOnRefreshListener(this);
-        setHasOptionsMenu(true);
 
-        listViewPush.setEmptyView(rootView.findViewById(R.id.id_list_empty));
+        adapterTasksListView = new AdapterPushListView(this.getActivity(), pushMessages);
+        listViewPush.setAdapter(adapterTasksListView);
+        listViewPush.setEmptyView(idListEmpty);
         listViewPush.setDivider(null);
-
         listViewPush.setOnItemClickListener((parent, itemClicked, position, id) -> {
             if (pushMessages != null) {
                 intentDetailTaskActivity.putExtra(ONE_PUSH_MESSAGE_DATA, pushMessages.get(position));
                 startActivity(intentDetailTaskActivity);
             }
         });
+
         return rootView;
     }
 
@@ -78,20 +83,18 @@ public class PushFragment extends BaseFragment implements SwipeRefreshLayout.OnR
                 new SenderContainerDTO(appUserID.getID(), sharedPref.getString(Constants.GOOGLE_CLOUD_PREFERENCE, "")),
                 (isSuccess, answerServerResponse) -> {
                     if (isSuccess) {
-                        PushMessage.saveInTx(answerServerResponse.getDataTransferObject());
+                        pushMessages.clear();
+                        pushMessages.addAll(answerServerResponse.getDataTransferObject());
                         updateViewList();
-                        Timber.e("update Push ViewList OK");
                     } else {
-                        Timber.e("update Push ViewList ERROR!!");
+                        showToast(getResources().getString(R.string.errorServer));
                     }
                 });
     }
 
     protected void updateViewList() {
-        pushMessages = (ArrayList<PushMessage>) listAll(PushMessage.class);
-        adapterTasksListView = new AdapterPushListView(this.getActivity(), pushMessages);
-        listViewPush.setAdapter(adapterTasksListView);
-        //adapterTasksListView.notifyDataSetChanged();
+
+        adapterTasksListView.notifyDataSetChanged();
         groupSwipeRefreshLayout.setRefreshing(false);
     }
 
@@ -102,6 +105,11 @@ public class PushFragment extends BaseFragment implements SwipeRefreshLayout.OnR
 
     }
 
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        unbinder.unbind();
+    }
 }
 
 
