@@ -17,9 +17,9 @@ public class Constants {
     public final static String PUSH_MESSAGES_STATE = "PUSH_MESSAGES_STATE";
 
     //public final static String BASE_URL = "http://52.211.242.225:8080/"; // a.sofac.kr
-    public final static String BASE_URL = "http://www.sofac.kr/"; // http://swfac.kr/
+    //public final static String BASE_URL = "http://www.sofac.kr/"; // http://swfac.kr/
     //public final static String BASE_URL = "http://52.57.116.160:8080/"; //Test server
-    //public final static String BASE_URL = "http://192.168.0.15/"; //Zegna
+    public final static String BASE_URL = "http://192.168.0.58/"; //Zegna
     //public final static String BASE_URL = "http://192.168.1.5/"; //FreeMax
     //public final static String BASE_URL = "http://192.168.1.36/"; //Maxx
 

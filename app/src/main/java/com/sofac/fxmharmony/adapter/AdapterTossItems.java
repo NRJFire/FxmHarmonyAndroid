@@ -1,6 +1,5 @@
 package com.sofac.fxmharmony.adapter;
 
-import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,19 +10,17 @@ import com.sofac.fxmharmony.R;
 import com.sofac.fxmharmony.dto.ResponsibleUserDTO;
 import com.sofac.fxmharmony.dto.TossDTO;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.Unbinder;
 
 /**
  * Created by Maxim on 29.11.2017.
  */
 
 public class AdapterTossItems extends RecyclerView.Adapter<AdapterTossItems.TossViewHolder> {
+
     private ArrayList<TossDTO> listTosses;
 
     public AdapterTossItems(ArrayList<TossDTO> tossDTOs){
@@ -62,28 +59,38 @@ public class AdapterTossItems extends RecyclerView.Adapter<AdapterTossItems.Toss
         }
 
         void setModel(TossDTO tossDTO) {
-
             viewTextTitle.setText(tossDTO.getTitle());
             viewTextDate.setText(tossDTO.getDate());
             viewNamesFrom.setText(tossDTO.getName());
+            viewNamesTo.setText(getNamesResponsible(tossDTO.getResponsible()));
+            changeStatus(tossDTO.getStatus());
+        }
+
+        private String getNamesResponsible(ResponsibleUserDTO[] listUsers){
             StringBuilder stringBuilder = new StringBuilder();
-            for(ResponsibleUserDTO responsibleUserDTO : tossDTO.getResponsible()){
-                stringBuilder.append(String.format("%s, ",responsibleUserDTO.getName()));
+            for(ResponsibleUserDTO responsibleUser : listUsers){
+                stringBuilder.append(String.format("%s, ",responsibleUser.getName()));
             }
             stringBuilder.delete(stringBuilder.length()-3,stringBuilder.length()-1);
-            viewNamesTo.setText(stringBuilder.toString());
+            return stringBuilder.toString();
+        }
 
-            switch (tossDTO.getStatus()){
+        private void changeStatus(String statusToss){
+            switch (statusToss){
                 case "closed":
                     viewRightStatus.setBackgroundColor(view.getResources().getColor(R.color.ColorRed));
                     break;
                 case "open":
                     viewRightStatus.setBackgroundColor(view.getResources().getColor(R.color.ColorGreen));
                     break;
+                case "pause":
+                    viewRightStatus.setBackgroundColor(view.getResources().getColor(R.color.ColorPurple));
+                    break;
                 case "process":
                     viewRightStatus.setBackgroundColor(view.getResources().getColor(R.color.ColorYellow));
                     break;
             }
         }
+
     }
 }

@@ -33,7 +33,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="Title"
-                    android:textColor="@color/colorItemTitle"
+                    android:textColor="@color/ColorGreyDark"
                     android:textSize="19sp"
                     android:textStyle="bold" />
             </LinearLayout>
@@ -51,7 +51,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="end"
                     android:text="@string/event_date"
-                    android:textColor="@color/colorItemDate"
+                    android:textColor="@color/colorDate"
                     android:textSize="15sp"
                     android:textStyle="bold" />
 
@@ -61,7 +61,7 @@
                     android:layout_height="wrap_content"
                     android:gravity="end"
                     android:text="Date"
-                    android:textColor="@color/colorItemDate"
+                    android:textColor="@color/colorDate"
                     android:textSize="15sp" />
 
                 <TextView

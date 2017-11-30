@@ -68,7 +68,7 @@
                 android:inputType="textEmailAddress"
                 android:paddingEnd="5dp"
                 android:paddingStart="5dp"
-                android:textColor="@color/colorText"
+                android:textColor="@color/ColorGreyDark"
                 android:textColorHint="@color/colorHint" />
 
         </LinearLayout>
@@ -93,7 +93,7 @@
                 android:inputType="textPassword"
                 android:paddingEnd="5dp"
                 android:paddingStart="5dp"
-                android:textColor="@color/colorText"
+                android:textColor="@color/ColorGreyDark"
                 android:textColorHint="@color/colorHint" />
         </LinearLayout>
 
@@ -117,7 +117,7 @@
         android:gravity="bottom|center_horizontal"
         android:padding="20dp"
         android:text="@string/softwareFactory"
-        android:textColor="@color/colorText"
+        android:textColor="@color/ColorGreyDark"
         android:textSize="12sp"
         android:textStyle="bold" />
 

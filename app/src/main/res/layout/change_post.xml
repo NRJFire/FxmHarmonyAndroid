@@ -8,7 +8,7 @@
     android:background="#ffffff"
     android:focusableInTouchMode="true"
     android:orientation="vertical"
-    tools:context="com.sofac.fxmharmony.view.CreatePost">
+    tools:context="com.sofac.fxmharmony.view.CreatePostActivity">
 
 
     <ScrollView

@@ -1,7 +1,6 @@
 package com.sofac.fxmharmony.view.fragment;
 
 import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -27,12 +26,11 @@ import com.sofac.fxmharmony.util.AppUserID;
 import com.sofac.fxmharmony.util.ProgressBar;
 import com.sofac.fxmharmony.view.BaseFragment;
 import com.sofac.fxmharmony.view.ChangePost;
-import com.sofac.fxmharmony.view.CreatePost;
+import com.sofac.fxmharmony.view.CreatePostActivity;
 import com.sofac.fxmharmony.view.DetailPostActivity;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 
 import timber.log.Timber;
 
@@ -152,7 +150,6 @@ public class GroupFragment extends BaseFragment implements SwipeRefreshLayout.On
 
     public void refreshRecyclerView() {
         postDTOs.clear();
-
         postDTOs.addAll(PostDTO.find(PostDTO.class, "type = ?", stringTypeGroup));
         Collections.sort(postDTOs, (o1, o2) -> o2.getDate().compareTo(o1.getDate()));
         adapterPostGroup.notifyDataSetChanged();
@@ -164,7 +161,7 @@ public class GroupFragment extends BaseFragment implements SwipeRefreshLayout.On
     }
 
     public void createPost() {
-        Intent intentButtonAdd = new Intent(GroupFragment.this.getActivity(), CreatePost.class);
+        Intent intentButtonAdd = new Intent(GroupFragment.this.getActivity(), CreatePostActivity.class);
         intentButtonAdd.putExtra(TYPE_GROUP, stringTypeGroup);
         startActivityForResult(intentButtonAdd, 1);
     }

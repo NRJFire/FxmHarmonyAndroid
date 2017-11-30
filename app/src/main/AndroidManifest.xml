@@ -55,13 +55,13 @@
             android:name=".view.DetailPushMessageActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".view.CreatePost"
+            android:name=".view.CreatePostActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".view.ChangePost"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".view.TranslatePost"
+            android:name=".view.TranslatePostActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".view.DetailPostActivity"
@@ -96,7 +96,7 @@
             android:logo="@drawable/keyboard_backspace"
             android:screenOrientation="portrait"
             android:theme="@style/Black" /> <!-- or android:screenOrientation="landscape" -->
-        <activity android:name=".view.DetailTossActivity"></activity>
+        <activity android:name=".view.DetailTossActivity"/>
     </application>
 
 </manifest>

@@ -27,7 +27,6 @@ import jp.wasabeef.glide.transformations.CropCircleTransformation;
 
 import static com.sofac.fxmharmony.Constants.BASE_URL;
 import static com.sofac.fxmharmony.Constants.PART_POST;
-import static com.sofac.fxmharmony.R.string.files;
 
 public class AdapterPostGroup extends RecyclerView.Adapter<AdapterPostGroup.ViewHolder> {
     private ArrayList<PostDTO> postDTOArrayList;

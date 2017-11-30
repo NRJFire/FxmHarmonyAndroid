@@ -48,7 +48,7 @@
                         android:ellipsize="end"
                         android:maxLines="1"
                         android:text="Title"
-                        android:textColor="@color/colorItemTitle"
+                        android:textColor="@color/ColorGreyDark"
                         android:textSize="14sp"
                         android:textStyle="bold" />
 
@@ -59,7 +59,7 @@
                         android:gravity="end"
                         android:maxLines="1"
                         android:text="date"
-                        android:textColor="@color/colorItemDate"
+                        android:textColor="@color/colorDate"
                         android:textSize="13sp" />
                 </LinearLayout>
             </LinearLayout>

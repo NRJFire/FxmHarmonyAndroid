@@ -446,7 +446,7 @@ public class DetailPostActivity extends BaseActivity {
     }
 
     public void translatePost(Long post_id) {
-        Intent intentTranslatePost = new Intent(this, TranslatePost.class);
+        Intent intentTranslatePost = new Intent(this, TranslatePostActivity.class);
         intentTranslatePost.putExtra(POST_ID, post_id);
         startActivityForResult(intentTranslatePost, 1);
     }
