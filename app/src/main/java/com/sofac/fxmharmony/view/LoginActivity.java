@@ -16,8 +16,7 @@ import com.sofac.fxmharmony.dto.AuthorizationDTO;
 import com.sofac.fxmharmony.dto.ManagerDTO;
 import com.sofac.fxmharmony.dto.UserDTO;
 import com.sofac.fxmharmony.server.Connection;
-import com.sofac.fxmharmony.util.AppUserID;
-import com.sofac.fxmharmony.util.CheckAuthorization;
+import com.sofac.fxmharmony.util.AppPreference;
 
 /**
  * Activity login & password authorization, validation input field, if validate data start MainActivity.class
@@ -70,8 +69,8 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                     UserDTO userDTO1 = answerServerResponse.getDataTransferObject();
                     userDTO1.save();
 
-                    new CheckAuthorization(LoginActivity.this).setAuthorization(true);
-                    new AppUserID(LoginActivity.this).setID(userDTO1.getId());
+                    new AppPreference(LoginActivity.this).setAuthorization(true);
+                    new AppPreference(LoginActivity.this).setID(userDTO1.getId());
 
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     progressBar.dismissView();

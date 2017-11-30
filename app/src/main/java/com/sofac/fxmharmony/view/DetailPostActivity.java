@@ -38,7 +38,7 @@ import com.sofac.fxmharmony.dto.PostDTO;
 import com.sofac.fxmharmony.dto.UserDTO;
 import com.sofac.fxmharmony.server.Connection;
 import com.sofac.fxmharmony.util.AppMethods;
-import com.sofac.fxmharmony.util.AppUserID;
+import com.sofac.fxmharmony.util.AppPreference;
 import com.sofac.fxmharmony.util.ConvertorHTML;
 import com.sofac.fxmharmony.util.FileLoadingListener;
 import com.sofac.fxmharmony.util.FileLoadingTask;
@@ -122,7 +122,7 @@ public class DetailPostActivity extends BaseActivity {
                 commentDTO = arrayListComments.get(position - 1);
                 if (commentDTO.getId() != null) {
                     DetailPostActivity.idComment = commentDTO.getId();
-                    if (commentDTO.getUser_id().equals(appUserID.getID())) {
+                    if (commentDTO.getUser_id().equals(appPreference.getID())) {
                         AlertDialog.Builder builder = new AlertDialog.Builder(DetailPostActivity.this);
                         builder.setItems(R.array.choice_double_click_post, (dialog, which) -> {
 
@@ -161,7 +161,7 @@ public class DetailPostActivity extends BaseActivity {
                 progressBar.showView();
                 if (isCreatingComment) { //Создание коментария
 
-                    new Connection<String>().createComment(new CommentDTO(1L, appUserID.getID(), postDTO.getId(), editTextComment.getText().toString(), "", "", ""), (isSuccess, answerServerResponse) -> {
+                    new Connection<String>().createComment(new CommentDTO(1L, appPreference.getID(), postDTO.getId(), editTextComment.getText().toString(), "", "", ""), (isSuccess, answerServerResponse) -> {
                         if (isSuccess) {
                             updateListView();
                             editTextComment.setText("");
@@ -428,9 +428,9 @@ public class DetailPostActivity extends BaseActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_detail_post_update, menu);
-        UserDTO userDTO = UserDTO.findById(UserDTO.class, new AppUserID(DetailPostActivity.this).getID());
+        UserDTO userDTO = UserDTO.findById(UserDTO.class, new AppPreference(DetailPostActivity.this).getID());
 
-        if (userDTO.isAdmin() || postDTO.getUser_id().equals(new AppUserID(DetailPostActivity.this).getID())) {
+        if (userDTO.isAdmin() || postDTO.getUser_id().equals(new AppPreference(DetailPostActivity.this).getID())) {
             getMenuInflater().inflate(R.menu.menu_detail_post, menu);
         }
 

@@ -27,7 +27,7 @@ import com.sofac.fxmharmony.R;
 import com.sofac.fxmharmony.dto.ManagerDTO;
 import com.sofac.fxmharmony.dto.PostDTO;
 import com.sofac.fxmharmony.server.Connection;
-import com.sofac.fxmharmony.util.CheckAuthorization;
+import com.sofac.fxmharmony.util.AppPreference;
 import com.sofac.fxmharmony.view.fragment.PushFragment;
 import com.sofac.fxmharmony.view.fragment.GroupFragment;
 import com.sofac.fxmharmony.view.fragment.TossFragment;
@@ -42,7 +42,6 @@ import static com.sofac.fxmharmony.Constants.BASE_URL;
 import static com.sofac.fxmharmony.Constants.LINK_IMAGE;
 import static com.sofac.fxmharmony.Constants.NAME_IMAGE;
 import static com.sofac.fxmharmony.Constants.PART_AVATAR;
-import static com.sofac.fxmharmony.Constants.TYPE_GROUP;
 
 public class NavigationActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -128,69 +127,19 @@ public class NavigationActivity extends BaseActivity implements NavigationView.O
 
     }
 
-    private void setupViewPager(ViewPager viewPager) { // Заполнение ViewPager
+    private void setupViewPager(ViewPager viewPager) {
 
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
         adapter.addFragment(new PushFragment(), "PUSH");
-
-        if (userDTO.isAdmin() || userDTO.isAccessLeaderGroup()) {
-            Bundle bundleGroupLeader = new Bundle();
-            bundleGroupLeader.putString(TYPE_GROUP, "leadergroup");
-            GroupFragment groupFragmentLeader = new GroupFragment();
-            groupFragmentLeader.setArguments(bundleGroupLeader);
-            adapter.addFragment(groupFragmentLeader, "leader\ngroup");
+        if (userDTO.isAdmin() || userDTO.isAccessLeaderGroup() || userDTO.isAccessMemberGroup() || userDTO.isAccessStaffGroup()) {
+            adapter.addFragment(new GroupFragment(), "Group");
         }
-        if (userDTO.isAdmin() || userDTO.isAccessMemberGroup()) {
-            Bundle bundleGroupLeader = new Bundle();
-            bundleGroupLeader.putString(TYPE_GROUP, "membergroup");
-            GroupFragment groupFragmentMember = new GroupFragment();
-            groupFragmentMember.setArguments(bundleGroupLeader);
-            adapter.addFragment(groupFragmentMember, "member\ngroup");
-        }
-        if (userDTO.isAdmin() || userDTO.isAccessStaffGroup()) {
-            Bundle bundleGroupLeader = new Bundle();
-            bundleGroupLeader.putString(TYPE_GROUP, "staffgroup");
-            GroupFragment groupFragmentStaff = new GroupFragment();
-            groupFragmentStaff.setArguments(bundleGroupLeader);
-            adapter.addFragment(groupFragmentStaff, "staff\ngroup");
-        }
-
         adapter.addFragment(new TossFragment(), "TOSS");
 
         viewPager.setAdapter(adapter);
     }
 
 
-    //
-    private class ViewPagerAdapter extends FragmentPagerAdapter {
-
-        private final List<Fragment> mFragmentList = new ArrayList<>();
-        private final List<String> mFragmentTitleList = new ArrayList<>();
-
-        public ViewPagerAdapter(FragmentManager manager) {
-            super(manager);
-        }
-
-        @Override
-        public Fragment getItem(int position) {
-            return mFragmentList.get(position);
-        }
-
-        @Override
-        public int getCount() {
-            return mFragmentList.size();
-        }
-
-        public void addFragment(Fragment fragment, String title) {
-            mFragmentList.add(fragment);
-            mFragmentTitleList.add(title);
-        }
-
-        @Override
-        public CharSequence getPageTitle(int position) {
-            return mFragmentTitleList.get(position);
-        }
-    }
 
 
     @Override
@@ -202,7 +151,7 @@ public class NavigationActivity extends BaseActivity implements NavigationView.O
                 item.setChecked(true);
                 break;
             case R.id.idExitItem:
-                new CheckAuthorization(this).setAuthorization(false);
+                new AppPreference(this).setAuthorization(false);
                 startActivity(new Intent(this, SplashActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
                 item.setChecked(true);
                 break;
@@ -232,5 +181,35 @@ public class NavigationActivity extends BaseActivity implements NavigationView.O
         }
     }
 
+    //INNER CLASS
+    private class ViewPagerAdapter extends FragmentPagerAdapter {
+
+        private final List<Fragment> mFragmentList = new ArrayList<>();
+        private final List<String> mFragmentTitleList = new ArrayList<>();
+
+        ViewPagerAdapter(FragmentManager manager) {
+            super(manager);
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            return mFragmentList.get(position);
+        }
+
+        @Override
+        public int getCount() {
+            return mFragmentList.size();
+        }
+
+        void addFragment(Fragment fragment, String title) {
+            mFragmentList.add(fragment);
+            mFragmentTitleList.add(title);
+        }
+
+        @Override
+        public CharSequence getPageTitle(int position) {
+            return mFragmentTitleList.get(position);
+        }
+    }
 
 }

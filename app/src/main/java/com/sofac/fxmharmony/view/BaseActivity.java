@@ -12,14 +12,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
 
 import com.sofac.fxmharmony.dto.UserDTO;
-import com.sofac.fxmharmony.util.AppUserID;
+import com.sofac.fxmharmony.util.AppPreference;
 import com.sofac.fxmharmony.util.ProgressBar;
 
 import static com.orm.SugarRecord.findById;
 
 public class BaseActivity extends AppCompatActivity {
 
-    public AppUserID appUserID;
+    public AppPreference appPreference;
     public UserDTO userDTO;
     public ProgressBar progressBar;
 
@@ -29,8 +29,8 @@ public class BaseActivity extends AppCompatActivity {
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         progressBar = new ProgressBar(this);
-        appUserID = new AppUserID(this);
-        userDTO = findById(UserDTO.class, appUserID.getID());
+        appPreference = new AppPreference(this);
+        userDTO = findById(UserDTO.class, appPreference.getID());
     }
 
     public void showToast(String str) {

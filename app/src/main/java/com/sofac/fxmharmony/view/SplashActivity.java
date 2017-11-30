@@ -3,7 +3,7 @@ package com.sofac.fxmharmony.view;
 import android.content.Intent;
 import android.os.Bundle;
 import com.sofac.fxmharmony.R;
-import com.sofac.fxmharmony.util.CheckAuthorization;
+import com.sofac.fxmharmony.util.AppPreference;
 import com.sofac.fxmharmony.util.CheckVersionApp;
 
 public class SplashActivity extends BaseActivity {
@@ -27,7 +27,7 @@ public class SplashActivity extends BaseActivity {
     }
 
     public void checkAuthorization() {
-        if (new CheckAuthorization(this).isAuthorization()) {
+        if (new AppPreference(this).getAuthorization()) {
             startNavigationActivity();
         } else {
             startLoginActivity();

@@ -17,7 +17,7 @@ import com.sofac.fxmharmony.adapter.AdapterPushListView;
 import com.sofac.fxmharmony.dto.PushMessage;
 import com.sofac.fxmharmony.dto.SenderContainerDTO;
 import com.sofac.fxmharmony.server.Connection;
-import com.sofac.fxmharmony.util.AppUserID;
+import com.sofac.fxmharmony.util.AppPreference;
 import com.sofac.fxmharmony.view.BaseFragment;
 import com.sofac.fxmharmony.view.DetailPushMessageActivity;
 
@@ -77,10 +77,10 @@ public class PushFragment extends BaseFragment implements SwipeRefreshLayout.OnR
     }
 
     public void loadData() {
-        AppUserID appUserID = new AppUserID(this.getActivity());
+        AppPreference appPreference = new AppPreference(this.getActivity());
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this.getActivity());
         new Connection<ArrayList<PushMessage>>().getListPush(
-                new SenderContainerDTO(appUserID.getID(), sharedPref.getString(Constants.GOOGLE_CLOUD_PREFERENCE, "")),
+                new SenderContainerDTO(appPreference.getID(), sharedPref.getString(Constants.GOOGLE_CLOUD_PREFERENCE, "")),
                 (isSuccess, answerServerResponse) -> {
                     if (isSuccess) {
                         pushMessages.clear();

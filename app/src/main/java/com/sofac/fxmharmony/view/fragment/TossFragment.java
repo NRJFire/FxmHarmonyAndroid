@@ -21,7 +21,7 @@ import com.sofac.fxmharmony.adapter.RecyclerItemClickListener;
 import com.sofac.fxmharmony.dto.SenderContainerDTO;
 import com.sofac.fxmharmony.dto.TossDTO;
 import com.sofac.fxmharmony.server.Connection;
-import com.sofac.fxmharmony.util.AppUserID;
+import com.sofac.fxmharmony.util.AppPreference;
 import com.sofac.fxmharmony.util.ProgressBar;
 import com.sofac.fxmharmony.view.DetailTossActivity;
 
@@ -93,7 +93,7 @@ public class TossFragment extends Fragment {
         status = filter;
         progressBar.showView();
         new Connection<ArrayList<TossDTO>>().getListToss(
-                new SenderContainerDTO(filter, new AppUserID(this.getActivity()).getID().toString()),
+                new SenderContainerDTO(filter, new AppPreference(this.getActivity()).getID().toString()),
                 (isSuccess, answerServerResponse) -> {
                     if (isSuccess) {
                         Timber.e(answerServerResponse.getDataTransferObject().toString());

@@ -37,11 +37,6 @@ public class AdapterCommentsGroup extends BaseAdapter {
 
 
     public AdapterCommentsGroup(Context context, ArrayList<CommentDTO> commentDTOArrayList) {
-        Collections.sort(commentDTOArrayList, new Comparator<CommentDTO>() {
-            public int compare(CommentDTO o1, CommentDTO o2) {
-                return o2.getDate().compareTo(o1.getDate());
-            }
-        });
         this.commentDTOArrayList = commentDTOArrayList;
         this.ctx = context;
         this.inflater = (LayoutInflater) ctx.getSystemService(Context.LAYOUT_INFLATER_SERVICE);

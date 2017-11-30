@@ -4,7 +4,6 @@ import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -22,7 +21,7 @@ import com.sofac.fxmharmony.adapter.RecyclerItemClickListener;
 import com.sofac.fxmharmony.dto.PostDTO;
 import com.sofac.fxmharmony.dto.UserDTO;
 import com.sofac.fxmharmony.server.Connection;
-import com.sofac.fxmharmony.util.AppUserID;
+import com.sofac.fxmharmony.util.AppPreference;
 import com.sofac.fxmharmony.util.ProgressBar;
 import com.sofac.fxmharmony.view.BaseFragment;
 import com.sofac.fxmharmony.view.ChangePost;
@@ -56,7 +55,7 @@ public class GroupFragment extends BaseFragment implements SwipeRefreshLayout.On
     private RecyclerView.LayoutManager mLayoutManager;
     private RecyclerView.Adapter adapterPostGroup;
 
-    public AppUserID appUserID;
+    public AppPreference appPreference;
     public UserDTO userDTO;
     public ProgressBar progressBar;
 
@@ -72,8 +71,8 @@ public class GroupFragment extends BaseFragment implements SwipeRefreshLayout.On
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         progressBar = new ProgressBar(this.getContext());
-        appUserID = new AppUserID(this.getContext());
-        userDTO = findById(UserDTO.class, appUserID.getID());
+        appPreference = new AppPreference(this.getContext());
+        userDTO = findById(UserDTO.class, appPreference.getID());
 
         Bundle groupType = getArguments();
         stringTypeGroup = groupType.getString(TYPE_GROUP);

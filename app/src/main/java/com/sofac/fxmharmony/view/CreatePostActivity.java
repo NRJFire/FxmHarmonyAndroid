@@ -134,7 +134,7 @@ public class CreatePostActivity extends BaseActivity implements View.OnClickList
             case R.id.send_post_button:
                 if (!postTextInput.getText().toString().equals("")) {
                     progressBar.showView();
-                    PostDTO postDTO = new PostDTO(0L, appUserID.getID(), "", "", ConvertorHTML.toHTML(postTextInput.getText().toString()), "", "", "", "", "", stringTypeGroup);
+                    PostDTO postDTO = new PostDTO(0L, appPreference.getID(), "", "", ConvertorHTML.toHTML(postTextInput.getText().toString()), "", "", "", "", "", stringTypeGroup);
 
                     ArrayList<Uri> arrayListAll = new ArrayList<>();
                     arrayListAll.addAll(listPhoto);
