@@ -23,11 +23,12 @@
     <!--New color-->
     <color name="colorPrimary">#4367af</color>
     <color name="colorPrimaryDark">#214180</color>
-    <color name="colorAccent">#4376da</color>
+    <color name="colorAccent">#79a0ec</color>
 
     <color name="colorDate">#9b9b9b</color>
 
     <color name="colorWhite">#ffffff</color>
+    <color name="ColorGreyVeryLight">#efefef</color>
     <color name="ColorGreyLight">#bababa</color>
     <color name="ColorGrey">#848484</color>
     <color name="ColorGreyDark">#434343</color>
