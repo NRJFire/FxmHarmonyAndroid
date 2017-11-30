@@ -48,8 +48,8 @@ public class PushFragment extends BaseFragment implements SwipeRefreshLayout.OnR
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         View rootView = inflater.inflate(R.layout.fragment_push, container, false);
-        listViewPush = (ListView) rootView.findViewById(R.id.idListPost);
-        groupSwipeRefreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.idRefresh);
+        listViewPush = rootView.findViewById(R.id.idListPost);
+        groupSwipeRefreshLayout = rootView.findViewById(R.id.idRefresh);
         groupSwipeRefreshLayout.setOnRefreshListener(this);
         setHasOptionsMenu(true);
 
@@ -93,27 +93,6 @@ public class PushFragment extends BaseFragment implements SwipeRefreshLayout.OnR
         listViewPush.setAdapter(adapterTasksListView);
         //adapterTasksListView.notifyDataSetChanged();
         groupSwipeRefreshLayout.setRefreshing(false);
-    }
-
-
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        getActivity().getMenuInflater().inflate(R.menu.menu_main_activity, menu);
-        super.onCreateOptionsMenu(menu, inflater);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.menu_delete_all:
-                if (pushMessages != null) {
-                    pushMessages.clear();
-                    PushMessage.deleteAll(PushMessage.class);
-                    adapterTasksListView.notifyDataSetChanged();
-                }
-                break;
-        }
-        return super.onOptionsItemSelected(item);
     }
 
     @Override

@@ -47,7 +47,6 @@ public class GroupFragment extends BaseFragment implements SwipeRefreshLayout.On
     public ArrayList<PostDTO> postDTOs;
     public SwipeRefreshLayout groupSwipeRefreshLayout;
     SharedPreferences preferences;
-    public FloatingActionButton floatingActionButton;
     public static Long idPost;
     public PostDTO postDTO;
     public Intent intentChangePost;
@@ -96,9 +95,6 @@ public class GroupFragment extends BaseFragment implements SwipeRefreshLayout.On
         groupSwipeRefreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.refresh);
         groupSwipeRefreshLayout.setOnRefreshListener(this);
         setHasOptionsMenu(true);
-
-        floatingActionButton = (FloatingActionButton) rootView.findViewById(R.id.fab);
-        floatingActionButton.setOnClickListener(view -> createPost());
 
         recyclerViewPost.addOnItemTouchListener(new RecyclerItemClickListener(getContext(), recyclerViewPost, new RecyclerItemClickListener.OnItemClickListener() {
             @Override
@@ -195,10 +191,6 @@ public class GroupFragment extends BaseFragment implements SwipeRefreshLayout.On
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.menu_update_list_post:
-                progressBar.showView();
-                loadUpdate();
-                break;
             case R.id.menu_write_post:
                 createPost();
                 break;
