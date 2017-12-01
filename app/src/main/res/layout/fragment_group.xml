@@ -1,33 +1,81 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.sofac.fxmharmony.view.NavigationActivity">
+    tools:context="com.sofac.fxmharmony.view.NavigationActivity"
+    tools:layout_editor_absoluteY="25dp">
 
 
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/refresh"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"       >
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@color/colorGroupBackground"
-            android:paddingTop="3dp"
-            android:paddingBottom="3dp">
+            android:paddingBottom="3dp"
+            android:paddingTop="3dp">
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/idListGroup"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@color/colorGroupBackground"
-                android:scrollbars="vertical"  />
+                android:scrollbars="vertical" />
         </LinearLayout>
 
     </android.support.v4.widget.SwipeRefreshLayout>
+
+    <Button
+        android:id="@+id/viewButtonLeader"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:background="@drawable/custom_button_left"
+        android:minHeight="25dp"
+        android:padding="0dp"
+        android:text="Leader"
+        android:textColor="@color/colorPrimary"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/viewButtonMember"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/viewButtonMember"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:background="@drawable/custom_button_central"
+        android:minHeight="25dp"
+        android:text="Member"
+        android:textColor="@color/colorPrimary"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/viewButtonStaff"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/viewButtonLeader" />
+
+    <Button
+        android:id="@+id/viewButtonStaff"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:background="@drawable/custom_button_right"
+        android:minHeight="25dp"
+        android:text="Staff"
+        android:textColor="@color/colorPrimary"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/viewButtonMember" />
 
     <LinearLayout
         android:id="@+id/id_recycler_empty"
@@ -52,4 +100,4 @@
             android:textSize="15sp" />
 
     </LinearLayout>
-</android.support.design.widget.CoordinatorLayout>
+</android.support.constraint.ConstraintLayout>

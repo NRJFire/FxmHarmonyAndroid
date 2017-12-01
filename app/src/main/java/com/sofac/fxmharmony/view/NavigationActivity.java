@@ -50,9 +50,9 @@ public class NavigationActivity extends BaseActivity implements NavigationView.O
     private ImageView avatarImage;
     private TextView textViewUserName;
     private TextView textViewUserStatus;
-
     private TabLayout tabLayout;
     private ViewPager viewPager;
+    private ViewPagerAdapter adapter;
 
     Menu menu;
 
@@ -63,29 +63,27 @@ public class NavigationActivity extends BaseActivity implements NavigationView.O
         setTitle(getString(R.string.app_name));
 
         progressBar.showView();
-
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
-        drawer.findViewById(R.id.idNavDrawNameManager);
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         View header = navigationView.getHeaderView(0);
         menu = navigationView.getMenu();
 
-        avatarImage = (ImageView) header.findViewById(R.id.navAvatarImage);
-        textViewUserName = (TextView) header.findViewById(R.id.idNavDrawNameManager);
-        textViewUserStatus = (TextView) header.findViewById(R.id.idNavDrawTypeManager);
-
-        viewPager = (ViewPager) findViewById(R.id.viewpager);
-
-        tabLayout = (TabLayout) findViewById(R.id.tabs);
+        avatarImage = header.findViewById(R.id.navAvatarImage);
+        textViewUserName = header.findViewById(R.id.idNavDrawNameManager);
+        textViewUserStatus = header.findViewById(R.id.idNavDrawTypeManager);
+        viewPager = findViewById(R.id.viewpager);
+        tabLayout = findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(viewPager);
+        tabLayout.setOnClickListener(view -> {
+        });
 
         new Connection<ManagerDTO>().getManagerInfo(userDTO.getId(), (isSuccess, answerServerResponse) -> {
             if(isSuccess){
@@ -93,20 +91,9 @@ public class NavigationActivity extends BaseActivity implements NavigationView.O
             } else {
                 setupUserInfoInHeader(BASE_URL + PART_AVATAR + "man-03.jpg", "Name", userDTO.getRole());
             }
-        });
-
-        new Connection<ArrayList<PostDTO>>().getListPosts("", (isSuccess, answerServerResponse) -> {
             progressBar.dismissView();
-            if(isSuccess) {
-                if (answerServerResponse.getDataTransferObject() != null) {
-                    PostDTO.deleteAll(PostDTO.class);
-                    PostDTO.saveInTx(answerServerResponse.getDataTransferObject());
-                    setupViewPager(viewPager);
-                }
-            } else {
-                Toast.makeText(NavigationActivity.this, "Connection error", Toast.LENGTH_SHORT).show();
-            }
         });
+        setupViewPager(viewPager);
     }
 
     public void setupUserInfoInHeader(String userAvatarURL, String userName, String userStatus){
@@ -124,18 +111,15 @@ public class NavigationActivity extends BaseActivity implements NavigationView.O
                 .into(avatarImage);
         textViewUserName.setText(userName);
         textViewUserStatus.setText(userStatus);
-
     }
 
     private void setupViewPager(ViewPager viewPager) {
-
-        ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
+        adapter = new ViewPagerAdapter(getSupportFragmentManager());
         adapter.addFragment(new PushFragment(), "PUSH");
         if (userDTO.isAdmin() || userDTO.isAccessLeaderGroup() || userDTO.isAccessMemberGroup() || userDTO.isAccessStaffGroup()) {
             adapter.addFragment(new GroupFragment(), "Group");
         }
         adapter.addFragment(new TossFragment(), "TOSS");
-
         viewPager.setAdapter(adapter);
     }
 
@@ -144,16 +128,14 @@ public class NavigationActivity extends BaseActivity implements NavigationView.O
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-
+        item.setChecked(true);
         switch (item.getItemId()) {
             case R.id.idWebSiteSOFAC:
                 startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(Constants.BASE_URL+"control/")));
-                item.setChecked(true);
                 break;
             case R.id.idExitItem:
                 new AppPreference(this).setAuthorization(false);
                 startActivity(new Intent(this, SplashActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
-                item.setChecked(true);
                 break;
         }
 

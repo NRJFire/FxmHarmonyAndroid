@@ -13,6 +13,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.sofac.fxmharmony.R;
@@ -23,6 +24,7 @@ import com.sofac.fxmharmony.dto.TossDTO;
 import com.sofac.fxmharmony.server.Connection;
 import com.sofac.fxmharmony.util.AppPreference;
 import com.sofac.fxmharmony.util.ProgressBar;
+import com.sofac.fxmharmony.view.BaseFragment;
 import com.sofac.fxmharmony.view.DetailTossActivity;
 
 import java.util.ArrayList;
@@ -33,26 +35,36 @@ import butterknife.OnClick;
 import butterknife.Unbinder;
 import timber.log.Timber;
 
-public class TossFragment extends Fragment {
+public class TossFragment extends BaseFragment implements SwipeRefreshLayout.OnRefreshListener {
 
     public ArrayList<TossDTO> tossDTOs = new ArrayList<>();
-    public AdapterTossItems adapterTossItems;
+    public AdapterTossItems adapterTossItems = new AdapterTossItems(tossDTOs);
     public ProgressBar progressBar;
     private String status = "";
+    private Unbinder unbinder;
 
     @BindView(R.id.recyclerViewToss)
     RecyclerView recyclerViewToss;
     @BindView(R.id.swipeRefreshLayout)
     SwipeRefreshLayout swipeRefreshLayout;
-    private Unbinder unbinder;
+    @BindView(R.id.viewButtonAllToss)
+    Button viewButtonAllToss;
+    @BindView(R.id.viewButtonMyToss)
+    Button viewButtonMyToss;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_toss, container, false);
-        unbinder = ButterKnife.bind(this, view);
+        initializationRecyclerView(view);
+        setHasOptionsMenu(true);
+        return view;
+    }
 
+
+    public void initializationRecyclerView(View view){
+        unbinder = ButterKnife.bind(this, view);
         progressBar = new ProgressBar(getActivity());
-        adapterTossItems = new AdapterTossItems(tossDTOs);
+        swipeRefreshLayout.setOnRefreshListener(this);
         recyclerViewToss.setAdapter(adapterTossItems);
         recyclerViewToss.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
         recyclerViewToss.addOnItemTouchListener(
@@ -72,9 +84,7 @@ public class TossFragment extends Fragment {
                         }
                 )
         );
-
-        setHasOptionsMenu(true);
-        return view;
+        selectedButton(viewButtonAllToss);
     }
 
     @Override
@@ -91,7 +101,6 @@ public class TossFragment extends Fragment {
 
     public void updateRecyclerView(String filter) {
         status = filter;
-        progressBar.showView();
         new Connection<ArrayList<TossDTO>>().getListToss(
                 new SenderContainerDTO(filter, new AppPreference(this.getActivity()).getID().toString()),
                 (isSuccess, answerServerResponse) -> {
@@ -101,9 +110,10 @@ public class TossFragment extends Fragment {
                         tossDTOs.addAll(answerServerResponse.getDataTransferObject());
                         adapterTossItems.notifyDataSetChanged();
                     } else {
-                        showToast(getResources().getString(R.string.errorConnection));
+                        showToast(getResources().getString(R.string.errorServer));
                     }
                     progressBar.dismissView();
+                    swipeRefreshLayout.setRefreshing(false);
                 });
     }
 
@@ -113,14 +123,29 @@ public class TossFragment extends Fragment {
 
     @OnClick({R.id.viewButtonMyToss, R.id.viewButtonAllToss})
     public void onViewClicked(View view) {
+        progressBar.showView();
         switch (view.getId()) {
             case R.id.viewButtonMyToss:
                 updateRecyclerView("my");
+                selectedButton(viewButtonMyToss);
+                unSelectedButton(viewButtonAllToss);
                 break;
             case R.id.viewButtonAllToss:
                 updateRecyclerView("");
+                selectedButton(viewButtonAllToss);
+                unSelectedButton(viewButtonMyToss);
                 break;
         }
+    }
+
+    public void selectedButton(Button button){
+        button.setSelected(true);
+        button.setTextColor(getResources().getColor(R.color.colorWhite));
+    }
+
+    public void unSelectedButton(Button button){
+        button.setSelected(false);
+        button.setTextColor(getResources().getColor(R.color.colorPrimary));
     }
 
     @Override
@@ -131,25 +156,35 @@ public class TossFragment extends Fragment {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+
         switch (item.getItemId()) {
             case R.id.filterOpen:
+                progressBar.showView();
                 updateRecyclerView("open");
                 break;
             case R.id.filterProcess:
+                progressBar.showView();
                 updateRecyclerView("process");
                 break;
             case R.id.filterPause:
+                progressBar.showView();
                 updateRecyclerView("pause");
                 break;
             case R.id.filterClosed:
+                progressBar.showView();
                 updateRecyclerView("closed");
                 break;
-
             case R.id.createNewToss:
                 showToast("Button create press!");
                 //updateRecyclerView("create");
                 break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onRefresh() {
+        swipeRefreshLayout.setRefreshing(true);
+        updateRecyclerView(status);
     }
 }

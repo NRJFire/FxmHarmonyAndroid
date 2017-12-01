@@ -1,24 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <group android:checkableBehavior="single">
-        <item
-            android:id="@+id/idWebSiteSOFAC"
-            android:icon="@drawable/web"
-            android:title="SOFAC WebSite" />
-    </group>
+    <item
+        android:id="@+id/idWebSiteSOFAC"
+        android:icon="@drawable/web"
+        android:title="SOFAC WebSite" />
 
-    <item android:title="@string/configuration">
-        <menu>
-            <!--<item-->
-                <!--android:id="@+id/idSettingItem"-->
-                <!--android:icon="@drawable/ic_menu_manage"-->
-                <!--android:title="@string/settings" />-->
-            <item
-                android:id="@+id/idExitItem"
-                android:icon="@drawable/exit_to_app"
-                android:title="@string/exit" />
-        </menu>
-    </item>
+    <item
+        android:id="@+id/idExitItem"
+        android:icon="@drawable/exit_to_app"
+        android:title="@string/exit" />
 
 </menu>

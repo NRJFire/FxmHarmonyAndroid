@@ -74,12 +74,10 @@ public class GroupFragment extends BaseFragment implements SwipeRefreshLayout.On
         appPreference = new AppPreference(this.getContext());
         userDTO = findById(UserDTO.class, appPreference.getID());
 
-
         Bundle groupType = getArguments();
         if (groupType != null) {
             stringTypeGroup = groupType.getString(TYPE_GROUP);
         }
-
 
         View rootView = inflater.inflate(R.layout.fragment_group, container, false);
         mLayoutManager = new LinearLayoutManager(getContext());
@@ -87,7 +85,6 @@ public class GroupFragment extends BaseFragment implements SwipeRefreshLayout.On
         recyclerViewPost = (RecyclerView) rootView.findViewById(R.id.idListGroup);
         recyclerViewPost.setHasFixedSize(true);
         recyclerViewPost.setLayoutManager(mLayoutManager);
-        //recyclerViewPost.setEmptyView(rootView.findViewById(R.id.id_list_empty));
 
         postDTOs = (ArrayList<PostDTO>) PostDTO.find(PostDTO.class, "type = ?", stringTypeGroup);
         Collections.sort(postDTOs, (o1, o2) -> o2.getDate().compareTo(o1.getDate()));
@@ -130,6 +127,8 @@ public class GroupFragment extends BaseFragment implements SwipeRefreshLayout.On
                 }
             }
         }));
+
+        loadUpdate();
 
         return rootView;
     }
