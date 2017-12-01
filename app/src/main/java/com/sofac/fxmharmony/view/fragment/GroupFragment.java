@@ -138,6 +138,7 @@ public class GroupFragment extends BaseFragment implements SwipeRefreshLayout.On
                 unSelectedButton(viewButtonLeader);
                 unSelectedButton(viewButtonMember);
                 break;
+                //TODO button disabled, no need change text color, fix it
         }
     }
 
