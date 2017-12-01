@@ -21,6 +21,13 @@
             <solid android:color="@color/colorPrimary" />
         </shape>
     </item>
+    <item android:state_enabled="false">
+        <shape android:shape="rectangle"  >
+            <corners android:bottomLeftRadius="30dip"
+                android:topLeftRadius="30dip" />
+            <solid android:color="@color/ColorGreyLight" />
+        </shape>
+    </item>
     <item >
         <shape android:shape="rectangle"  >
             <corners android:bottomLeftRadius="30dip"

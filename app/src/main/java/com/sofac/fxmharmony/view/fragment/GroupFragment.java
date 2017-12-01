@@ -2,6 +2,7 @@ package com.sofac.fxmharmony.view.fragment;
 
 import android.app.AlertDialog;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -94,18 +95,24 @@ public class GroupFragment extends BaseFragment implements SwipeRefreshLayout.On
         } else {
             if (appPreference.getUser().isAccessStaffGroup()) {
                 typeUsersGroup = typeStaffGroup;
-            } else
-                viewButtonStaff.setClickable(false);
+            } else {
+                viewButtonStaff.setEnabled(false);
+                viewButtonStaff.setTextColor(getResources().getColor(R.color.ColorGrey));
+            }
 
             if (appPreference.getUser().isAccessMemberGroup()) {
                 typeUsersGroup = typeMemberGroup;
-            } else
-                viewButtonMember.setClickable(false);
+            } else {
+                viewButtonMember.setEnabled(false);
+                viewButtonMember.setTextColor(getResources().getColor(R.color.ColorGrey));
+            }
 
             if (appPreference.getUser().isAccessLeaderGroup()) {
                 typeUsersGroup = typeLeaderGroup;
-            } else
-                viewButtonLeader.setClickable(false);
+            } else {
+                viewButtonLeader.setEnabled(false);
+                viewButtonLeader.setTextColor(getResources().getColor(R.color.ColorGrey));
+            }
         }
     }
 

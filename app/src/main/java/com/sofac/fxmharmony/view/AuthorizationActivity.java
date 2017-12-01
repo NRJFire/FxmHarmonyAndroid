@@ -31,7 +31,7 @@ public class AuthorizationActivity extends BaseActivity implements View.OnClickL
     TextInputEditText editLogin;
     @BindView(R.id.editPassword)
     TextInputEditText editPassword;
-    @BindView(R.id.editPassword)
+    @BindView(R.id.buttonLogin)
     Button buttonLogin;
 
     @Override

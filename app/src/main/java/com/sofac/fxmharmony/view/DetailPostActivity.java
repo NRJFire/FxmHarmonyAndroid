@@ -91,7 +91,7 @@ public class DetailPostActivity extends BaseActivity {
         intentChangePost = new Intent(this, ChangePost.class);
 
         Long id_post = getIntent().getLongExtra(POST_ID, 1);
-        Timber.e("DetailPostActivity -> id_post = " + id_post);
+
         postDTO = PostDTO.findById(PostDTO.class, id_post);
 
         if (state != null) {
@@ -428,7 +428,6 @@ public class DetailPostActivity extends BaseActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_detail_post_update, menu);
-        UserDTO userDTO = UserDTO.findById(UserDTO.class, new AppPreference(DetailPostActivity.this).getID());
 
         if (userDTO.isAdmin() || postDTO.getUser_id().equals(new AppPreference(DetailPostActivity.this).getID())) {
             getMenuInflater().inflate(R.menu.menu_detail_post, menu);
