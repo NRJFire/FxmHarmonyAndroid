@@ -35,7 +35,7 @@ public class SplashActivity extends BaseActivity {
     }
 
     public void startLoginActivity() {
-        intent = new Intent(this, LoginActivity.class);
+        intent = new Intent(this, AuthorizationActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
     }

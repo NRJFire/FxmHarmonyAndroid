@@ -22,7 +22,7 @@ import com.sofac.fxmharmony.util.AppPreference;
  * Activity login & password authorization, validation input field, if validate data start MainActivity.class
  */
 
-public class LoginActivity extends BaseActivity implements View.OnClickListener {
+public class AuthorizationActivity extends BaseActivity implements View.OnClickListener {
 
     Intent intent;
     EditText editPassword, editLogin;
@@ -32,7 +32,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
+        setContentView(R.layout.activity_authorization);
         initUI();
 
         buttonLogin.setOnClickListener(this);
@@ -60,17 +60,17 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         String password = editPassword.getText().toString();
         String login = editLogin.getText().toString();
         if ("".equals(password) && "".equals(login)) {
-            Toast.makeText(LoginActivity.this, getString(R.string.fieldEmpty), Toast.LENGTH_SHORT).show();
+            Toast.makeText(AuthorizationActivity.this, getString(R.string.fieldEmpty), Toast.LENGTH_SHORT).show();
         } else {
-            SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(LoginActivity.this);
+            SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(AuthorizationActivity.this);
             new Connection<UserDTO>().authorizationUser(new AuthorizationDTO(editLogin.getText().toString(), editPassword.getText().toString(), sharedPref.getString(Constants.GOOGLE_CLOUD_PREFERENCE, "")), (isSuccess, answerServerResponse) -> {
                 if (isSuccess) {
 
                     UserDTO userDTO1 = answerServerResponse.getDataTransferObject();
                     userDTO1.save();
 
-                    new AppPreference(LoginActivity.this).setAuthorization(true);
-                    new AppPreference(LoginActivity.this).setID(userDTO1.getId());
+                    new AppPreference(AuthorizationActivity.this).setAuthorization(true);
+                    new AppPreference(AuthorizationActivity.this).setID(userDTO1.getId());
 
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     progressBar.dismissView();
@@ -78,7 +78,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
 
                 } else {
                     progressBar.dismissView();
-                    Toast.makeText(LoginActivity.this, R.string.errorConnection, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(AuthorizationActivity.this, R.string.errorConnection, Toast.LENGTH_SHORT).show();
                 }
             });
         }
