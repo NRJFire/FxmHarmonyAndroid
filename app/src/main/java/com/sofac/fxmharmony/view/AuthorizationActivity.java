@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.design.widget.TextInputEditText;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -13,10 +14,12 @@ import android.widget.Toast;
 import com.sofac.fxmharmony.Constants;
 import com.sofac.fxmharmony.R;
 import com.sofac.fxmharmony.dto.AuthorizationDTO;
-import com.sofac.fxmharmony.dto.ManagerDTO;
 import com.sofac.fxmharmony.dto.UserDTO;
 import com.sofac.fxmharmony.server.Connection;
 import com.sofac.fxmharmony.util.AppPreference;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 /**
  * Activity login & password authorization, validation input field, if validate data start MainActivity.class
@@ -24,33 +27,19 @@ import com.sofac.fxmharmony.util.AppPreference;
 
 public class AuthorizationActivity extends BaseActivity implements View.OnClickListener {
 
-    Intent intent;
-    EditText editPassword, editLogin;
+    @BindView(R.id.editLogin)
+    TextInputEditText editLogin;
+    @BindView(R.id.editPassword)
+    TextInputEditText editPassword;
+    @BindView(R.id.editPassword)
     Button buttonLogin;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_authorization);
-        initUI();
-
+        ButterKnife.bind(this);
         buttonLogin.setOnClickListener(this);
-        intent = new Intent(this, NavigationActivity.class);
-
-        // Cleaning DataBase
-        try {
-            ManagerDTO.deleteAll(UserDTO.class);
-            UserDTO.deleteAll(UserDTO.class);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void initUI() {
-        editPassword = (EditText) findViewById(R.id.editPassword);
-        editLogin = (EditText) findViewById(R.id.editLogin);
-        buttonLogin = (Button) findViewById(R.id.buttonLogin);
     }
 
     @Override
@@ -66,15 +55,10 @@ public class AuthorizationActivity extends BaseActivity implements View.OnClickL
             new Connection<UserDTO>().authorizationUser(new AuthorizationDTO(editLogin.getText().toString(), editPassword.getText().toString(), sharedPref.getString(Constants.GOOGLE_CLOUD_PREFERENCE, "")), (isSuccess, answerServerResponse) -> {
                 if (isSuccess) {
 
-                    UserDTO userDTO1 = answerServerResponse.getDataTransferObject();
-                    userDTO1.save();
-
-                    new AppPreference(AuthorizationActivity.this).setAuthorization(true);
-                    new AppPreference(AuthorizationActivity.this).setID(userDTO1.getId());
-
-                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    new AppPreference(this).setAuthorization(true);
+                    new AppPreference(this).setUser(answerServerResponse.getDataTransferObject());
+                    startActivity(new Intent(this, NavigationActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
                     progressBar.dismissView();
-                    startActivity(intent);
 
                 } else {
                     progressBar.dismissView();

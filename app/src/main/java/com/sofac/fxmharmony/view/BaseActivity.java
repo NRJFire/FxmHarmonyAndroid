@@ -30,7 +30,7 @@ public class BaseActivity extends AppCompatActivity {
 
         progressBar = new ProgressBar(this);
         appPreference = new AppPreference(this);
-        userDTO = findById(UserDTO.class, appPreference.getID());
+        userDTO = appPreference.getUser();
     }
 
     public void showToast(String str) {

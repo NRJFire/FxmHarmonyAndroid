@@ -123,9 +123,6 @@ public class NavigationActivity extends BaseActivity implements NavigationView.O
         viewPager.setAdapter(adapter);
     }
 
-
-
-
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         item.setChecked(true);

@@ -71,7 +71,7 @@ public class AdapterTossItems extends RecyclerView.Adapter<AdapterTossItems.Toss
             for(ResponsibleUserDTO responsibleUser : listUsers){
                 stringBuilder.append(String.format("%s, ",responsibleUser.getName()));
             }
-            stringBuilder.delete(stringBuilder.length()-3,stringBuilder.length()-1);
+            stringBuilder.delete(stringBuilder.length()-2,stringBuilder.length());
             return stringBuilder.toString();
         }
 

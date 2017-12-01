@@ -2,7 +2,6 @@ package com.sofac.fxmharmony.view.fragment;
 
 import android.app.AlertDialog;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -13,13 +12,12 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
+import android.widget.Button;
 
 import com.sofac.fxmharmony.R;
 import com.sofac.fxmharmony.adapter.AdapterPostGroup;
 import com.sofac.fxmharmony.adapter.RecyclerItemClickListener;
 import com.sofac.fxmharmony.dto.PostDTO;
-import com.sofac.fxmharmony.dto.UserDTO;
 import com.sofac.fxmharmony.server.Connection;
 import com.sofac.fxmharmony.util.AppPreference;
 import com.sofac.fxmharmony.util.ProgressBar;
@@ -29,78 +27,132 @@ import com.sofac.fxmharmony.view.CreatePostActivity;
 import com.sofac.fxmharmony.view.DetailPostActivity;
 
 import java.util.ArrayList;
-import java.util.Collections;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+import butterknife.Unbinder;
 import timber.log.Timber;
 
-import static android.content.Context.MODE_PRIVATE;
-import static android.content.Context.USER_SERVICE;
-import static com.orm.SugarRecord.findById;
 import static com.sofac.fxmharmony.Constants.POST_ID;
 import static com.sofac.fxmharmony.Constants.TYPE_GROUP;
 
 public class GroupFragment extends BaseFragment implements SwipeRefreshLayout.OnRefreshListener {
 
-    public Intent intentDetailPostActivity;
-
-    public ArrayList<PostDTO> postDTOs;
-    public SwipeRefreshLayout groupSwipeRefreshLayout;
-    SharedPreferences preferences;
+    public ArrayList<PostDTO> postDTOs = new ArrayList<>();
     public static Long idPost;
     public PostDTO postDTO;
-    public Intent intentChangePost;
-    public String stringTypeGroup = "staffgroup";
 
-    public RecyclerView recyclerViewPost;
-    private RecyclerView.LayoutManager mLayoutManager;
+    public String typeUsersGroup = "leadergroup";
+
+    public String typeLeaderGroup = "leadergroup";
+    public String typeMemberGroup = "membergroup";
+    public String typeStaffGroup = "staffgroup";
+
+    Unbinder unbinder;
+
     private RecyclerView.Adapter adapterPostGroup;
-
     public AppPreference appPreference;
-    public UserDTO userDTO;
     public ProgressBar progressBar;
+
+    @BindView(R.id.idListGroup)
+    RecyclerView recyclerViewPost;
+    @BindView(R.id.refresh)
+    SwipeRefreshLayout groupSwipeRefreshLayout;
+
+    @BindView(R.id.viewButtonLeader)
+    Button viewButtonLeader;
+    @BindView(R.id.viewButtonMember)
+    Button viewButtonMember;
+    @BindView(R.id.viewButtonStaff)
+    Button viewButtonStaff;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        intentDetailPostActivity = new Intent(this.getContext(), DetailPostActivity.class);
-        intentChangePost = new Intent(this.getActivity(), ChangePost.class);
-        preferences = getActivity().getSharedPreferences(USER_SERVICE, MODE_PRIVATE);
+        progressBar = new ProgressBar(getActivity());
+        appPreference = new AppPreference(getActivity());
+        adapterPostGroup = new AdapterPostGroup(getActivity(), postDTOs);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        progressBar = new ProgressBar(this.getContext());
-        appPreference = new AppPreference(this.getContext());
-        userDTO = findById(UserDTO.class, appPreference.getID());
-
-        Bundle groupType = getArguments();
-        if (groupType != null) {
-            stringTypeGroup = groupType.getString(TYPE_GROUP);
-        }
-
         View rootView = inflater.inflate(R.layout.fragment_group, container, false);
-        mLayoutManager = new LinearLayoutManager(getContext());
-
-        recyclerViewPost = (RecyclerView) rootView.findViewById(R.id.idListGroup);
-        recyclerViewPost.setHasFixedSize(true);
-        recyclerViewPost.setLayoutManager(mLayoutManager);
-
-        postDTOs = (ArrayList<PostDTO>) PostDTO.find(PostDTO.class, "type = ?", stringTypeGroup);
-        Collections.sort(postDTOs, (o1, o2) -> o2.getDate().compareTo(o1.getDate()));
-        adapterPostGroup = new AdapterPostGroup(getActivity(), postDTOs);
-        recyclerViewPost.setAdapter(adapterPostGroup);
-
-        groupSwipeRefreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.refresh);
+        unbinder = ButterKnife.bind(this, rootView);
         groupSwipeRefreshLayout.setOnRefreshListener(this);
         setHasOptionsMenu(true);
+        initializationUI();
+        setupButtonFilter();
+        updateRecyclerView(typeUsersGroup);
+        return rootView;
+    }
 
+    public void setupButtonFilter() {
+        if (appPreference.getUser().isAdmin() != null && appPreference.getUser().isAdmin()) {
+            typeUsersGroup = typeLeaderGroup;
+        } else {
+            if (appPreference.getUser().isAccessStaffGroup()) {
+                typeUsersGroup = typeStaffGroup;
+            } else
+                viewButtonStaff.setClickable(false);
+
+            if (appPreference.getUser().isAccessMemberGroup()) {
+                typeUsersGroup = typeMemberGroup;
+            } else
+                viewButtonMember.setClickable(false);
+
+            if (appPreference.getUser().isAccessLeaderGroup()) {
+                typeUsersGroup = typeLeaderGroup;
+            } else
+                viewButtonLeader.setClickable(false);
+        }
+    }
+
+    @OnClick({R.id.viewButtonLeader, R.id.viewButtonMember, R.id.viewButtonStaff})
+    public void onViewClicked(View view) {
+        progressBar.showView();
+        switch (view.getId()) {
+            case R.id.viewButtonLeader:
+                updateRecyclerView(typeLeaderGroup);
+                selectedButton(viewButtonLeader);
+                unSelectedButton(viewButtonMember);
+                unSelectedButton(viewButtonStaff);
+                break;
+            case R.id.viewButtonMember:
+                updateRecyclerView(typeMemberGroup);
+                selectedButton(viewButtonMember);
+                unSelectedButton(viewButtonLeader);
+                unSelectedButton(viewButtonStaff);
+                break;
+            case R.id.viewButtonStaff:
+                updateRecyclerView(typeStaffGroup);
+                selectedButton(viewButtonStaff);
+                unSelectedButton(viewButtonLeader);
+                unSelectedButton(viewButtonMember);
+                break;
+        }
+    }
+
+    public void selectedButton(Button button) {
+        button.setSelected(true);
+        button.setTextColor(getResources().getColor(R.color.colorWhite));
+    }
+
+    public void unSelectedButton(Button button) {
+        button.setSelected(false);
+        button.setTextColor(getResources().getColor(R.color.colorPrimary));
+    }
+
+
+    public void initializationUI() {
+        recyclerViewPost.setAdapter(adapterPostGroup);
+        recyclerViewPost.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerViewPost.addOnItemTouchListener(new RecyclerItemClickListener(getContext(), recyclerViewPost, new RecyclerItemClickListener.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
                 if (postDTOs != null) {
-                    intentDetailPostActivity.putExtra(POST_ID, postDTOs.get(position).getId());
-                    startActivityForResult(intentDetailPostActivity, 1);
+                    startActivityDetailPost(postDTOs.get(position).getId());
                 }
             }
 
@@ -109,16 +161,15 @@ public class GroupFragment extends BaseFragment implements SwipeRefreshLayout.On
                 postDTO = postDTOs.get(position);
                 GroupFragment.idPost = postDTOs.get(position).getId();
 
-                if (postDTO.getUser_id().equals(userDTO.getId()) || userDTO.isAdmin()) {
+                if (postDTO.getUser_id().equals(appPreference.getUser().getId()) || appPreference.getUser().isAdmin()) {
 
                     AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
                     builder.setItems(R.array.choice_double_click_post, (dialog, which) -> {
                         switch (which) {
                             case 0: // Edit
-                                changePost(GroupFragment.idPost);
+                                startActivityChangePost(GroupFragment.idPost);
                                 break;
                             case 1: // Delete
-                                Timber.e("Click delete");
                                 deletePost();
                                 break;
                         }
@@ -127,51 +178,41 @@ public class GroupFragment extends BaseFragment implements SwipeRefreshLayout.On
                 }
             }
         }));
-
-        loadUpdate();
-
-        return rootView;
     }
 
-    public void loadUpdate() {
-        new Connection<ArrayList<PostDTO>>().getListPosts(stringTypeGroup, (isSuccess, answerServerResponse) -> {
+    public void updateRecyclerView(String filter) {
+        typeUsersGroup = filter;
+        new Connection<ArrayList<PostDTO>>().getListPosts(filter, (isSuccess, answerServerResponse) -> {
             if (isSuccess && answerServerResponse != null) {
-                PostDTO.deleteAll(PostDTO.class, "type = ?", stringTypeGroup);
-                PostDTO.saveInTx(answerServerResponse.getDataTransferObject());
-                refreshRecyclerView();
+                postDTOs.clear();
+                postDTOs.addAll(answerServerResponse.getDataTransferObject());
+                adapterPostGroup.notifyDataSetChanged();
             }
             groupSwipeRefreshLayout.setRefreshing(false);
             progressBar.dismissView();
         });
     }
 
-    public void refreshRecyclerView() {
-        postDTOs.clear();
-        postDTOs.addAll(PostDTO.find(PostDTO.class, "type = ?", stringTypeGroup));
-        Collections.sort(postDTOs, (o1, o2) -> o2.getDate().compareTo(o1.getDate()));
-        adapterPostGroup.notifyDataSetChanged();
+    public void startActivityDetailPost(Long post_id) {
+        startActivityForResult(new Intent(getActivity(), DetailPostActivity.class).putExtra(POST_ID, post_id), 1);
     }
 
-    public void changePost(Long post_id) {
-        intentChangePost.putExtra(POST_ID, post_id);
-        startActivityForResult(intentChangePost, 1);
+    public void startActivityChangePost(Long post_id) {
+        startActivityForResult(new Intent(getActivity(), ChangePost.class).putExtra(POST_ID, post_id), 1);
     }
 
-    public void createPost() {
-        Intent intentButtonAdd = new Intent(GroupFragment.this.getActivity(), CreatePostActivity.class);
-        intentButtonAdd.putExtra(TYPE_GROUP, stringTypeGroup);
-        startActivityForResult(intentButtonAdd, 1);
+    public void startActivityCreatePost() {
+        startActivityForResult((new Intent(getActivity(), CreatePostActivity.class)).putExtra(TYPE_GROUP, typeUsersGroup), 1);
     }
 
     public void deletePost() {
         progressBar.showView();
         new Connection<String>().deletePost(postDTO, (isSuccess, answerServerResponse) -> {
             if (isSuccess) {
-                postDTO.delete();
-                refreshRecyclerView();
-                Toast.makeText(getActivity(), R.string.post_was_delete, Toast.LENGTH_SHORT).show();
+                updateRecyclerView(typeUsersGroup);
+                showToast(getResources().getString(R.string.post_was_delete));
             } else {
-                Toast.makeText(getActivity(), R.string.errorServer, Toast.LENGTH_SHORT).show();
+                showToast(getResources().getString(R.string.errorServer));
             }
             progressBar.dismissView();
         });
@@ -180,7 +221,7 @@ public class GroupFragment extends BaseFragment implements SwipeRefreshLayout.On
     @Override
     public void onRefresh() {
         groupSwipeRefreshLayout.setRefreshing(true);
-        loadUpdate();
+        updateRecyclerView(typeUsersGroup);
     }
 
     @Override
@@ -191,23 +232,26 @@ public class GroupFragment extends BaseFragment implements SwipeRefreshLayout.On
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.menu_write_post:
-                createPost();
-                break;
-        }
+        if (item.getItemId() == R.id.menu_write_post)
+            startActivityCreatePost();
         return super.onOptionsItemSelected(item);
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == 2) {
-            loadUpdate();
-//            intentDetailPostActivity.putExtra(ONE_POST_DATA, (PostDTO) data.getSerializableExtra(ONE_POST_DATA));
-//            startActivity(intentDetailPostActivity);
+            updateRecyclerView(typeUsersGroup);
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        unbinder.unbind();
+    }
+
+
 }
 
 

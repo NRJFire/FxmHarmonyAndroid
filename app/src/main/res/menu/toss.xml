@@ -11,25 +11,25 @@
                 android:id="@+id/filterOpen"
                 android:icon="@drawable/filter_open"
                 android:orderInCategory="1"
-                android:title="Open"
+                android:title="All opened"
                 app:showAsAction="never" />
             <item
                 android:id="@+id/filterProcess"
                 android:icon="@drawable/filter_process"
                 android:orderInCategory="2"
-                android:title="Process"
+                android:title="All process"
                 app:showAsAction="never" />
             <item
                 android:id="@+id/filterPause"
                 android:icon="@drawable/filter_pause"
                 android:orderInCategory="2"
-                android:title="Pause"
+                android:title="All pauses"
                 app:showAsAction="never" />
             <item
                 android:id="@+id/filterClosed"
                 android:icon="@drawable/filter_closed"
                 android:orderInCategory="3"
-                android:title="Closed"
+                android:title="All closed"
                 app:showAsAction="never" />
         </menu>
     </item>
