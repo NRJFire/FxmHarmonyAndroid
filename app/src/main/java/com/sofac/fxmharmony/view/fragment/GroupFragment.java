@@ -74,8 +74,11 @@ public class GroupFragment extends BaseFragment implements SwipeRefreshLayout.On
         appPreference = new AppPreference(this.getContext());
         userDTO = findById(UserDTO.class, appPreference.getID());
 
+
         Bundle groupType = getArguments();
-        stringTypeGroup = groupType.getString(TYPE_GROUP);
+        if (groupType != null) {
+            stringTypeGroup = groupType.getString(TYPE_GROUP);
+        }
 
 
         View rootView = inflater.inflate(R.layout.fragment_group, container, false);
