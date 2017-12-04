@@ -21,7 +21,7 @@ import com.sofac.fxmharmony.adapter.AdapterCreatePostMovies;
 import com.sofac.fxmharmony.adapter.AdapterCreatePostPhotos;
 import com.sofac.fxmharmony.dto.PostDTO;
 import com.sofac.fxmharmony.server.Connection;
-import com.sofac.fxmharmony.util.ConvertorHTML;
+import com.sofac.fxmharmony.util.ConverterHTML;
 
 import org.apache.commons.io.FilenameUtils;
 
@@ -33,6 +33,7 @@ import butterknife.OnClick;
 import timber.log.Timber;
 
 import static com.sofac.fxmharmony.Constants.BASE_URL;
+import static com.sofac.fxmharmony.Constants.ONE_POST_MESSAGE_DATA;
 import static com.sofac.fxmharmony.Constants.PART_POST;
 import static com.sofac.fxmharmony.Constants.POST_ID;
 import static com.sofac.fxmharmony.Constants.REQUEST_TAKE_FILE;
@@ -84,14 +85,12 @@ public class ChangePost extends BaseActivity {
         ButterKnife.bind(this);
 
         setTitle(getString(R.string.change_post_activity_name));
-
-        postDTO = PostDTO.findById(PostDTO.class, getIntent().getLongExtra(POST_ID, 0));
-        Timber.e(postDTO.toString());
+        postDTO = (PostDTO) getIntent().getSerializableExtra(ONE_POST_MESSAGE_DATA);
 
         idMenuButton.setClosedOnTouchOutside(true);
 
         if (postDTO != null) {
-            postTextInput.setText(ConvertorHTML.fromHTML(postDTO.getBody_original()));
+            postTextInput.setText(ConverterHTML.fromHTML(postDTO.getBody_original()));
 
             if (postDTO.getImages() != null && !postDTO.getImages().isEmpty()) {
                 for (String uriString : postDTO.getImages()) {
@@ -165,7 +164,7 @@ public class ChangePost extends BaseActivity {
                 if (!postTextInput.getText().toString().equals("")) {
                     progressBar.showView();
 
-                    postDTO.setBody_original(ConvertorHTML.toHTML(postTextInput.getText().toString()));
+                    postDTO.setBody_original(ConverterHTML.toHTML(postTextInput.getText().toString()));
 
                     ArrayList<Uri> arrayListAll = new ArrayList<>();
                     for (Uri uriPhoto : listPhoto) {
@@ -179,29 +178,14 @@ public class ChangePost extends BaseActivity {
 
                     new Connection<String>().updatePost(this, postDTO, arrayListAll, listDeleting, (isSuccess, answerServerResponse) -> {
                         if (isSuccess) {
-                            PostDTO.deleteAll(PostDTO.class, "type = ?", postDTO.getType());
-                            new Connection<ArrayList<PostDTO>>().getListPosts(postDTO.getType(), (isSuccess1, answerServerResponse1) -> {
-                                if (isSuccess1 && answerServerResponse1 != null) {
-                                    PostDTO.saveInTx(answerServerResponse1.getDataTransferObject());
-                                    Intent intent = new Intent(ChangePost.this, NavigationActivity.class);
-                                    setResult(2, intent);
-                                    progressBar.dismissView();
-                                    finish();
-                                    showToast("Finished edit post!");
-                                } else {
-                                    progressBar.dismissView();
-                                }
-                            });
+                            Intent intent = new Intent(ChangePost.this, NavigationActivity.class).putExtra(ONE_POST_MESSAGE_DATA, postDTO);
+                            setResult(2, intent);
+                            finish();
+                            showToast("Finished edit post!");
                         } else {
-                            if (answerServerResponse != null) {
-                                Timber.e(answerServerResponse.toString());
-                            } else {
-                                Timber.e("SOME PROBLEM TO REQUEST ANSWER : null = answerServerResponse,       on up, check the log");
-                            }
-                            showToast("Some problem with editing post!");
-                            progressBar.dismissView();
+                            showToast(getResources().getString(R.string.errorServer));
                         }
-
+                        progressBar.dismissView();
                     });
 
                 } else {
@@ -209,8 +193,11 @@ public class ChangePost extends BaseActivity {
                 }
                 return true;
             default:
-                return super.onOptionsItemSelected(item);
+                return super.
+
+                        onOptionsItemSelected(item);
         }
+
     }
 
     @Override

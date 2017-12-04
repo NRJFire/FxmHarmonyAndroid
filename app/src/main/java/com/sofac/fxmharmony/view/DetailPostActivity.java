@@ -35,11 +35,11 @@ import com.sofac.fxmharmony.R;
 import com.sofac.fxmharmony.adapter.AdapterCommentsGroup;
 import com.sofac.fxmharmony.dto.CommentDTO;
 import com.sofac.fxmharmony.dto.PostDTO;
-import com.sofac.fxmharmony.dto.UserDTO;
+import com.sofac.fxmharmony.dto.PushMessage;
 import com.sofac.fxmharmony.server.Connection;
 import com.sofac.fxmharmony.util.AppMethods;
 import com.sofac.fxmharmony.util.AppPreference;
-import com.sofac.fxmharmony.util.ConvertorHTML;
+import com.sofac.fxmharmony.util.ConverterHTML;
 import com.sofac.fxmharmony.util.FileLoadingListener;
 import com.sofac.fxmharmony.util.FileLoadingTask;
 
@@ -49,13 +49,14 @@ import java.util.ArrayList;
 import java.util.Locale;
 
 import jp.wasabeef.glide.transformations.CropCircleTransformation;
-import timber.log.Timber;
 
 import static com.sofac.fxmharmony.Constants.BASE_URL;
 import static com.sofac.fxmharmony.Constants.LINK_IMAGE;
 import static com.sofac.fxmharmony.Constants.LINK_VIDEO;
 import static com.sofac.fxmharmony.Constants.NAME_IMAGE;
 import static com.sofac.fxmharmony.Constants.NAME_VIDEO;
+import static com.sofac.fxmharmony.Constants.ONE_POST_MESSAGE_DATA;
+import static com.sofac.fxmharmony.Constants.ONE_PUSH_MESSAGE_DATA;
 import static com.sofac.fxmharmony.Constants.PART_AVATAR;
 import static com.sofac.fxmharmony.Constants.PART_POST;
 import static com.sofac.fxmharmony.Constants.POST_ID;
@@ -92,9 +93,7 @@ public class DetailPostActivity extends BaseActivity {
 
         intentChangePost = new Intent(this, ChangePost.class);
 
-        Long id_post = getIntent().getLongExtra(POST_ID, 1);
-
-        postDTO = PostDTO.findById(PostDTO.class, id_post);
+        postDTO = (PostDTO) getIntent().getSerializableExtra(ONE_POST_MESSAGE_DATA);
 
         if (state != null) {
             listViewComments.onRestoreInstanceState(state);
@@ -228,16 +227,16 @@ public class DetailPostActivity extends BaseActivity {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
                 if (parent.getSelectedItem().toString().equals(getString(R.string.original_spinner))) {
-                    ((TextView) headerView.findViewById(R.id.idMessagePost)).setText(ConvertorHTML.fromHTML(postDTO.getBody_original()));
+                    ((TextView) headerView.findViewById(R.id.idMessagePost)).setText(ConverterHTML.fromHTML(postDTO.getBody_original()));
 
                 } else if (parent.getSelectedItem().toString().equals(getString(R.string.english_spinner))) {
-                    ((TextView) headerView.findViewById(R.id.idMessagePost)).setText(ConvertorHTML.fromHTML(postDTO.getBody_en()));
+                    ((TextView) headerView.findViewById(R.id.idMessagePost)).setText(ConverterHTML.fromHTML(postDTO.getBody_en()));
 
                 } else if (parent.getSelectedItem().toString().equals(getString(R.string.korean_spinner))) {
-                    ((TextView) headerView.findViewById(R.id.idMessagePost)).setText(ConvertorHTML.fromHTML(postDTO.getBody_ko()));
+                    ((TextView) headerView.findViewById(R.id.idMessagePost)).setText(ConverterHTML.fromHTML(postDTO.getBody_ko()));
 
                 } else if (parent.getSelectedItem().toString().equals(getString(R.string.russian_spinner))) {
-                    ((TextView) headerView.findViewById(R.id.idMessagePost)).setText(ConvertorHTML.fromHTML(postDTO.getBody_ru()));
+                    ((TextView) headerView.findViewById(R.id.idMessagePost)).setText(ConverterHTML.fromHTML(postDTO.getBody_ru()));
                 }
             }
 
@@ -376,7 +375,7 @@ public class DetailPostActivity extends BaseActivity {
 
         // END FILES
 
-        messageTextView.setText(ConvertorHTML.fromHTML(message));
+        messageTextView.setText(ConverterHTML.fromHTML(message));
         clipboardManager = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
 
         /* Translate */
@@ -441,14 +440,13 @@ public class DetailPostActivity extends BaseActivity {
         return true;
     }
 
-    public void changePost(Long post_id) {
-        intentChangePost.putExtra(POST_ID, post_id);
+    public void startActivityChangePost(PostDTO postDTO) {
+        intentChangePost.putExtra(ONE_POST_MESSAGE_DATA, postDTO);
         startActivityForResult(intentChangePost, 1);
     }
 
-    public void translatePost(Long post_id) {
-        Intent intentTranslatePost = new Intent(this, TranslatePostActivity.class);
-        intentTranslatePost.putExtra(POST_ID, post_id);
+    public void startActivityTranslatePost(PostDTO postDTO) {
+        Intent intentTranslatePost = new Intent(this, TranslatePostActivity.class).putExtra(ONE_POST_MESSAGE_DATA, postDTO);
         startActivityForResult(intentTranslatePost, 1);
     }
 
@@ -462,7 +460,7 @@ public class DetailPostActivity extends BaseActivity {
                 finish();
                 return true;
             case R.id.menu_edit:
-                changePost(postDTO.getId());
+                startActivityChangePost(postDTO);
                 return true;
             case R.id.menu_delete:
                 new Connection<String>().deletePost(postDTO, (isSuccess, answerServerResponse) -> {
@@ -477,7 +475,7 @@ public class DetailPostActivity extends BaseActivity {
                 });
                 return true;
             case R.id.menu_translate_post:
-                translatePost(postDTO.getId());
+                startActivityTranslatePost(postDTO);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -488,7 +486,10 @@ public class DetailPostActivity extends BaseActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == 2) {
             linearLayout.removeAllViews();
-            postDTO = PostDTO.findById(PostDTO.class, postDTO.getId());
+
+            if(data.getSerializableExtra(ONE_POST_MESSAGE_DATA)!=null)
+            postDTO = (PostDTO) data.getSerializableExtra(ONE_POST_MESSAGE_DATA);
+
             createHeaderPost();
             updateListView();
         }

@@ -21,7 +21,7 @@ import com.sofac.fxmharmony.adapter.AdapterCreatePostMovies;
 import com.sofac.fxmharmony.adapter.AdapterCreatePostPhotos;
 import com.sofac.fxmharmony.dto.PostDTO;
 import com.sofac.fxmharmony.server.Connection;
-import com.sofac.fxmharmony.util.ConvertorHTML;
+import com.sofac.fxmharmony.util.ConverterHTML;
 
 import org.apache.commons.io.FilenameUtils;
 
@@ -134,7 +134,7 @@ public class CreatePostActivity extends BaseActivity implements View.OnClickList
             case R.id.send_post_button:
                 if (!postTextInput.getText().toString().equals("")) {
                     progressBar.showView();
-                    PostDTO postDTO = new PostDTO(0L, appPreference.getID(), "", "", ConvertorHTML.toHTML(postTextInput.getText().toString()), "", "", "", "", "", stringTypeGroup);
+                    PostDTO postDTO = new PostDTO(0L, appPreference.getID(), "", "", ConverterHTML.toHTML(postTextInput.getText().toString()), "", "", "", "", "", stringTypeGroup);
 
                     ArrayList<Uri> arrayListAll = new ArrayList<>();
                     arrayListAll.addAll(listPhoto);

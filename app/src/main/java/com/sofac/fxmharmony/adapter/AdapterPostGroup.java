@@ -17,7 +17,7 @@ import com.sofac.fxmharmony.Constants;
 import com.sofac.fxmharmony.R;
 import com.sofac.fxmharmony.dto.PostDTO;
 import com.sofac.fxmharmony.util.AppMethods;
-import com.sofac.fxmharmony.util.ConvertorHTML;
+import com.sofac.fxmharmony.util.ConverterHTML;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -72,7 +72,7 @@ public class AdapterPostGroup extends RecyclerView.Adapter<AdapterPostGroup.View
         view.dateItemPost.setText(postDTO.getDate().toString());
         view.dateItemPost.setText(new SimpleDateFormat("d MMM yyyy", Locale.GERMAN).format(postDTO.getDate())); //"d MMM yyyy HH:mm:ss"
         if (postDTO.getBody_original() != null)
-            view.messageItemPost.setText(ConvertorHTML.fromHTML(postDTO.getBody_original()));
+            view.messageItemPost.setText(ConverterHTML.fromHTML(postDTO.getBody_original()));
 
         //FILES
         if (postDTO.getDocs().size() > 0) {

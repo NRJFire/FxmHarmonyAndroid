@@ -35,6 +35,7 @@ import butterknife.OnClick;
 import butterknife.Unbinder;
 import timber.log.Timber;
 
+import static com.sofac.fxmharmony.Constants.ONE_POST_MESSAGE_DATA;
 import static com.sofac.fxmharmony.Constants.POST_ID;
 import static com.sofac.fxmharmony.Constants.TYPE_GROUP;
 
@@ -161,14 +162,13 @@ public class GroupFragment extends BaseFragment implements SwipeRefreshLayout.On
             @Override
             public void onItemClick(View view, int position) {
                 if (postDTOs != null) {
-                    startActivityDetailPost(postDTOs.get(position).getId());
+                    startActivityDetailPost(postDTOs.get(position));
                 }
             }
 
             @Override
             public void onLongItemClick(View view, final int position) {
                 postDTO = postDTOs.get(position);
-                GroupFragment.idPost = postDTOs.get(position).getId();
 
                 if (postDTO.getUser_id().equals(appPreference.getUser().getId()) || appPreference.getUser().isAdmin()) {
 
@@ -176,7 +176,7 @@ public class GroupFragment extends BaseFragment implements SwipeRefreshLayout.On
                     builder.setItems(R.array.choice_double_click_post, (dialog, which) -> {
                         switch (which) {
                             case 0: // Edit
-                                startActivityChangePost(GroupFragment.idPost);
+                                startActivityChangePost(postDTO);
                                 break;
                             case 1: // Delete
                                 deletePost();
@@ -202,12 +202,12 @@ public class GroupFragment extends BaseFragment implements SwipeRefreshLayout.On
         });
     }
 
-    public void startActivityDetailPost(Long post_id) {
-        startActivityForResult(new Intent(getActivity(), DetailPostActivity.class).putExtra(POST_ID, post_id), 1);
+    public void startActivityDetailPost(PostDTO postDTO) {
+        startActivityForResult(new Intent(getActivity(), DetailPostActivity.class).putExtra(ONE_POST_MESSAGE_DATA, postDTO), 1);
     }
 
-    public void startActivityChangePost(Long post_id) {
-        startActivityForResult(new Intent(getActivity(), ChangePost.class).putExtra(POST_ID, post_id), 1);
+    public void startActivityChangePost(PostDTO postDTO) {
+        startActivityForResult(new Intent(getActivity(), ChangePost.class).putExtra(ONE_POST_MESSAGE_DATA, postDTO), 1);
     }
 
     public void startActivityCreatePost() {

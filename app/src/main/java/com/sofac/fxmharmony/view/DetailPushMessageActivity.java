@@ -14,7 +14,7 @@ import com.google.cloud.translate.Translation;
 import com.sofac.fxmharmony.Constants;
 import com.sofac.fxmharmony.R;
 import com.sofac.fxmharmony.dto.PushMessage;
-import com.sofac.fxmharmony.util.ConvertorHTML;
+import com.sofac.fxmharmony.util.ConverterHTML;
 
 import java.util.Locale;
 
@@ -49,13 +49,13 @@ public class DetailPushMessageActivity extends BaseActivity {
         StrictMode.setThreadPolicy(policy);
         TranslateOptions options = TranslateOptions.newBuilder().setApiKey(Constants.CLOUD_API_KEY).build();
         Translate translate = options.getService();
-        final Translation translation = translate.translate(ConvertorHTML.fromHTML(pushMessage.getBody()), Translate.TranslateOption.targetLanguage(Locale.getDefault().getLanguage()));
+        final Translation translation = translate.translate(ConverterHTML.fromHTML(pushMessage.getBody()), Translate.TranslateOption.targetLanguage(Locale.getDefault().getLanguage()));
         final Drawable drawable = getResources().getDrawable(R.drawable.verticalline);
 
 
         titleDetailPushMessage.setText(pushMessage.getTitle());
         dateDetailPushMessage.setText(pushMessage.getDate());
-        messageDetailPushMessage.setText(ConvertorHTML.fromHTML(pushMessage.getBody()));
+        messageDetailPushMessage.setText(ConverterHTML.fromHTML(pushMessage.getBody()));
 
 
         buttonTranslatePushMessage.setOnClickListener(v -> {

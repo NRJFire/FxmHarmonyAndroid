@@ -13,12 +13,13 @@ import android.widget.Toast;
 import com.sofac.fxmharmony.R;
 import com.sofac.fxmharmony.dto.PostDTO;
 import com.sofac.fxmharmony.server.Connection;
-import com.sofac.fxmharmony.util.ConvertorHTML;
+import com.sofac.fxmharmony.util.ConverterHTML;
 
 import java.util.ArrayList;
 
 import timber.log.Timber;
 
+import static com.sofac.fxmharmony.Constants.ONE_POST_MESSAGE_DATA;
 import static com.sofac.fxmharmony.Constants.POST_ID;
 
 
@@ -39,26 +40,28 @@ public class TranslatePostActivity extends BaseActivity {
         setTitle(getString(R.string.translate_post));
 
 
-        postDTO = PostDTO.findById(PostDTO.class, getIntent().getLongExtra(POST_ID, 0L));
+
+        postDTO = (PostDTO) getIntent().getSerializableExtra(ONE_POST_MESSAGE_DATA);
+
         preferences = getSharedPreferences(USER_SERVICE, MODE_PRIVATE);
 
         //TextView
         postTextOrig = (TextView) findViewById(R.id.id_text_orig);
         if (postDTO.getBody_original() != null && !"".equals(postDTO.getBody_original()))
-            postTextOrig.setText(ConvertorHTML.fromHTML(postDTO.getBody_original()));
+            postTextOrig.setText(ConverterHTML.fromHTML(postDTO.getBody_original()));
 
         //EditText
         postTextEng = (EditText) findViewById(R.id.id_text_eng);
         if (postDTO.getBody_en() != null && !"".equals(postDTO.getBody_en()))
-            postTextEng.setText(ConvertorHTML.fromHTML(postDTO.getBody_en()));
+            postTextEng.setText(ConverterHTML.fromHTML(postDTO.getBody_en()));
 
         postTextKor = (EditText) findViewById(R.id.id_text_kor);
         if (postDTO.getBody_ko() != null && !"".equals(postDTO.getBody_ko()))
-            postTextKor.setText(ConvertorHTML.fromHTML(postDTO.getBody_ko()));
+            postTextKor.setText(ConverterHTML.fromHTML(postDTO.getBody_ko()));
 
         postTextRus = (EditText) findViewById(R.id.id_text_rus);
         if (postDTO.getBody_ru() != null && !"".equals(postDTO.getBody_ru()))
-            postTextRus.setText(ConvertorHTML.fromHTML(postDTO.getBody_ru()));
+            postTextRus.setText(ConverterHTML.fromHTML(postDTO.getBody_ru()));
 
         TabHost tabHost = (TabHost) findViewById(android.R.id.tabhost);
 
@@ -112,7 +115,7 @@ public class TranslatePostActivity extends BaseActivity {
 
                 new Connection<String>().updatePost(this, postDTO, new ArrayList<>(), new ArrayList<>(), (isSuccess, answerServerResponse) -> {
                     if (isSuccess) {
-                        Intent intent = new Intent(TranslatePostActivity.this, NavigationActivity.class);
+                        Intent intent = new Intent(TranslatePostActivity.this, NavigationActivity.class).putExtra(ONE_POST_MESSAGE_DATA, postDTO);
                         setResult(2, intent);
                         finish();
                     } else {
