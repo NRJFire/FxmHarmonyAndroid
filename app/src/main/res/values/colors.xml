@@ -32,6 +32,7 @@
 
     <color name="colorWhite">#ffffff</color>
     <color name="ColorGreyVeryLight">#efefef</color>
+    <color name="ColorGreyLittleLight">#eaeaea</color>
     <color name="ColorGreyLight">#bababa</color>
     <color name="ColorGrey">#848484</color>
     <color name="ColorGreyDark">#434343</color>

@@ -83,15 +83,15 @@ public class TossMessageDTO implements Serializable {
 
     @Override
     public String toString() {
-        return "TossMessageDTO{" +
-                "id='" + id + '\'' +
-                ", body='" + body + '\'' +
-                ", status='" + status + '\'' +
-                ", date='" + date + '\'' +
-                ", user_id='" + user_id + '\'' +
-                ", name='" + name + '\'' +
-                ", avatar='" + avatar + '\'' +
-                ", comments=" + comments +
+        return "\n\nTossMessageDTO{" +
+                "\n\tid='" + id + '\'' +
+                ", \n\tbody='" + body + '\'' +
+                ", \n\tstatus='" + status + '\'' +
+                ", \n\tdate='" + date + '\'' +
+                ", \n\tuser_id='" + user_id + '\'' +
+                ", \n\tname='" + name + '\'' +
+                ", \n\tavatar='" + avatar + '\'' +
+                ", \n\tcomments=" + comments +
                 '}';
     }
 }

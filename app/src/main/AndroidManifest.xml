@@ -55,23 +55,31 @@
             android:logo="@drawable/keyboard_backspace"
             android:screenOrientation="portrait" />
 
+        <activity android:name=".view.DetailTossActivity"
+            android:logo="@drawable/keyboard_backspace"
+            android:screenOrientation="portrait" />
+
         <activity
             android:name=".view.NavigationActivity"
             android:label="@string/title_activity_navigation"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
+
+
+
+
         <activity
             android:name=".view.PreviewPhotoActivity"
             android:logo="@drawable/keyboard_backspace"
             android:screenOrientation="portrait"
             android:theme="@style/Black" />
+
         <activity
             android:name=".view.PreviewVideoActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:logo="@drawable/keyboard_backspace"
             android:screenOrientation="portrait"
             android:theme="@style/Black" /> <!-- or android:screenOrientation="landscape" -->
-        <activity android:name=".view.DetailTossActivity"/>
 
 
         <!-- Push Google Cloud Messaging services -->

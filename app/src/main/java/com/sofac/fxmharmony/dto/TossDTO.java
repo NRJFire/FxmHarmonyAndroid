@@ -107,7 +107,8 @@ public class TossDTO implements Serializable {
     }
 
     public ArrayList<TossMessageDTO> getMessages() {
-        return messages;
+        if (messages == null) return new ArrayList<>();
+        else return messages;
     }
 
     public void setMessages(ArrayList<TossMessageDTO> messages) {
@@ -116,17 +117,17 @@ public class TossDTO implements Serializable {
 
     @Override
     public String toString() {
-        return "TossDTO{" +
-                "id='" + id + '\'' +
-                ", user_id='" + user_id + '\'' +
-                ", title='" + title + '\'' +
-                ", date='" + date + '\'' +
-                ", date_end='" + date_end + '\'' +
-                ", now='" + now + '\'' +
-                ", name='" + name + '\'' +
-                ", status='" + status + '\'' +
-                ", responsible=" + Arrays.toString(responsible) +
-                ", messages=" + messages +
+        return "\n\nTossDTO{" +
+                "\n\tid='" + id + '\'' +
+                ", \n\tuser_id='" + user_id + '\'' +
+                ", \n\ttitle='" + title + '\'' +
+                ", \n\tdate='" + date + '\'' +
+                ", \n\tdate_end='" + date_end + '\'' +
+                ", \n\tnow='" + now + '\'' +
+                ", \n\tname='" + name + '\'' +
+                ", \n\tstatus='" + status + '\'' +
+                ", \n\tresponsible=" + Arrays.toString(responsible) +
+                ", \n\tmessages=" + messages +
                 '}';
     }
 }

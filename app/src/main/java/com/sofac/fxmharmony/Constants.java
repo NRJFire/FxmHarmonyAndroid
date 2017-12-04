@@ -15,6 +15,7 @@ public class Constants {
     public final static String ONE_POST_MESSAGE_DATA = "ONE_POST_MESSAGE_DATA";
     public final static String ONE_TOSS_MESSAGE_DATA = "ONE_TOSS_MESSAGE_DATA";
     public final static String POST_ID = "POST_ID";
+    public final static String TOSS_ID = "POST_ID";
 
     public final static String PUSH_MESSAGES_STATE = "PUSH_MESSAGES_STATE";
 

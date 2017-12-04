@@ -1,5 +1,6 @@
 package com.sofac.fxmharmony.adapter;
 
+import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.sofac.fxmharmony.Constants;
 import com.sofac.fxmharmony.R;
 import com.sofac.fxmharmony.dto.ResponsibleUserDTO;
 import com.sofac.fxmharmony.dto.TossMessageDTO;
@@ -19,6 +21,7 @@ import java.util.ArrayList;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import jp.wasabeef.glide.transformations.CropCircleTransformation;
+import timber.log.Timber;
 
 import static com.sofac.fxmharmony.Constants.BASE_URL;
 import static com.sofac.fxmharmony.Constants.PART_AVATAR;
@@ -79,17 +82,18 @@ public class AdapterTossMessages extends RecyclerView.Adapter<AdapterTossMessage
             textViewAuthorMessage.setText(messageDTO.getName());
             textViewDateTime.setText(messageDTO.getDate());
 
+
+            Uri uri = Uri.parse(BASE_URL + Constants.PART_AVATAR + messageDTO.getAvatar());
+            Timber.e(uri.toString());
+
             Glide.with(view.getContext())
-                    .load(BASE_URL + PART_AVATAR + messageDTO)
+                    .load(uri)
                     .override(150, 150)
                     .error(R.drawable.no_avatar)
                     .placeholder(R.drawable.no_avatar)
                     .bitmapTransform(new CropCircleTransformation(view.getContext()))
                     .into(imageViewAvatar);
         }
-
-
-
 
 
     }

@@ -36,6 +36,7 @@ import butterknife.Unbinder;
 import timber.log.Timber;
 
 import static com.sofac.fxmharmony.Constants.ONE_TOSS_MESSAGE_DATA;
+import static com.sofac.fxmharmony.Constants.TOSS_ID;
 
 public class TossFragment extends BaseFragment implements SwipeRefreshLayout.OnRefreshListener {
 
@@ -77,7 +78,7 @@ public class TossFragment extends BaseFragment implements SwipeRefreshLayout.OnR
                             @Override
                             public void onItemClick(View view, int position) {
                                 Intent intent = new Intent(getActivity(), DetailTossActivity.class);
-                                intent.putExtra(ONE_TOSS_MESSAGE_DATA, tossDTOs.get(position));
+                                intent.putExtra(TOSS_ID, tossDTOs.get(position).getId());
                                 startActivity(intent);
                             }
 
@@ -109,7 +110,6 @@ public class TossFragment extends BaseFragment implements SwipeRefreshLayout.OnR
                 new SenderContainerDTO(filter, new AppPreference(this.getActivity()).getID()),
                 (isSuccess, answerServerResponse) -> {
                     if (isSuccess) {
-                        Timber.e(answerServerResponse.getDataTransferObject().toString());
                         tossDTOs.clear();
                         tossDTOs.addAll(answerServerResponse.getDataTransferObject());
                         adapterTossItems.notifyDataSetChanged();
