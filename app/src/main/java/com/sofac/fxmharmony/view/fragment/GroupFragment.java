@@ -144,6 +144,7 @@ public class GroupFragment extends BaseFragment implements SwipeRefreshLayout.On
 
     public void selectedButton(Button button) {
         button.setSelected(true);
+
         button.setTextColor(getResources().getColor(R.color.colorWhite));
     }
 

@@ -1,14 +1,12 @@
 package com.sofac.fxmharmony.dto;
 
-import com.orm.SugarRecord;
-
 import java.io.Serializable;
 
 /**
  * Created by Maxim on 31.08.2017.
  */
 
-public class ManagerDTO extends SugarRecord implements Serializable {
+public class ManagerDTO implements Serializable {
 
     private String name;
     private String avatar;
@@ -16,7 +14,6 @@ public class ManagerDTO extends SugarRecord implements Serializable {
     private String phone;
     private String access;
 
-    public ManagerDTO(){}
 
     public ManagerDTO(String name, String avatar, String email, String phone, String access) {
         this.name = name;

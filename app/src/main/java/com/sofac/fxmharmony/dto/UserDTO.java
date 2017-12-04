@@ -1,32 +1,36 @@
 package com.sofac.fxmharmony.dto;
 
-import com.orm.SugarRecord;
-
 import java.io.Serializable;
 
 /**
  * Created by Maxim on 02.09.2017.
  */
 
-public class UserDTO extends SugarRecord implements Serializable {
+public class UserDTO implements Serializable {
 
+    private Long id;
     private String login;
     private String password;
     private String role;
     private Boolean visible;
     private String access;
 
-    public UserDTO() {
-    }
-
     public UserDTO(Long id, String login, String password, String role, Boolean visible, String access) {
 
-        setId(id);
+        this.id = id;
         this.login = login;
         this.password = password;
         this.role = role; // manager;admin;staff,customer
         this.visible = visible;
         this.access = access;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getLogin() {
@@ -129,7 +133,7 @@ public class UserDTO extends SugarRecord implements Serializable {
     @Override
     public String toString() {
         return "UserDTO{" +
-                "id(ORM)='" + getId() + '\'' +
+                "id(ORM)='" + id + '\'' +
                 ", login='" + login + '\'' +
                 ", password='" + password + '\'' +
                 ", role='" + role + '\'' +

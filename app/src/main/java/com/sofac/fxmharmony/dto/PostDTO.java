@@ -2,7 +2,6 @@ package com.sofac.fxmharmony.dto;
 
 import android.text.TextUtils;
 
-import com.orm.SugarRecord;
 import com.sofac.fxmharmony.util.TypeFiles;
 
 import java.io.Serializable;
@@ -14,13 +13,22 @@ import java.util.Locale;
 
 import static com.sofac.fxmharmony.Constants.SPLIT_FILES;
 
-public class PostDTO extends SugarRecord implements Serializable {
+public class PostDTO implements Serializable {
 
-    public PostDTO() {
-    }
+    private Long id;
+    private Long user_id;
+    private String name;
+    private String date;
+    private String body_original;
+    private String body_ru;
+    private String body_en;
+    private String body_ko;
+    private String files;
+    private String avatar;
+    private String type;
 
     public PostDTO(Long id, Long user_id, String name, String date, String body_original, String body_ru, String body_en, String body_ko, String files, String avatar, String type) {
-        setId(id);
+        this.id = id;
         this.user_id = user_id;
         this.name = name;
         this.date = date;
@@ -33,16 +41,13 @@ public class PostDTO extends SugarRecord implements Serializable {
         this.type = type;
     }
 
-    private Long user_id;
-    private String name;
-    private String date;
-    private String body_original;
-    private String body_ru;
-    private String body_en;
-    private String body_ko;
-    private String files;
-    private String avatar;
-    private String type;
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public Long getUser_id() {
         return user_id;
@@ -155,7 +160,7 @@ public class PostDTO extends SugarRecord implements Serializable {
     @Override
     public String toString() {
         return "PostDTO{" +
-                "id=" + getId() +
+                "id=" + id +
                 ", user_id=" + user_id +
                 ", name='" + name + '\'' +
                 ", date='" + date + '\'' +
@@ -163,7 +168,7 @@ public class PostDTO extends SugarRecord implements Serializable {
                 ", body_ru='" + body_ru + '\'' +
                 ", body_en='" + body_en + '\'' +
                 ", body_ko='" + body_ko + '\'' +
-                ", files=" + files +
+                ", files='" + files + '\'' +
                 ", avatar='" + avatar + '\'' +
                 ", type='" + type + '\'' +
                 '}';

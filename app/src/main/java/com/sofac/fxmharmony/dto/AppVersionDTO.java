@@ -1,13 +1,13 @@
 package com.sofac.fxmharmony.dto;
 
-import com.orm.SugarRecord;
 import java.io.Serializable;
 
 /**
  * Created by Maxim on 17.08.2017.
  */
 
-public class AppVersionDTO extends SugarRecord implements Serializable {
+public class AppVersionDTO implements Serializable {
+    private Long id;
     private String title;
     private String body;
     private String date;
@@ -16,13 +16,21 @@ public class AppVersionDTO extends SugarRecord implements Serializable {
     private Integer version_code;
 
     public AppVersionDTO(Long id, String title, String body, String date, String important, String version_name, Integer version_code) {
-        setId(id);
+        this.id = id;
         this.title = title;
         this.body = body;
         this.date = date;
         this.important = important;
         this.version_name = version_name;
         this.version_code = version_code;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getTitle() {
@@ -77,10 +85,11 @@ public class AppVersionDTO extends SugarRecord implements Serializable {
     @Override
     public String toString() {
         return "AppVersionDTO{" +
-                "title='" + title + '\'' +
+                "id=" + id +
+                ", title='" + title + '\'' +
                 ", body='" + body + '\'' +
-                ", date=" + date +
-                ", important=" + important +
+                ", date='" + date + '\'' +
+                ", important='" + important + '\'' +
                 ", version_name='" + version_name + '\'' +
                 ", version_code=" + version_code +
                 '}';

@@ -1,19 +1,15 @@
 package com.sofac.fxmharmony.dto;
 
-import com.orm.SugarRecord;
-
 import java.io.Serializable;
 
 /**
  * Created by Maxim on 11.05.2017.
  */
 
-public class PushMessage extends SugarRecord implements Serializable {
+public class PushMessage implements Serializable {
         private String title;
         private String body;
         private String date;
-
-    public PushMessage(){}
 
     public PushMessage(String title, String body, String date) {
         this.title = title;

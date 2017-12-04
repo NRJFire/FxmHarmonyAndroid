@@ -7,16 +7,15 @@ package com.sofac.fxmharmony.dto;
 public class SenderContainerDTO {
 
     private String status;
-    private String id;
     private Long user_id;
     private String google_key;
 
     /**
      * constructor for sending "getListTosses"
      */
-    public SenderContainerDTO(String status, String id) {
+    public SenderContainerDTO(String status, Long user_id) {
         this.status = status;
-        this.id = id;
+        this.user_id = user_id;
     }
 
     /**
@@ -35,14 +34,6 @@ public class SenderContainerDTO {
 
     public void setStatus(String status) {
         this.status = status;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
     }
 
     public Long getUser_id() {
@@ -65,7 +56,6 @@ public class SenderContainerDTO {
     public String toString() {
         return "SenderContainerDTO{" +
                 "status='" + status + '\'' +
-                ", id='" + id + '\'' +
                 ", user_id=" + user_id +
                 ", google_key='" + google_key + '\'' +
                 '}';

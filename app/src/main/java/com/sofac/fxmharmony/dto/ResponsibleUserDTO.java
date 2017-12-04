@@ -6,9 +6,9 @@ package com.sofac.fxmharmony.dto;
 
 public class ResponsibleUserDTO {
 
-    String id;
-    String user_id;
-    String name;
+    private String id;
+    private String user_id;
+    private String name;
 
     public ResponsibleUserDTO(String id, String user_id, String name) {
         this.id = id;

@@ -24,19 +24,6 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"> <!-- android:name=".FXMHarmony" -->
 
-        <meta-data
-            android:name="DATABASE"
-            android:value="database.db" />
-        <meta-data
-            android:name="VERSION"
-            android:value="23" />
-        <meta-data
-            android:name="QUERY_LOG"
-            android:value="true" />
-        <meta-data
-            android:name="DOMAIN_PACKAGE_NAME"
-            android:value="com.sofac.fxmharmony" />
-
         <activity
             android:name=".view.SplashActivity"
             android:screenOrientation="portrait"
@@ -68,18 +55,6 @@
             android:logo="@drawable/keyboard_backspace"
             android:screenOrientation="portrait" />
 
-        <!-- Push Google Cloud Messaging services -->
-        <service android:name=".util.googleFirebaseService.MyFirebaseInstanceIDService">
-            <intent-filter>
-                <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
-            </intent-filter>
-        </service>
-        <service android:name=".util.googleFirebaseService.MyFirebaseMessagingService">
-            <intent-filter>
-                <action android:name="com.google.firebase.MESSAGING_EVENT" />
-            </intent-filter>
-        </service>
-
         <activity
             android:name=".view.NavigationActivity"
             android:label="@string/title_activity_navigation"
@@ -97,6 +72,21 @@
             android:screenOrientation="portrait"
             android:theme="@style/Black" /> <!-- or android:screenOrientation="landscape" -->
         <activity android:name=".view.DetailTossActivity"/>
+
+
+        <!-- Push Google Cloud Messaging services -->
+        <service android:name=".util.googleFirebaseService.MyFirebaseInstanceIDService">
+            <intent-filter>
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
+            </intent-filter>
+        </service>
+        <service android:name=".util.googleFirebaseService.MyFirebaseMessagingService">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+
+
     </application>
 
 </manifest>

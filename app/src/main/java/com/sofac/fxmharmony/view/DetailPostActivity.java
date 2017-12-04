@@ -62,18 +62,19 @@ import static com.sofac.fxmharmony.Constants.POST_ID;
 
 public class DetailPostActivity extends BaseActivity {
 
+    public static Long idComment = 0L;
+    public static Boolean isCreatingComment = true;
+    public static CommentDTO commentDTO;
+    public Intent intentChangePost;
+
     Button buttonSend;
     Intent intent;
     View headerView;
     ArrayList<CommentDTO> arrayListComments;
     ListView listViewComments;
-    PostDTO postDTO = new PostDTO();
+    PostDTO postDTO;
     EditText editTextComment;
     AdapterCommentsGroup adapterCommentsGroup;
-    public static Long idComment = 0L;
-    public static Boolean isCreatingComment = true;
-    public static CommentDTO commentDTO;
-    public Intent intentChangePost;
     ClipboardManager clipboardManager;
     ClipData clipData;
     LinearLayout linearLayout;
@@ -87,6 +88,7 @@ public class DetailPostActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail_post);
         setTitle(getString(R.string.FXM_group));
+
 
         intentChangePost = new Intent(this, ChangePost.class);
 

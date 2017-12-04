@@ -1,20 +1,23 @@
 package com.sofac.fxmharmony.dto;
 
-import com.orm.SugarRecord;
-
 import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-public class CommentDTO extends SugarRecord implements Serializable {
+public class CommentDTO implements Serializable {
 
-    public CommentDTO() {
-    }
+    private Long id;
+    private Long user_id;
+    private Long post_id;
+    private String body;
+    private String name;
+    private String date;
+    private String avatar;
 
     public CommentDTO(Long id, Long user_id, Long post_id, String body, String name, String date, String avatar) {
-        setId(id);
+        this.id = id;
         this.user_id = user_id;
         this.post_id = post_id;
         this.body = body;
@@ -23,12 +26,13 @@ public class CommentDTO extends SugarRecord implements Serializable {
         this.avatar = avatar;
     }
 
-    private Long user_id;
-    private Long post_id;
-    private String body;
-    private String name;
-    private String date;
-    private String avatar;
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public Long getUser_id() {
         return user_id;
@@ -87,7 +91,7 @@ public class CommentDTO extends SugarRecord implements Serializable {
     @Override
     public String toString() {
         return "CommentDTO{" +
-                "id=" + getId() +
+                "id=" + id +
                 ", user_id=" + user_id +
                 ", post_id=" + post_id +
                 ", body='" + body + '\'' +

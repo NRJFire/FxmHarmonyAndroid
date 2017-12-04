@@ -15,8 +15,6 @@ import com.sofac.fxmharmony.dto.UserDTO;
 import com.sofac.fxmharmony.util.AppPreference;
 import com.sofac.fxmharmony.util.ProgressBar;
 
-import static com.orm.SugarRecord.findById;
-
 public class BaseActivity extends AppCompatActivity {
 
     public AppPreference appPreference;

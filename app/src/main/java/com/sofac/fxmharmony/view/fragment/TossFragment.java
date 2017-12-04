@@ -102,7 +102,7 @@ public class TossFragment extends BaseFragment implements SwipeRefreshLayout.OnR
     public void updateRecyclerView(String filter) {
         status = filter;
         new Connection<ArrayList<TossDTO>>().getListToss(
-                new SenderContainerDTO(filter, new AppPreference(this.getActivity()).getID().toString()),
+                new SenderContainerDTO(filter, new AppPreference(this.getActivity()).getID()),
                 (isSuccess, answerServerResponse) -> {
                     if (isSuccess) {
                         Timber.e(answerServerResponse.getDataTransferObject().toString());

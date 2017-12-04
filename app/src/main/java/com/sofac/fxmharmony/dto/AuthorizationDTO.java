@@ -1,6 +1,5 @@
 package com.sofac.fxmharmony.dto;
 
-
 import java.io.Serializable;
 
 public class AuthorizationDTO implements Serializable {

@@ -1,14 +1,12 @@
 package com.sofac.fxmharmony;
 
+import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.support.multidex.MultiDex;
 import android.util.Log;
 
-import com.orm.SchemaGenerator;
-import com.orm.SugarApp;
-import com.orm.SugarContext;
-import com.orm.SugarDb;
 import com.sofac.fxmharmony.util.FakeCrashLibrary;
 
 import java.util.Locale;
@@ -20,29 +18,25 @@ import timber.log.Timber;
  * Always starting when app is start
  */
 
-public class FXMHarmony extends SugarApp {
+public class FXMHarmony extends Application {
 
     @Override
     protected void attachBaseContext(Context context) {
         super.attachBaseContext(context);
-       // MultiDex.install(this);
+        MultiDex.install(this);
 
     }
 
     @Override
     public void onCreate() {
         super.onCreate();
-        SugarContext.init(getApplicationContext());
+
 
         if (BuildConfig.DEBUG) {
             Timber.plant(new Timber.DebugTree());
         } else {
             Timber.plant(new CrashReportingTree());
         }
-
-        // create table if not exists
-        SchemaGenerator schemaGenerator = new SchemaGenerator(this);
-        schemaGenerator.createDatabase(new SugarDb(this).getDB());
 
         initLanguage(this);
     }
@@ -74,7 +68,6 @@ public class FXMHarmony extends SugarApp {
     @Override
     public void onTerminate() {
         super.onTerminate();
-        SugarContext.terminate();
     }
 
 

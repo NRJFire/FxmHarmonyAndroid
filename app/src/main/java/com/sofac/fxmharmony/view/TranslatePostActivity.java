@@ -112,7 +112,6 @@ public class TranslatePostActivity extends BaseActivity {
 
                 new Connection<String>().updatePost(this, postDTO, new ArrayList<>(), new ArrayList<>(), (isSuccess, answerServerResponse) -> {
                     if (isSuccess) {
-                        postDTO.save();
                         Intent intent = new Intent(TranslatePostActivity.this, NavigationActivity.class);
                         setResult(2, intent);
                         finish();
