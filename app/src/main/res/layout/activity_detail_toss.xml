@@ -130,6 +130,20 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/viewNamesTo" />
 
+    <TextView
+        android:id="@+id/textViewStatus"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:textAllCaps="true"
+        app:layout_constraintBottom_toBottomOf="@+id/viewRightStatus"
+        app:layout_constraintEnd_toEndOf="@+id/viewRightStatus"
+        app:layout_constraintStart_toStartOf="@+id/viewRightStatus"
+        app:layout_constraintTop_toTopOf="@+id/viewRightStatus" />
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recyclerViewMessage"
         android:layout_width="0dp"
@@ -140,5 +154,7 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/lineSeparator3" />
+
+
 
 </android.support.constraint.ConstraintLayout>

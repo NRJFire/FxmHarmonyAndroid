@@ -145,6 +145,21 @@
                 card_view:layout_constraintStart_toStartOf="@+id/guideline2"
                 card_view:layout_constraintTop_toBottomOf="@+id/lineSeparator2" />
 
+            <TextView
+                android:id="@+id/textViewStatus"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:text="O\nP\nE\nN"
+                android:textAllCaps="true"
+                card_view:layout_constraintBottom_toBottomOf="@+id/viewRightStatus"
+                card_view:layout_constraintEnd_toEndOf="@+id/viewRightStatus"
+                card_view:layout_constraintStart_toStartOf="@+id/viewRightStatus"
+                card_view:layout_constraintTop_toTopOf="@+id/viewRightStatus" />
+
         </android.support.constraint.ConstraintLayout>
 
     </android.support.v7.widget.CardView>

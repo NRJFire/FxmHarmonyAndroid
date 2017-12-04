@@ -21,9 +21,10 @@ import butterknife.ButterKnife;
 
 public class AdapterTossItems extends RecyclerView.Adapter<AdapterTossItems.TossViewHolder> {
 
+
     private ArrayList<TossDTO> listTosses;
 
-    public AdapterTossItems(ArrayList<TossDTO> tossDTOs){
+    public AdapterTossItems(ArrayList<TossDTO> tossDTOs) {
         this.listTosses = tossDTOs;
     }
 
@@ -46,11 +47,18 @@ public class AdapterTossItems extends RecyclerView.Adapter<AdapterTossItems.Toss
     class TossViewHolder extends RecyclerView.ViewHolder {
         View view;
 
-        @BindView(R.id.viewTextTitle) TextView viewTextTitle;
-        @BindView(R.id.viewTextDate) TextView viewTextDate;
-        @BindView(R.id.viewNamesFrom) TextView viewNamesFrom;
-        @BindView(R.id.viewNamesTo) TextView viewNamesTo;
-        @BindView(R.id.viewRightStatus) View viewRightStatus;
+        @BindView(R.id.viewTextTitle)
+        TextView viewTextTitle;
+        @BindView(R.id.viewTextDate)
+        TextView viewTextDate;
+        @BindView(R.id.viewNamesFrom)
+        TextView viewNamesFrom;
+        @BindView(R.id.viewNamesTo)
+        TextView viewNamesTo;
+        @BindView(R.id.viewRightStatus)
+        View viewRightStatus;
+        @BindView(R.id.textViewStatus)
+        TextView textViewStatus;
 
         TossViewHolder(View itemView) {
             super(itemView);
@@ -66,27 +74,31 @@ public class AdapterTossItems extends RecyclerView.Adapter<AdapterTossItems.Toss
             changeStatus(tossDTO.getStatus());
         }
 
-        private String getNamesResponsible(ResponsibleUserDTO[] listUsers){
+        private String getNamesResponsible(ResponsibleUserDTO[] listUsers) {
             StringBuilder stringBuilder = new StringBuilder();
-            for(ResponsibleUserDTO responsibleUser : listUsers){
-                stringBuilder.append(String.format("%s, ",responsibleUser.getName()));
+            for (ResponsibleUserDTO responsibleUser : listUsers) {
+                stringBuilder.append(String.format("%s, ", responsibleUser.getName()));
             }
-            stringBuilder.delete(stringBuilder.length()-2,stringBuilder.length());
+            stringBuilder.delete(stringBuilder.length() - 2, stringBuilder.length());
             return stringBuilder.toString();
         }
 
-        private void changeStatus(String statusToss){
-            switch (statusToss){
+        private void changeStatus(String statusToss) {
+            switch (statusToss) {
                 case "closed":
+                    textViewStatus.setText("c\nl\no\ns\ne\nd");
                     viewRightStatus.setBackgroundColor(view.getResources().getColor(R.color.ColorRed));
                     break;
                 case "open":
+                    textViewStatus.setText("o\np\ne\nn");
                     viewRightStatus.setBackgroundColor(view.getResources().getColor(R.color.ColorGreen));
                     break;
                 case "pause":
+                    textViewStatus.setText("p\na\nu\ns\ne");
                     viewRightStatus.setBackgroundColor(view.getResources().getColor(R.color.ColorPurple));
                     break;
                 case "process":
+                    textViewStatus.setText("p\nr\no\nc\ne\ns\ns");
                     viewRightStatus.setBackgroundColor(view.getResources().getColor(R.color.ColorYellow));
                     break;
             }

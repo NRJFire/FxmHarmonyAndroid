@@ -3,7 +3,6 @@ package com.sofac.fxmharmony.view;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.AttributeSet;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -26,6 +25,7 @@ import static com.sofac.fxmharmony.Constants.TOSS_ID;
 
 public class DetailTossActivity extends BaseActivity {
 
+
     private TossDTO tossDTO;
     private AdapterTossMessages adapterTossMessages;
 
@@ -41,6 +41,8 @@ public class DetailTossActivity extends BaseActivity {
     TextView viewNamesTo;
     @BindView(R.id.recyclerViewMessage)
     RecyclerView recyclerViewMessage;
+    @BindView(R.id.textViewStatus)
+    TextView textViewStatus;
 
 
     @Override
@@ -66,7 +68,7 @@ public class DetailTossActivity extends BaseActivity {
         setListModel(tossDTO.getMessages());
     }
 
-    private void setListModel(ArrayList<TossMessageDTO> tossMessageDTOS){
+    private void setListModel(ArrayList<TossMessageDTO> tossMessageDTOS) {
         adapterTossMessages = new AdapterTossMessages(tossMessageDTOS);
         recyclerViewMessage.setAdapter(adapterTossMessages);
         recyclerViewMessage.setLayoutManager(new LinearLayoutManager(this));
@@ -109,15 +111,19 @@ public class DetailTossActivity extends BaseActivity {
     private void changeStatus(String statusToss) {
         switch (statusToss) {
             case "closed":
+                textViewStatus.setText("c\nl\no\ns\ne\nd");
                 viewRightStatus.setBackgroundColor(getResources().getColor(R.color.ColorRed));
                 break;
             case "open":
+                textViewStatus.setText("o\np\ne\nn");
                 viewRightStatus.setBackgroundColor(getResources().getColor(R.color.ColorGreen));
                 break;
             case "pause":
+                textViewStatus.setText("p\na\nu\ns\ne");
                 viewRightStatus.setBackgroundColor(getResources().getColor(R.color.ColorPurple));
                 break;
             case "process":
+                textViewStatus.setText("p\nr\no\nc\ne\ns\ns");
                 viewRightStatus.setBackgroundColor(getResources().getColor(R.color.ColorYellow));
                 break;
         }
