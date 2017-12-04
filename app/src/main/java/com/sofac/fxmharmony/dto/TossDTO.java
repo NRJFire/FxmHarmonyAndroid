@@ -1,12 +1,14 @@
 package com.sofac.fxmharmony.dto;
 
+import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Arrays;
 
 /**
  * Created by Maxim on 29.11.2017.
  */
 
-public class TossDTO {
+public class TossDTO implements Serializable {
 
     private String id;
     private String user_id;
@@ -17,9 +19,9 @@ public class TossDTO {
     private String name;
     private String status;
     private ResponsibleUserDTO[] responsible;
-    private String[] messages;
+    private ArrayList<TossMessageDTO> messages;
 
-    public TossDTO(String id, String user_id, String title, String date, String date_end, String now, String name, String status, ResponsibleUserDTO[] responsible, String[] messages) {
+    public TossDTO(String id, String user_id, String title, String date, String date_end, String now, String name, String status, ResponsibleUserDTO[] responsible, ArrayList<TossMessageDTO> messages) {
         this.id = id;
         this.user_id = user_id;
         this.title = title;
@@ -104,11 +106,11 @@ public class TossDTO {
         this.responsible = responsible;
     }
 
-    public String[] getMessages() {
+    public ArrayList<TossMessageDTO> getMessages() {
         return messages;
     }
 
-    public void setMessages(String[] messages) {
+    public void setMessages(ArrayList<TossMessageDTO> messages) {
         this.messages = messages;
     }
 
@@ -124,7 +126,7 @@ public class TossDTO {
                 ", name='" + name + '\'' +
                 ", status='" + status + '\'' +
                 ", responsible=" + Arrays.toString(responsible) +
-                ", messages=" + Arrays.toString(messages) +
+                ", messages=" + messages +
                 '}';
     }
 }

@@ -35,6 +35,8 @@ import butterknife.OnClick;
 import butterknife.Unbinder;
 import timber.log.Timber;
 
+import static com.sofac.fxmharmony.Constants.ONE_TOSS_MESSAGE_DATA;
+
 public class TossFragment extends BaseFragment implements SwipeRefreshLayout.OnRefreshListener {
 
     public ArrayList<TossDTO> tossDTOs = new ArrayList<>();
@@ -61,7 +63,7 @@ public class TossFragment extends BaseFragment implements SwipeRefreshLayout.OnR
     }
 
 
-    public void initializationRecyclerView(View view){
+    public void initializationRecyclerView(View view) {
         unbinder = ButterKnife.bind(this, view);
         progressBar = new ProgressBar(getActivity());
         swipeRefreshLayout.setOnRefreshListener(this);
@@ -74,7 +76,9 @@ public class TossFragment extends BaseFragment implements SwipeRefreshLayout.OnR
                         new RecyclerItemClickListener.OnItemClickListener() {
                             @Override
                             public void onItemClick(View view, int position) {
-                                startActivity(new Intent(getActivity(), DetailTossActivity.class));
+                                Intent intent = new Intent(getActivity(), DetailTossActivity.class);
+                                intent.putExtra(ONE_TOSS_MESSAGE_DATA, tossDTOs.get(position));
+                                startActivity(intent);
                             }
 
                             @Override
@@ -138,12 +142,12 @@ public class TossFragment extends BaseFragment implements SwipeRefreshLayout.OnR
         }
     }
 
-    public void selectedButton(Button button){
+    public void selectedButton(Button button) {
         button.setSelected(true);
         button.setTextColor(getResources().getColor(R.color.colorWhite));
     }
 
-    public void unSelectedButton(Button button){
+    public void unSelectedButton(Button button) {
         button.setSelected(false);
         button.setTextColor(getResources().getColor(R.color.colorPrimary));
     }

@@ -21,12 +21,12 @@
     <color name="dark_header_transparent">#60006c7c</color>
 
     <!--New color-->
-    <color name="colorPrimary">#4367af</color>
-    <color name="colorPrimaryDark">#214180</color>
-    <color name="colorAccent">#79a0ec</color>
+    <color name="colorPrimary">#4e6282</color>
+    <color name="colorPrimaryDark">#354866</color>
+    <color name="colorAccent">#4e6282</color>
 
     <!--Button color-->
-    <color name="colorButtonFocus">#5b84d4</color>
+    <color name="colorButtonFocus">#6b83ab</color>
 
     <color name="colorDate">#9b9b9b</color>
 
@@ -35,8 +35,6 @@
     <color name="ColorGreyLight">#bababa</color>
     <color name="ColorGrey">#848484</color>
     <color name="ColorGreyDark">#434343</color>
-
-
 
     <!--Transparent progressbar-->
     <color name="transparent">#00000000</color>

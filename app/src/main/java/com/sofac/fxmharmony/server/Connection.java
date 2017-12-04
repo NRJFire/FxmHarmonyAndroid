@@ -158,6 +158,24 @@ public class Connection<T> {
             }
         });
     }
+
+    /**
+     * LIST TOSSES
+     */
+    public void getToss(String tossID, AnswerServerResponse<T> async) {
+        answerServerResponse = async;
+        new ManagerRetrofit<String>().sendRequest(tossID, new Object() {// Change (type sending) / (data sending)
+        }.getClass().getEnclosingMethod().getName(), (isSuccess, answerString) -> {
+            if (isSuccess) {
+                Type typeAnswer = new TypeToken<ServerResponse<TossDTO>>() { //Change type response(тип ответа)
+                }.getType();
+                tryParsing(answerString, typeAnswer);
+            } else {
+                answerServerResponse.processFinish(false, null);
+            }
+        });
+    }
+
     /**
      * CREATE POST
      */
