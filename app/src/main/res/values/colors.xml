@@ -29,6 +29,7 @@
     <color name="colorButtonFocus">#6b83ab</color>
 
     <color name="colorDate">#9b9b9b</color>
+    <color name="colorBackgroundActivity">#fdfdfe</color>
 
     <color name="colorWhite">#ffffff</color>
     <color name="ColorGreyVeryLight">#efefef</color>
