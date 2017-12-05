@@ -1,10 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:state_pressed="true" >
-        <shape android:shape="rectangle"  >
-            <corners android:topLeftRadius="5dip"
-             android:topRightRadius="5dip" />
-            <solid android:color="@color/colorButtonFocus"  />
-        </shape>
+    <!--<item-->
+        <!--android:left="100dp"        >-->
+        <!--<shape android:shape="rectangle">-->
+            <!--<corners-->
+                <!--android:bottomLeftRadius="0dip"-->
+                <!--android:bottomRightRadius="5dip"-->
+                <!--android:topLeftRadius="0dip"-->
+                <!--android:topRightRadius="5dip" />-->
+            <!--<solid android:color="@color/colorButtonFocus" />-->
+        <!--</shape>-->
+    <!--</item>-->
+    <item
+        android:right="0dp"
+        android:left="60dp"
+        android:top="0dp"
+        android:bottom="-100dp">
+            <shape android:shape="rectangle">
+                <corners
+                    android:radius="5dip" />
+                <solid android:color="@color/colorButtonFocus" />
+            </shape>
+    </item>
+
+
+    <item
+        android:bottom="-25dp"
+        android:top="-25dp"
+        android:left="10dp"
+        android:right="25dp">
+        <rotate android:fromDegrees="10">
+            <shape android:shape="rectangle">
+                <size android:width="10dp"
+                    android:height="10dp"/>
+                <solid android:color="@color/colorButtonFocus"/>
+            </shape>
+
+        </rotate>
     </item>
 </layer-list>

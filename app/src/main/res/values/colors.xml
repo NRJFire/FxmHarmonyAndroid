@@ -37,8 +37,11 @@
     <color name="ColorGrey">#848484</color>
     <color name="ColorGreyDark">#434343</color>
 
+
+
     <!--Transparent progressbar-->
     <color name="transparent">#00000000</color>
+    <color name="ColorTransparentDark">#b3000000</color>
 
     <!--Statuses TOSS-->
     <color name="ColorRed">#ed9898</color>

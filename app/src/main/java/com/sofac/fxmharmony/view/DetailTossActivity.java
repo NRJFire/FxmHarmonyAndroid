@@ -3,13 +3,19 @@ package com.sofac.fxmharmony.view;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.mancj.slideup.SlideUp;
+import com.mancj.slideup.SlideUpBuilder;
 import com.sofac.fxmharmony.R;
 import com.sofac.fxmharmony.adapter.AdapterTossMessages;
+import com.sofac.fxmharmony.adapter.RecyclerItemClickListener;
 import com.sofac.fxmharmony.dto.ResponsibleUserDTO;
 import com.sofac.fxmharmony.dto.TossDTO;
 import com.sofac.fxmharmony.dto.TossMessageDTO;
@@ -19,15 +25,12 @@ import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import timber.log.Timber;
 
 import static com.sofac.fxmharmony.Constants.TOSS_ID;
 
 public class DetailTossActivity extends BaseActivity {
-
-
-    private TossDTO tossDTO;
-    private AdapterTossMessages adapterTossMessages;
 
     @BindView(R.id.viewRightStatus)
     View viewRightStatus;
@@ -43,6 +46,14 @@ public class DetailTossActivity extends BaseActivity {
     RecyclerView recyclerViewMessage;
     @BindView(R.id.textViewStatus)
     TextView textViewStatus;
+    @BindView(R.id.slideView)
+    LinearLayout slideView;
+    @BindView(R.id.dim)
+    FrameLayout dim;
+
+    private TossDTO tossDTO;
+    private AdapterTossMessages adapterTossMessages;
+    private SlideUp slideUp;
 
 
     @Override
@@ -60,6 +71,27 @@ public class DetailTossActivity extends BaseActivity {
             }
             progressBar.dismissView();
         });
+
+        slideUp = new SlideUpBuilder(slideView)
+                .withStartState(SlideUp.State.HIDDEN)
+                .withStartGravity(Gravity.BOTTOM)
+                .withListeners(new SlideUp.Listener.Events() {
+                    @Override
+                    public void onSlide(float percent) {
+                        dim.setAlpha(1 - (percent / 100));
+                    }
+
+                    @Override
+                    public void onVisibilityChanged(int visibility) {
+                        if (visibility == View.GONE) {
+
+                        }
+                    }
+                })
+                .withGesturesEnabled(true)
+                .build();
+
+
     }
 
     public void fillingFieldsView(TossDTO updatedTossDTO) {
@@ -72,6 +104,17 @@ public class DetailTossActivity extends BaseActivity {
         adapterTossMessages = new AdapterTossMessages(tossMessageDTOS);
         recyclerViewMessage.setAdapter(adapterTossMessages);
         recyclerViewMessage.setLayoutManager(new LinearLayoutManager(this));
+        recyclerViewMessage.addOnItemTouchListener(new RecyclerItemClickListener(this, recyclerViewMessage, new RecyclerItemClickListener.OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                slideUp.show();
+            }
+
+            @Override
+            public void onLongItemClick(View view, int position) {
+
+            }
+        }));
     }
 
     private void setModel(TossDTO tossDTO) {
@@ -127,5 +170,10 @@ public class DetailTossActivity extends BaseActivity {
                 viewRightStatus.setBackgroundColor(getResources().getColor(R.color.ColorYellow));
                 break;
         }
+    }
+
+    @OnClick(R.id.buttonCloseSlideUpView)
+    public void onViewClicked() {
+        slideUp.hide();
     }
 }

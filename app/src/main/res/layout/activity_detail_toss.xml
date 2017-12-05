@@ -3,8 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="com.sofac.fxmharmony.view.DetailTossActivity">
+    android:layout_height="match_parent">
+
 
     <View
         android:id="@+id/viewRightStatus"
@@ -122,9 +122,9 @@
     <View
         android:id="@+id/lineSeparator3"
         android:layout_width="0dp"
-        android:layout_height="0.5dp"
+        android:layout_height="12dp"
         android:layout_marginTop="8dp"
-        android:background="@android:color/darker_gray"
+        android:background="@color/colorTextDark"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
@@ -155,6 +155,87 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/lineSeparator3" />
 
+    <FrameLayout
+        android:id="@+id/dim"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:alpha="0"
+        android:background="@color/ColorTransparentDark"
+        android:fitsSystemWindows="true"
+        app:layout_constraintBottom_toBottomOf="@+id/slideView"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
+    <LinearLayout
+        android:id="@+id/slideView"
+        android:layout_width="match_parent"
+        android:layout_height="400dp"
+        android:background="@color/colorWhite"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <android.support.constraint.ConstraintLayout
+            android:id="@+id/commentsConstraintLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+
+            <ImageButton
+                android:id="@+id/buttonCloseSlideUpView"
+                android:layout_width="70dp"
+                android:layout_height="wrap_content"
+                android:background="@drawable/button_without_shadow_right"
+                android:minHeight="39dp"
+                app:srcCompat="@drawable/close" />
+        </android.support.constraint.ConstraintLayout>
+
+    </LinearLayout>
+
+
+    <!--<LinearLayout-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="400dp"-->
+    <!--android:orientation="vertical">-->
+
+    <!--<android.support.constraint.ConstraintLayout-->
+    <!--android:id="@+id/commentsConstraintLayout"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="match_parent">-->
+
+    <!--<ImageButton-->
+    <!--android:id="@+id/buttonCloseComments"-->
+    <!--android:layout_width="70dp"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:background="@drawable/button_without_shadow_right"-->
+    <!--android:minHeight="39dp"-->
+    <!--app:srcCompat="@drawable/close"-->
+    <!--sothree:srcCompat="@drawable/button_without_shadow_right" />-->
+    <!--</android.support.constraint.ConstraintLayout>-->
+
+    <!--<android.support.constraint.ConstraintLayout-->
+    <!--android:id="@+id/filesConstraintLayout"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="match_parent"-->
+    <!--android:visibility="gone">-->
+
+    <!--<ImageButton-->
+    <!--android:id="@+id/buttonCloseFiles"-->
+    <!--android:layout_width="70dp"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:background="@drawable/button_without_shadow_right"-->
+    <!--android:minHeight="39dp"-->
+    <!--app:srcCompat="@drawable/close"-->
+    <!--sothree:srcCompat="@drawable/button_without_shadow_right" />-->
+    <!--</android.support.constraint.ConstraintLayout>-->
+    <!--</LinearLayout>-->
 
 </android.support.constraint.ConstraintLayout>
+
+
+
+
+
