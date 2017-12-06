@@ -85,8 +85,15 @@ public class NavigationActivity extends BaseActivity implements NavigationView.O
         tabLayout.setOnClickListener(view -> {
         });
 
+        if (userDTO == null || userDTO.getId() == null) {
+            new AppPreference(this).setAuthorization(false);
+            startActivity(new Intent(this, SplashActivity.class));
+            finishAffinity();
+            return;
+        }
+
         new Connection<ManagerDTO>().getManagerInfo(userDTO.getId(), (isSuccess, answerServerResponse) -> {
-            if(isSuccess){
+            if (isSuccess) {
                 setupUserInfoInHeader(BASE_URL + PART_AVATAR + answerServerResponse.getDataTransferObject().getAvatar(), answerServerResponse.getDataTransferObject().getName(), userDTO.getRole());
             } else {
                 setupUserInfoInHeader(BASE_URL + PART_AVATAR + "man-03.jpg", "Name", userDTO.getRole());
@@ -96,11 +103,11 @@ public class NavigationActivity extends BaseActivity implements NavigationView.O
         setupViewPager(viewPager);
     }
 
-    public void setupUserInfoInHeader(String userAvatarURL, String userName, String userStatus){
-        avatarImage.setOnClickListener( v -> {
+    public void setupUserInfoInHeader(String userAvatarURL, String userName, String userStatus) {
+        avatarImage.setOnClickListener(v -> {
             Intent intent = new Intent(this, PreviewPhotoActivity.class);
             intent.putExtra(LINK_IMAGE, userAvatarURL);
-            intent.putExtra(NAME_IMAGE,"User Avatar");
+            intent.putExtra(NAME_IMAGE, "User Avatar");
             startActivity(intent);
         });
         Glide.with(this)
@@ -128,7 +135,7 @@ public class NavigationActivity extends BaseActivity implements NavigationView.O
         item.setChecked(true);
         switch (item.getItemId()) {
             case R.id.idWebSiteSOFAC:
-                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(Constants.BASE_URL+"control/")));
+                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(Constants.BASE_URL + "control/")));
                 break;
             case R.id.idExitItem:
                 new AppPreference(this).setAuthorization(false);
