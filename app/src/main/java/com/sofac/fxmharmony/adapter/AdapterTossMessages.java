@@ -14,6 +14,8 @@ import com.sofac.fxmharmony.Constants;
 import com.sofac.fxmharmony.R;
 import com.sofac.fxmharmony.dto.TossMessageDTO;
 
+import org.w3c.dom.Comment;
+
 import java.util.ArrayList;
 
 import butterknife.BindView;
@@ -92,7 +94,7 @@ public class AdapterTossMessages extends RecyclerView.Adapter<AdapterTossMessage
             Uri uri = Uri.parse(BASE_URL + Constants.PART_AVATAR + messageDTO.getAvatar());
 
             if(messageDTO.getComments()!=null){
-                buttonComments.setText(String.format("%s (%s)", buttonComments.getText().toString(), messageDTO.getComments().size()));
+                buttonComments.setText(String.format("Comment (%s)", messageDTO.getComments().size()));
             }
 
             Glide.with(view.getContext())

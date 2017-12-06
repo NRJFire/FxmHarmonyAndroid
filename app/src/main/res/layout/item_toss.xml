@@ -34,34 +34,21 @@
                 card_view:layout_constraintEnd_toEndOf="parent"
                 card_view:layout_constraintTop_toTopOf="parent" />
 
-            <android.support.constraint.Guideline
-                android:id="@+id/guideline2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                card_view:layout_constraintGuide_begin="50dp" />
-
             <TextView
-                android:id="@+id/labelFrom"
+                android:id="@+id/textViewStatus"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
                 android:layout_marginEnd="8dp"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
-                android:text="From"
-                card_view:layout_constraintEnd_toStartOf="@+id/guideline2"
-                card_view:layout_constraintStart_toStartOf="parent"
-                card_view:layout_constraintTop_toBottomOf="@+id/lineSeparator" />
-
-            <TextView
-                android:id="@+id/labelTo"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
-                android:text="To"
-                card_view:layout_constraintStart_toStartOf="parent"
-                card_view:layout_constraintTop_toBottomOf="@+id/lineSeparator2" />
+                android:text="O\nP\nE\nN"
+                android:textAllCaps="true"
+                card_view:layout_constraintBottom_toBottomOf="@+id/viewRightStatus"
+                card_view:layout_constraintEnd_toEndOf="@+id/viewRightStatus"
+                card_view:layout_constraintStart_toStartOf="@+id/viewRightStatus"
+                card_view:layout_constraintTop_toTopOf="@+id/viewRightStatus"
+                card_view:layout_constraintVertical_bias="0.673" />
 
             <TextView
                 android:id="@+id/viewTextTitle"
@@ -93,73 +80,74 @@
                 card_view:layout_constraintStart_toStartOf="parent"
                 card_view:layout_constraintTop_toBottomOf="@+id/viewTextTitle" />
 
-            <TextView
-                android:id="@+id/viewNamesFrom"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="8dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
-                android:text="Maxx"
-                card_view:layout_constraintEnd_toStartOf="@+id/viewRightStatus"
-                card_view:layout_constraintHorizontal_bias="0.0"
-                card_view:layout_constraintStart_toStartOf="@+id/guideline2"
-                card_view:layout_constraintTop_toBottomOf="@+id/lineSeparator" />
-
             <View
                 android:id="@+id/lineSeparator"
                 android:layout_width="0dp"
                 android:layout_height="0.5dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginStart="8dp"
+                android:layout_marginEnd="16dp"
                 android:layout_marginTop="8dp"
                 android:background="@android:color/darker_gray"
-                card_view:layout_constraintEnd_toStartOf="@+id/viewRightStatus"
-                card_view:layout_constraintStart_toStartOf="parent"
+                card_view:layout_constraintEnd_toStartOf="@+id/textViewStatus"
+                card_view:layout_constraintHorizontal_bias="0.437"
+                card_view:layout_constraintStart_toStartOf="@+id/viewTextDate"
                 card_view:layout_constraintTop_toBottomOf="@+id/viewTextDate" />
+
+            <TextView
+                android:id="@+id/labelFrom"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:text="From"
+                card_view:layout_constraintLeft_toLeftOf="parent"
+                card_view:layout_constraintStart_toStartOf="parent"
+                card_view:layout_constraintTop_toBottomOf="@+id/lineSeparator" />
+
+            <TextView
+                android:id="@+id/viewNamesFrom"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:text="Maxx"
+                card_view:layout_constraintEnd_toEndOf="@+id/lineSeparator"
+                card_view:layout_constraintLeft_toLeftOf="parent"
+                card_view:layout_constraintRight_toRightOf="parent"
+                card_view:layout_constraintStart_toEndOf="@+id/labelFrom"
+                card_view:layout_constraintTop_toBottomOf="@+id/lineSeparator" />
 
             <View
                 android:id="@+id/lineSeparator2"
-                android:layout_width="0dp"
+                android:layout_width="282dp"
                 android:layout_height="0.5dp"
                 android:layout_marginEnd="8dp"
-                android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
                 android:background="@android:color/darker_gray"
-                card_view:layout_constraintEnd_toStartOf="@+id/viewRightStatus"
-                card_view:layout_constraintHorizontal_bias="0.0"
-                card_view:layout_constraintStart_toStartOf="@+id/guideline2"
+                card_view:layout_constraintEnd_toEndOf="@+id/lineSeparator"
+                card_view:layout_constraintStart_toStartOf="@+id/viewNamesFrom"
                 card_view:layout_constraintTop_toBottomOf="@+id/viewNamesFrom" />
+
+            <TextView
+                android:id="@+id/labelTo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="To"
+                card_view:layout_constraintStart_toStartOf="@+id/labelFrom"
+                card_view:layout_constraintTop_toBottomOf="@+id/lineSeparator2" />
 
             <TextView
                 android:id="@+id/viewNamesTo"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
                 android:text="Zegna"
                 card_view:layout_constraintBottom_toBottomOf="parent"
-                card_view:layout_constraintEnd_toStartOf="@+id/viewRightStatus"
-                card_view:layout_constraintHorizontal_bias="0.0"
-                card_view:layout_constraintStart_toStartOf="@+id/guideline2"
+                card_view:layout_constraintEnd_toEndOf="@+id/lineSeparator"
+                card_view:layout_constraintStart_toStartOf="@+id/lineSeparator2"
                 card_view:layout_constraintTop_toBottomOf="@+id/lineSeparator2" />
-
-            <TextView
-                android:id="@+id/textViewStatus"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
-                android:text="O\nP\nE\nN"
-                android:textAllCaps="true"
-                card_view:layout_constraintBottom_toBottomOf="@+id/viewRightStatus"
-                card_view:layout_constraintEnd_toEndOf="@+id/viewRightStatus"
-                card_view:layout_constraintStart_toStartOf="@+id/viewRightStatus"
-                card_view:layout_constraintTop_toTopOf="@+id/viewRightStatus" />
 
         </android.support.constraint.ConstraintLayout>
 

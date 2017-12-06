@@ -196,6 +196,7 @@ public class GroupFragment extends BaseFragment implements SwipeRefreshLayout.On
                 postDTOs.clear();
                 postDTOs.addAll(answerServerResponse.getDataTransferObject());
                 adapterPostGroup.notifyDataSetChanged();
+                recyclerViewPost.scrollToPosition(0);
             }
             groupSwipeRefreshLayout.setRefreshing(false);
             progressBar.dismissView();
