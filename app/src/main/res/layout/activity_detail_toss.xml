@@ -168,34 +168,132 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <LinearLayout
+    <android.support.constraint.ConstraintLayout
         android:id="@+id/slideView"
         android:layout_width="match_parent"
         android:layout_height="400dp"
+        android:layout_marginBottom="0dp"
         android:background="@color/colorWhite"
-        android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
 
+        <TextView
+            android:id="@+id/textViewBodyMessage"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="32dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:background="@color/ColorGreyLittleLight"
+            android:paddingBottom="10dp"
+            android:paddingEnd="24dp"
+            android:paddingStart="10dp"
+            android:paddingTop="5dp"
+            android:text="TextView"
+            android:textColor="@color/colorAccent"
+            android:textSize="12sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/buttonCloseSlide"
+            tools:text="But I must explain to you how all this mistaken idea of denouncing pleasure and praising pain was born and I will give you a complete account of the system, and expound the actual teachings of the great explorer of the truth, the master-builder of human happiness. No one rejects, dislikes, or avoids pleasure itself, because it is pleasure" />
+
+        <ImageView
+            android:id="@+id/imageViewAvatar"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:background="@drawable/avatar_round_background"
+            android:padding="5dp"
+            app:layout_constraintBottom_toTopOf="@+id/textViewBodyMessage"
+            app:layout_constraintEnd_toEndOf="@+id/textViewBodyMessage"
+            app:layout_constraintStart_toEndOf="@+id/textViewBodyMessage"
+            app:layout_constraintTop_toTopOf="@+id/textViewBodyMessage" />
+
+        <ImageButton
+            android:id="@+id/buttonCloseSlide"
+            android:layout_width="70dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/button_without_shadow_right"
+            android:minHeight="39dp"
+            app:srcCompat="@drawable/close" />
+
+        <TextView
+            android:id="@+id/textViewDateMessage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:background="@drawable/date_background_top_position_view"
+            android:paddingBottom="3dp"
+            android:paddingEnd="15dp"
+            android:paddingStart="15dp"
+            android:paddingTop="3dp"
+            android:text="TextView"
+            android:textColor="@color/ColorGreyVeryLight"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toTopOf="@+id/textViewBodyMessage"
+            app:layout_constraintEnd_toStartOf="@+id/imageViewAvatar"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="@+id/textViewBodyMessage"
+            tools:text="2017-10-30 11:13:52" />
+
+        <!--FILES SLIDE UP-->
+        <android.support.constraint.ConstraintLayout
+        android:id="@+id/filesConstraintLayout"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="8dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textViewBodyMessage">
+
+        <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:text="Files =)"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+        </android.support.constraint.ConstraintLayout>
+
+
+        <!--COMMENTS SLIDE UP-->
         <android.support.constraint.ConstraintLayout
             android:id="@+id/commentsConstraintLayout"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="@color/colorWhite"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textViewBodyMessage">
 
 
             <View
                 android:id="@+id/lineSeparator4"
                 android:layout_width="0dp"
                 android:layout_height="0.5dp"
-                android:layout_marginTop="8dp"
                 android:background="@android:color/darker_gray"
-                app:layout_constraintBottom_toTopOf="@+id/editText"
+                app:layout_constraintBottom_toTopOf="@+id/editTextComment"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintStart_toStartOf="parent" />
 
             <EditText
-                android:id="@+id/editText"
+                android:id="@+id/editTextComment"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:background="@color/colorBackgroundActivity"
@@ -207,11 +305,11 @@
                 android:textSize="14sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/buttonSendComment"
-                app:layout_constraintStart_toStartOf="parent" />
+                app:layout_constraintLeft_toLeftOf="parent" />
 
             <Button
                 android:id="@+id/buttonSendComment"
-                android:layout_width="70dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@drawable/button_without_shadow_left_top"
                 android:minHeight="39dp"
@@ -221,55 +319,18 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent" />
 
-            <ImageButton
-                android:id="@+id/buttonCloseSlideUpView"
-                android:layout_width="70dp"
-                android:layout_height="wrap_content"
-                android:background="@drawable/button_without_shadow_right"
-                android:minHeight="39dp"
-                app:srcCompat="@drawable/close" />
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recyclerViewComments"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                app:layout_constraintBottom_toTopOf="@+id/lineSeparator4"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
         </android.support.constraint.ConstraintLayout>
 
-    </LinearLayout>
-
-
-    <!--<LinearLayout-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="400dp"-->
-    <!--android:orientation="vertical">-->
-
-    <!--<android.support.constraint.ConstraintLayout-->
-    <!--android:id="@+id/commentsConstraintLayout"-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="match_parent">-->
-
-    <!--<ImageButton-->
-    <!--android:id="@+id/buttonCloseComments"-->
-    <!--android:layout_width="70dp"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:background="@drawable/button_without_shadow_right"-->
-    <!--android:minHeight="39dp"-->
-    <!--app:srcCompat="@drawable/close"-->
-    <!--sothree:srcCompat="@drawable/button_without_shadow_right" />-->
-    <!--</android.support.constraint.ConstraintLayout>-->
-
-    <!--<android.support.constraint.ConstraintLayout-->
-    <!--android:id="@+id/filesConstraintLayout"-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="match_parent"-->
-    <!--android:visibility="gone">-->
-
-    <!--<ImageButton-->
-    <!--android:id="@+id/buttonCloseFiles"-->
-    <!--android:layout_width="70dp"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:background="@drawable/button_without_shadow_right"-->
-    <!--android:minHeight="39dp"-->
-    <!--app:srcCompat="@drawable/close"-->
-    <!--sothree:srcCompat="@drawable/button_without_shadow_right" />-->
-    <!--</android.support.constraint.ConstraintLayout>-->
-    <!--</LinearLayout>-->
+    </android.support.constraint.ConstraintLayout>
 
 </android.support.constraint.ConstraintLayout>
 

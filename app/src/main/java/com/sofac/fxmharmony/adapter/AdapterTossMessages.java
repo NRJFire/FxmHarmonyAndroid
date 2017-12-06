@@ -12,19 +12,17 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.sofac.fxmharmony.Constants;
 import com.sofac.fxmharmony.R;
-import com.sofac.fxmharmony.dto.ResponsibleUserDTO;
 import com.sofac.fxmharmony.dto.TossMessageDTO;
-import com.sofac.fxmharmony.util.AppMethods;
 
 import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import jp.wasabeef.glide.transformations.CropCircleTransformation;
 import timber.log.Timber;
 
 import static com.sofac.fxmharmony.Constants.BASE_URL;
-import static com.sofac.fxmharmony.Constants.PART_AVATAR;
 
 /**
  * Created by Maxim on 29.11.2017.
@@ -34,9 +32,18 @@ public class AdapterTossMessages extends RecyclerView.Adapter<AdapterTossMessage
 
 
     private ArrayList<TossMessageDTO> listMessages;
+    private ClickListener itemClickListener;
+
+    public interface ClickListener {
+        void onMyClick(View view, int position);
+    }
 
     public AdapterTossMessages(ArrayList<TossMessageDTO> tossMessageDTOS) {
         this.listMessages = tossMessageDTOS;
+    }
+
+    public void setItemClickListener(ClickListener myClickListener) {
+        this.itemClickListener = myClickListener;
     }
 
     @Override
@@ -82,9 +89,11 @@ public class AdapterTossMessages extends RecyclerView.Adapter<AdapterTossMessage
             textViewAuthorMessage.setText(messageDTO.getName());
             textViewDateTime.setText(messageDTO.getDate());
 
-
             Uri uri = Uri.parse(BASE_URL + Constants.PART_AVATAR + messageDTO.getAvatar());
-            Timber.e(uri.toString());
+
+            if(messageDTO.getComments()!=null){
+                buttonComments.setText(String.format("%s (%s)", buttonComments.getText().toString(), messageDTO.getComments().size()));
+            }
 
             Glide.with(view.getContext())
                     .load(uri)
@@ -93,6 +102,11 @@ public class AdapterTossMessages extends RecyclerView.Adapter<AdapterTossMessage
                     .placeholder(R.drawable.no_avatar)
                     .bitmapTransform(new CropCircleTransformation(view.getContext()))
                     .into(imageViewAvatar);
+        }
+
+        @OnClick({R.id.buttonFiles, R.id.buttonComments})
+        public void onViewClicked(View view) {
+            itemClickListener.onMyClick(view, getAdapterPosition());
         }
 
 
