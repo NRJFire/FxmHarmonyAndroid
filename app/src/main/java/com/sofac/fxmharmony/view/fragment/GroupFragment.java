@@ -90,9 +90,11 @@ public class GroupFragment extends BaseFragment implements SwipeRefreshLayout.On
     public void setupButtonFilter() {
         if (appPreference.getUser().isAdmin() != null && appPreference.getUser().isAdmin()) {
             typeUsersGroup = typeLeaderGroup;
+            selectLeaderButton();
         } else {
             if (appPreference.getUser().isAccessStaffGroup()) {
                 typeUsersGroup = typeStaffGroup;
+                selectStaffButton();
             } else {
                 viewButtonStaff.setEnabled(false);
                 viewButtonStaff.setTextColor(getResources().getColor(R.color.ColorGrey));
@@ -100,6 +102,7 @@ public class GroupFragment extends BaseFragment implements SwipeRefreshLayout.On
 
             if (appPreference.getUser().isAccessMemberGroup()) {
                 typeUsersGroup = typeMemberGroup;
+                selectMemberButton();
             } else {
                 viewButtonMember.setEnabled(false);
                 viewButtonMember.setTextColor(getResources().getColor(R.color.ColorGrey));
@@ -107,6 +110,7 @@ public class GroupFragment extends BaseFragment implements SwipeRefreshLayout.On
 
             if (appPreference.getUser().isAccessLeaderGroup()) {
                 typeUsersGroup = typeLeaderGroup;
+                selectLeaderButton();
             } else {
                 viewButtonLeader.setEnabled(false);
                 viewButtonLeader.setTextColor(getResources().getColor(R.color.ColorGrey));
@@ -120,35 +124,47 @@ public class GroupFragment extends BaseFragment implements SwipeRefreshLayout.On
         switch (view.getId()) {
             case R.id.viewButtonLeader:
                 updateRecyclerView(typeLeaderGroup);
-                selectedButton(viewButtonLeader);
-                unSelectedButton(viewButtonMember);
-                unSelectedButton(viewButtonStaff);
+                selectLeaderButton();
                 break;
             case R.id.viewButtonMember:
                 updateRecyclerView(typeMemberGroup);
-                selectedButton(viewButtonMember);
-                unSelectedButton(viewButtonLeader);
-                unSelectedButton(viewButtonStaff);
+                selectMemberButton();
                 break;
             case R.id.viewButtonStaff:
                 updateRecyclerView(typeStaffGroup);
-                selectedButton(viewButtonStaff);
-                unSelectedButton(viewButtonLeader);
-                unSelectedButton(viewButtonMember);
+                selectStaffButton();
                 break;
-                //TODO button disabled, no need change text color, fix it
+            //TODO button disabled, no need change text color, fix it
         }
+    }
+
+    public void selectLeaderButton(){
+        selectedButton(viewButtonLeader);
+        unSelectedButton(viewButtonMember);
+        unSelectedButton(viewButtonStaff);
+    }
+    public void selectMemberButton(){
+        selectedButton(viewButtonMember);
+        unSelectedButton(viewButtonLeader);
+        unSelectedButton(viewButtonStaff);
+    }
+    public void selectStaffButton(){
+        selectedButton(viewButtonStaff);
+        unSelectedButton(viewButtonLeader);
+        unSelectedButton(viewButtonMember);
     }
 
     public void selectedButton(Button button) {
         button.setSelected(true);
-
         button.setTextColor(getResources().getColor(R.color.colorWhite));
     }
 
     public void unSelectedButton(Button button) {
         button.setSelected(false);
-        button.setTextColor(getResources().getColor(R.color.colorPrimary));
+        if (button.isEnabled())
+            button.setTextColor(getResources().getColor(R.color.colorPrimary));
+        else
+            button.setTextColor(getResources().getColor(R.color.ColorGrey));
     }
 
 
