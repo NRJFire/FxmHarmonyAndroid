@@ -116,7 +116,7 @@ public class TossFragment extends BaseFragment implements SwipeRefreshLayout.OnR
                         tossDTOs.addAll(answerServerResponse.getDataTransferObject());
                         adapterTossItems.notifyDataSetChanged();
                     } else {
-                        showToast(getResources().getString(R.string.errorServer));
+                        showToast(getResources().getString(R.string.errorServerConnection));
                     }
                     progressBar.dismissView();
                     swipeRefreshLayout.setRefreshing(false);

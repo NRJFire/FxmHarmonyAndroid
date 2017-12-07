@@ -1,5 +1,6 @@
 package com.sofac.fxmharmony.view;
 
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
@@ -10,6 +11,8 @@ import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -21,7 +24,10 @@ import com.sofac.fxmharmony.Constants;
 import com.sofac.fxmharmony.R;
 import com.sofac.fxmharmony.adapter.AdapterTossComments;
 import com.sofac.fxmharmony.adapter.AdapterTossMessages;
+import com.sofac.fxmharmony.dto.CommentDTO;
 import com.sofac.fxmharmony.dto.ResponsibleUserDTO;
+import com.sofac.fxmharmony.dto.SenderContainerDTO;
+import com.sofac.fxmharmony.dto.TossCommentDTO;
 import com.sofac.fxmharmony.dto.TossDTO;
 import com.sofac.fxmharmony.dto.TossMessageDTO;
 import com.sofac.fxmharmony.server.Connection;
@@ -70,10 +76,16 @@ public class DetailTossActivity extends BaseActivity {
     RecyclerView recyclerViewComments;
     @BindView(R.id.mainConstrainLayout)
     ConstraintLayout mainConstrainLayout;
+    @BindView(R.id.buttonSendComment)
+    Button buttonSendComment;
+    @BindView(R.id.editTextComment)
+    EditText editTextComment;
 
+    private String idMessageToSend = "1";
     private TossDTO tossDTO;
     private AdapterTossMessages adapterTossMessages;
     private SlideUp slideUp;
+    AdapterTossComments adapterTossComments;
 
 
     @Override
@@ -95,7 +107,7 @@ public class DetailTossActivity extends BaseActivity {
             if (isSuccess) {
                 initializationView(answerServerResponse.getDataTransferObject());
             } else {
-                showToast(getResources().getString(R.string.errorServer));
+                showToast(getResources().getString(R.string.errorServerConnection));
             }
             progressBar.dismissView();
         });
@@ -103,7 +115,7 @@ public class DetailTossActivity extends BaseActivity {
 
     public void initializationView(TossDTO updatedTossDTO) {
         mainConstrainLayout.setVisibility(View.VISIBLE);
-                slideUp = new SlideUpBuilder(slideView)
+        slideUp = new SlideUpBuilder(slideView)
                 .withStartState(SlideUp.State.HIDDEN)
                 .withStartGravity(Gravity.BOTTOM)
                 .withListeners(new SlideUp.Listener.Events() {
@@ -143,6 +155,7 @@ public class DetailTossActivity extends BaseActivity {
                     createViewFiles(tossMessageDTOS.get(position));
                     break;
                 case R.id.buttonComments:
+                    idMessageToSend = tossMessageDTOS.get(position).getId();
                     createViewComments(tossMessageDTOS.get(position));
                     break;
             }
@@ -160,7 +173,7 @@ public class DetailTossActivity extends BaseActivity {
     public void createViewComments(TossMessageDTO tossMessageDTO) {
         showSlideUpComments();
         setMessageInHeaderSlideUp(tossMessageDTO);
-        AdapterTossComments adapterTossComments = new AdapterTossComments(tossMessageDTO.getComments());
+        adapterTossComments = new AdapterTossComments(tossMessageDTO.getComments());
         recyclerViewComments.setAdapter(adapterTossComments);
         recyclerViewComments.setLayoutManager(new LinearLayoutManager(this));
     }
@@ -192,11 +205,6 @@ public class DetailTossActivity extends BaseActivity {
     }
 
 
-    @OnClick(R.id.buttonCloseSlide)
-    public void onViewClicked() {
-        slideUp.hide();
-    }
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.toss_detail, menu);
@@ -208,9 +216,12 @@ public class DetailTossActivity extends BaseActivity {
         switch (item.getItemId()) {
             case android.R.id.home:
                 finish();
-                return true;
+                break;
+            case R.id.createNewMessage:
+                startActivityForResult(new Intent(this, CreateTossMessageActivity.class), 1);
+                break;
         }
-        return false;
+        return true;
     }
 
     private String getNamesResponsible(ResponsibleUserDTO[] listUsers) {
@@ -243,4 +254,35 @@ public class DetailTossActivity extends BaseActivity {
         }
     }
 
+    @OnClick({R.id.buttonCloseSlide, R.id.buttonSendComment})
+    public void onViewClicked(View view) {
+        switch (view.getId()) {
+            case R.id.buttonCloseSlide:
+                slideUp.hide();
+                break;
+            case R.id.buttonSendComment:
+                requestNewComment();
+                break;
+        }
+    }
+
+    public void requestNewComment() {
+        if (!editTextComment.getText().toString().isEmpty()) {
+            progressBar.showView();
+            new Connection<TossCommentDTO>().addTossComment(
+                    new SenderContainerDTO(
+                            appPreference.getID(),
+                            idMessageToSend,
+                            editTextComment.getText().toString(),
+                            tossDTO.getId()),
+                    (isSuccess, answerServerResponse) -> {
+                        if (isSuccess) {
+                            slideUp.hide();
+                            loadingFilesFromServer();
+                        } else {
+                            showToast(getResources().getString(R.string.errorServerConnection));
+                        }
+                    });
+        }
+    }
 }

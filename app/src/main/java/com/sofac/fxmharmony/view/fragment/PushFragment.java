@@ -87,7 +87,7 @@ public class PushFragment extends BaseFragment implements SwipeRefreshLayout.OnR
                         pushMessages.addAll(answerServerResponse.getDataTransferObject());
                         updateViewList();
                     } else {
-                        showToast(getResources().getString(R.string.errorServer));
+                        showToast(getResources().getString(R.string.errorServerConnection));
                     }
                 });
     }

@@ -2,7 +2,6 @@ package com.sofac.fxmharmony.view.fragment;
 
 import android.app.AlertDialog;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -33,10 +32,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
-import timber.log.Timber;
 
 import static com.sofac.fxmharmony.Constants.ONE_POST_MESSAGE_DATA;
-import static com.sofac.fxmharmony.Constants.POST_ID;
 import static com.sofac.fxmharmony.Constants.TYPE_GROUP;
 
 public class GroupFragment extends BaseFragment implements SwipeRefreshLayout.OnRefreshListener {
@@ -222,7 +219,7 @@ public class GroupFragment extends BaseFragment implements SwipeRefreshLayout.On
                 updateRecyclerView(typeUsersGroup);
                 showToast(getResources().getString(R.string.post_was_delete));
             } else {
-                showToast(getResources().getString(R.string.errorServer));
+                showToast(getResources().getString(R.string.errorServerConnection));
             }
             progressBar.dismissView();
         });

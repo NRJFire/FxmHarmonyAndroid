@@ -30,12 +30,10 @@ import java.util.ArrayList;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import timber.log.Timber;
 
 import static com.sofac.fxmharmony.Constants.BASE_URL;
 import static com.sofac.fxmharmony.Constants.ONE_POST_MESSAGE_DATA;
 import static com.sofac.fxmharmony.Constants.PART_POST;
-import static com.sofac.fxmharmony.Constants.POST_ID;
 import static com.sofac.fxmharmony.Constants.REQUEST_TAKE_FILE;
 import static com.sofac.fxmharmony.Constants.REQUEST_TAKE_GALLERY_VIDEO;
 import static com.sofac.fxmharmony.Constants.REQUEST_TAKE_PHOTO;
@@ -183,7 +181,7 @@ public class ChangePost extends BaseActivity {
                             finish();
                             showToast("Finished edit post!");
                         } else {
-                            showToast(getResources().getString(R.string.errorServer));
+                            showToast(getResources().getString(R.string.errorServerConnection));
                         }
                         progressBar.dismissView();
                     });

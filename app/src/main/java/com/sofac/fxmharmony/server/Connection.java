@@ -13,6 +13,7 @@ import com.sofac.fxmharmony.dto.ManagerDTO;
 import com.sofac.fxmharmony.dto.PostDTO;
 import com.sofac.fxmharmony.dto.PushMessage;
 import com.sofac.fxmharmony.dto.SenderContainerDTO;
+import com.sofac.fxmharmony.dto.TossCommentDTO;
 import com.sofac.fxmharmony.dto.TossDTO;
 import com.sofac.fxmharmony.dto.UserDTO;
 import com.sofac.fxmharmony.server.retrofit.ManagerRetrofit;
@@ -43,9 +44,6 @@ public class Connection<T> {
         void processFinish(Boolean isSuccess, ServerResponse<T> answerServerResponse);
     }
 
-    /**
-     * Authorization DTO
-     */
     public void authorizationUser(AuthorizationDTO authorizationDTO, AnswerServerResponse<T> async) { //Change name request / Change data in method parameters
         answerServerResponse = async;
         new ManagerRetrofit<AuthorizationDTO>().sendRequest(authorizationDTO, new Object() {// Change type Object sending / Change data sending
@@ -74,9 +72,6 @@ public class Connection<T> {
         });
     }
 
-    /**
-     * Get correct VERSION from Server
-     */
     public void getCorrectVersion(AnswerServerResponse<T> async) { //Change name request() / Change data in method parameters
         answerServerResponse = async;
         new ManagerRetrofit<String>().sendRequest("", new Object() {// Change type Object sending / Change data sending
@@ -91,9 +86,6 @@ public class Connection<T> {
         });
     }
 
-    /**
-     * Get MANAGER info from server
-     */
     public void getManagerInfo(Long idManager, AnswerServerResponse<T> async) {
         answerServerResponse = async;
         new ManagerRetrofit<Long>().sendRequest(idManager, new Object() {// Change type Object sending / Change data sending
@@ -108,9 +100,6 @@ public class Connection<T> {
         });
     }
 
-    /**
-     * LIST COMMENTS
-     */
     public void getListComments(Long postId, AnswerServerResponse<T> async) {
         answerServerResponse = async;
         new ManagerRetrofit<Long>().sendRequest(postId, new Object() {// Change (type sending) / (data sending)
@@ -125,9 +114,6 @@ public class Connection<T> {
         });
     }
 
-    /**
-     * LIST POSTS
-     */
     public void getListPosts(String stringTypeGroup, AnswerServerResponse<T> async) {
         answerServerResponse = async;
         new ManagerRetrofit<String>().sendRequest(stringTypeGroup, new Object() {// Change (type sending) / (data sending)
@@ -142,9 +128,6 @@ public class Connection<T> {
         });
     }
 
-    /**
-     * LIST TOSSES
-     */
     public void getListToss(SenderContainerDTO senderContainerDTO, AnswerServerResponse<T> async) {
         answerServerResponse = async;
         new ManagerRetrofit<SenderContainerDTO>().sendRequest(senderContainerDTO, new Object() {// Change (type sending) / (data sending)
@@ -159,9 +142,6 @@ public class Connection<T> {
         });
     }
 
-    /**
-     * LIST TOSSES
-     */
     public void getToss(String tossID, AnswerServerResponse<T> async) {
         answerServerResponse = async;
         new ManagerRetrofit<String>().sendRequest(tossID, new Object() {// Change (type sending) / (data sending)
@@ -176,10 +156,7 @@ public class Connection<T> {
         });
     }
 
-    /**
-     * CREATE POST
-     */
-    public void createPost(Context context, PostDTO postDTO, ArrayList<Uri> listUri, AnswerServerResponse<T> async) {
+     public void createPost(Context context, PostDTO postDTO, ArrayList<Uri> listUri, AnswerServerResponse<T> async) {
         answerServerResponse = async;
 
         new ManagerRetrofit<PostDTO>().sendMultiPartRequest(postDTO, new Object() {// Change (type sending) / (data sending)
@@ -193,6 +170,21 @@ public class Connection<T> {
             }
         });
 
+    }
+    public void addToss(Context context, SenderContainerDTO senderContainerDTO, ArrayList<Uri> listUri, AnswerServerResponse<T> async) {
+        answerServerResponse = async;
+
+        new ManagerRetrofit<SenderContainerDTO>().sendMultiPartRequest(senderContainerDTO, new Object() {// Change (type sending) / (data sending)
+        }.getClass().getEnclosingMethod().getName(), generateMultiPartList(listUri, context), (isSuccess, answerString) -> {
+            if (isSuccess) {
+                Type typeAnswer = new TypeToken<ServerResponse>() { //Change type response(тип ответа)
+                }.getType();
+                tryParsing(answerString, typeAnswer);
+            } else {
+                answerServerResponse.processFinish(false, null);
+            }
+        });
+        // addToss {"dataTransferObject":{"user_id":"12", "title":"test title", "date_end":"", "managers":{"0":11,"1":103}, "body":"test toss from postman"}, "requestType":"addToss"}
     }
 
 
@@ -232,15 +224,28 @@ public class Connection<T> {
         });
     }
 
-    /**
-     * COMMENT
-     */
     public void createComment(CommentDTO commentDTO, AnswerServerResponse<T> async) {
         answerServerResponse = async;
         new ManagerRetrofit<CommentDTO>().sendRequest(commentDTO, new Object() {// Change (type sending) / (data sending)
         }.getClass().getEnclosingMethod().getName(), (isSuccess, answerString) -> {
             if (isSuccess) {
                 Type typeAnswer = new TypeToken<ServerResponse>() { //Change type response(тип ответа)
+                }.getType();
+                tryParsing(answerString, typeAnswer);
+            } else {
+                answerServerResponse.processFinish(false, null);
+            }
+        });
+    }
+    /**
+     * COMMENT
+     */
+    public void addTossComment(SenderContainerDTO senderContainerDTO, AnswerServerResponse<T> async) {
+        answerServerResponse = async;
+        new ManagerRetrofit<SenderContainerDTO>().sendRequest(senderContainerDTO, new Object() {// Change (type sending) / (data sending)
+        }.getClass().getEnclosingMethod().getName(), (isSuccess, answerString) -> {
+            if (isSuccess) {
+                Type typeAnswer = new TypeToken<ServerResponse<TossCommentDTO>>() { //Change type response(тип ответа)
                 }.getType();
                 tryParsing(answerString, typeAnswer);
             } else {

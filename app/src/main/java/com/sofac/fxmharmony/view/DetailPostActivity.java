@@ -35,7 +35,6 @@ import com.sofac.fxmharmony.R;
 import com.sofac.fxmharmony.adapter.AdapterCommentsGroup;
 import com.sofac.fxmharmony.dto.CommentDTO;
 import com.sofac.fxmharmony.dto.PostDTO;
-import com.sofac.fxmharmony.dto.PushMessage;
 import com.sofac.fxmharmony.server.Connection;
 import com.sofac.fxmharmony.util.AppMethods;
 import com.sofac.fxmharmony.util.AppPreference;
@@ -56,10 +55,8 @@ import static com.sofac.fxmharmony.Constants.LINK_VIDEO;
 import static com.sofac.fxmharmony.Constants.NAME_IMAGE;
 import static com.sofac.fxmharmony.Constants.NAME_VIDEO;
 import static com.sofac.fxmharmony.Constants.ONE_POST_MESSAGE_DATA;
-import static com.sofac.fxmharmony.Constants.ONE_PUSH_MESSAGE_DATA;
 import static com.sofac.fxmharmony.Constants.PART_AVATAR;
 import static com.sofac.fxmharmony.Constants.PART_POST;
-import static com.sofac.fxmharmony.Constants.POST_ID;
 
 public class DetailPostActivity extends BaseActivity {
 
@@ -419,7 +416,7 @@ public class DetailPostActivity extends BaseActivity {
                 listViewComments.setAdapter(adapterCommentsGroup);
                 adapterCommentsGroup.notifyDataSetChanged();
             } else {
-                Toast.makeText(DetailPostActivity.this, getString(R.string.errorServer), Toast.LENGTH_SHORT).show();
+                Toast.makeText(DetailPostActivity.this, getString(R.string.errorServerConnection), Toast.LENGTH_SHORT).show();
             }
             progressBar.dismissView();
         });
@@ -470,7 +467,7 @@ public class DetailPostActivity extends BaseActivity {
                         setResult(2, intent);
                         finish();
                     } else {
-                        Toast.makeText(DetailPostActivity.this, R.string.errorServer, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(DetailPostActivity.this, R.string.errorServerConnection, Toast.LENGTH_SHORT).show();
                     }
                 });
                 return true;

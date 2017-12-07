@@ -10,8 +10,8 @@
     <string name="login">Login</string>
     <string name="password">Password</string>
     <string name="fieldEmpty">Field empty</string>
-    <string name="errorConnection">No connection to server / Incorrect login or password</string>
-    <string name="errorServer">No connection to server</string>
+    <string name="errorConnectionAndIncorrectLoginOrPassword">No connection to server / Incorrect login or password</string>
+    <string name="errorServerConnection">No connection to server</string>
 
     /* Navigation drawer - TasksActivity */
     <string name="navigation_drawer_open">Open navigation drawer</string>

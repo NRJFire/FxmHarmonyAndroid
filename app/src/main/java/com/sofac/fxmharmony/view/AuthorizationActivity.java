@@ -8,7 +8,6 @@ import android.preference.PreferenceManager;
 import android.support.design.widget.TextInputEditText;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.Toast;
 
 import com.sofac.fxmharmony.Constants;
@@ -62,7 +61,7 @@ public class AuthorizationActivity extends BaseActivity implements View.OnClickL
 
                 } else {
                     progressBar.dismissView();
-                    Toast.makeText(AuthorizationActivity.this, R.string.errorConnection, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(AuthorizationActivity.this, R.string.errorConnectionAndIncorrectLoginOrPassword, Toast.LENGTH_SHORT).show();
                 }
             });
         }
