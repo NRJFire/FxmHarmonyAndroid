@@ -68,6 +68,8 @@ public class DetailTossActivity extends BaseActivity {
     TextView textViewDateMessage;
     @BindView(R.id.recyclerViewComments)
     RecyclerView recyclerViewComments;
+    @BindView(R.id.mainConstrainLayout)
+    ConstraintLayout mainConstrainLayout;
 
     private TossDTO tossDTO;
     private AdapterTossMessages adapterTossMessages;
@@ -100,7 +102,8 @@ public class DetailTossActivity extends BaseActivity {
     }
 
     public void initializationView(TossDTO updatedTossDTO) {
-        slideUp = new SlideUpBuilder(slideView)
+        mainConstrainLayout.setVisibility(View.VISIBLE);
+                slideUp = new SlideUpBuilder(slideView)
                 .withStartState(SlideUp.State.HIDDEN)
                 .withStartGravity(Gravity.BOTTOM)
                 .withListeners(new SlideUp.Listener.Events() {

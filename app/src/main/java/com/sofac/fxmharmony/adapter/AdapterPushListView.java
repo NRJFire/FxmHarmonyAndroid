@@ -13,7 +13,6 @@ import com.sofac.fxmharmony.dto.PushMessage;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 
 public class AdapterPushListView extends BaseAdapter {
     private ArrayList<PushMessage> pushMessageArrayList;
@@ -52,7 +51,7 @@ public class AdapterPushListView extends BaseAdapter {
         // используем созданные, но не используемые view
         //View view = convertView;
         //if (view == null) {
-        View view = inflater.inflate(R.layout.item_task, parent, false);
+        View view = inflater.inflate(R.layout.item_push, parent, false);
         //}
 
         PushMessage pushMessage = getPushMessage(position);

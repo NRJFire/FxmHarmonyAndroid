@@ -3,7 +3,6 @@ package com.sofac.fxmharmony.adapter;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
-import android.os.StrictMode;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,8 +23,6 @@ import com.sofac.fxmharmony.util.AppMethods;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.Locale;
 
 import jp.wasabeef.glide.transformations.CropCircleTransformation;
@@ -63,7 +60,7 @@ public class AdapterCommentsGroup extends BaseAdapter {
         // используем созданные, но не используемые view
         //View view = convertView;
         //if (view == null) {
-        final View view = inflater.inflate(R.layout.item_comment, parent, false);
+        final View view = inflater.inflate(R.layout.item_post_comment, parent, false);
         //}
         final CommentDTO commentDTO = getCommentDTO(position);
 

@@ -54,26 +54,20 @@
             android:name=".view.DetailPostActivity"
             android:logo="@drawable/keyboard_backspace"
             android:screenOrientation="portrait" />
-
-        <activity android:name=".view.DetailTossActivity"
+        <activity
+            android:name=".view.DetailTossActivity"
             android:logo="@drawable/keyboard_backspace"
             android:screenOrientation="portrait" />
-
         <activity
             android:name=".view.NavigationActivity"
             android:label="@string/title_activity_navigation"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
-
-
-
-
         <activity
             android:name=".view.PreviewPhotoActivity"
             android:logo="@drawable/keyboard_backspace"
             android:screenOrientation="portrait"
             android:theme="@style/Black" />
-
         <activity
             android:name=".view.PreviewVideoActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
@@ -94,7 +88,8 @@
             </intent-filter>
         </service>
 
-
+        <activity android:name=".view.CreateTossActivity" />
+        <activity android:name=".view.CreateTossMessageActivity"></activity>
     </application>
 
 </manifest>

@@ -3,7 +3,6 @@ package com.sofac.fxmharmony.view.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -25,6 +24,7 @@ import com.sofac.fxmharmony.server.Connection;
 import com.sofac.fxmharmony.util.AppPreference;
 import com.sofac.fxmharmony.util.ProgressBar;
 import com.sofac.fxmharmony.view.BaseFragment;
+import com.sofac.fxmharmony.view.CreateTossActivity;
 import com.sofac.fxmharmony.view.DetailTossActivity;
 
 import java.util.ArrayList;
@@ -33,9 +33,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
-import timber.log.Timber;
 
-import static com.sofac.fxmharmony.Constants.ONE_TOSS_MESSAGE_DATA;
 import static com.sofac.fxmharmony.Constants.TOSS_ID;
 
 public class TossFragment extends BaseFragment implements SwipeRefreshLayout.OnRefreshListener {
@@ -43,6 +41,7 @@ public class TossFragment extends BaseFragment implements SwipeRefreshLayout.OnR
     public ArrayList<TossDTO> tossDTOs = new ArrayList<>();
     public AdapterTossItems adapterTossItems = new AdapterTossItems(tossDTOs);
     public ProgressBar progressBar;
+
     private String status = "";
     private Unbinder unbinder;
 
@@ -54,18 +53,20 @@ public class TossFragment extends BaseFragment implements SwipeRefreshLayout.OnR
     Button viewButtonAllToss;
     @BindView(R.id.viewButtonMyToss)
     Button viewButtonMyToss;
+    @BindView(R.id.progressBarPreLoader)
+    android.widget.ProgressBar progressBarPreLoader;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_toss, container, false);
-        initializationRecyclerView(view);
+        unbinder = ButterKnife.bind(this, view);
+        initializationRecyclerView();
         setHasOptionsMenu(true);
         return view;
     }
 
 
-    public void initializationRecyclerView(View view) {
-        unbinder = ButterKnife.bind(this, view);
+    public void initializationRecyclerView() {
         progressBar = new ProgressBar(getActivity());
         swipeRefreshLayout.setOnRefreshListener(this);
         recyclerViewToss.setAdapter(adapterTossItems);
@@ -94,6 +95,7 @@ public class TossFragment extends BaseFragment implements SwipeRefreshLayout.OnR
 
     @Override
     public void onResume() {
+
         updateRecyclerView(status);
         super.onResume();
     }
@@ -118,6 +120,7 @@ public class TossFragment extends BaseFragment implements SwipeRefreshLayout.OnR
                     }
                     progressBar.dismissView();
                     swipeRefreshLayout.setRefreshing(false);
+                    progressBarPreLoader.setVisibility(View.GONE);
                 });
     }
 
@@ -179,11 +182,17 @@ public class TossFragment extends BaseFragment implements SwipeRefreshLayout.OnR
                 updateRecyclerView("closed");
                 break;
             case R.id.createNewToss:
-                showToast("Button create press!");
+
+                startActivityForResult(new Intent(getActivity(), CreateTossActivity.class),1);
                 //updateRecyclerView("create");
                 break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
     }
 
     @Override
