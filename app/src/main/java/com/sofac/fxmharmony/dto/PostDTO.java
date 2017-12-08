@@ -120,21 +120,6 @@ public class PostDTO implements Serializable {
         this.files = TextUtils.join(SPLIT_FILES, files);
     }
 
-    public String getAvatar() {
-        return avatar;
-    }
-
-    public void setAvatar(String avatar) {
-        this.avatar = avatar;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
 
     public ArrayList<String> getImages() {
         return new TypeFiles(getFiles()).getImages();
@@ -155,6 +140,23 @@ public class PostDTO implements Serializable {
     }
 
     public void setDocs() {
+    }
+
+
+    public String getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 
     @Override

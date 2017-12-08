@@ -125,14 +125,6 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <!--<TextView-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:paddingEnd="10dp"-->
-        <!--android:paddingStart="10dp"-->
-        <!--android:text="PHOTOS:"-->
-        <!--android:textStyle="bold" />-->
-
     </LinearLayout>
 
     <LinearLayout
@@ -141,13 +133,6 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <!--<TextView-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:paddingEnd="10dp"-->
-        <!--android:paddingStart="10dp"-->
-        <!--android:text="VIDEOS:"-->
-        <!--android:textStyle="bold" />-->
 
     </LinearLayout>
 
@@ -157,14 +142,6 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:paddingTop="5dp">
-
-        <!--<TextView-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:paddingEnd="10dp"-->
-        <!--android:paddingStart="10dp"-->
-        <!--android:text="FILES:"-->
-        <!--android:textStyle="bold" />-->
 
     </LinearLayout>
 

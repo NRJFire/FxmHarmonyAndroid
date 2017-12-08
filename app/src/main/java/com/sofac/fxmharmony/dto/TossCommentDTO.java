@@ -1,6 +1,13 @@
 package com.sofac.fxmharmony.dto;
 
+import android.text.TextUtils;
+
+import com.sofac.fxmharmony.util.TypeFiles;
+
 import java.io.Serializable;
+import java.util.ArrayList;
+
+import static com.sofac.fxmharmony.Constants.SPLIT_FILES;
 
 /**
  * Created by Maxim on 04.12.2017.
@@ -71,6 +78,8 @@ public class TossCommentDTO implements Serializable {
     public void setAvatar(String avatar) {
         this.avatar = avatar;
     }
+
+
 
     @Override
     public String toString() {

@@ -121,11 +121,10 @@
                 android:id="@+id/lineSeparator2"
                 android:layout_width="282dp"
                 android:layout_height="0.5dp"
-                android:layout_marginEnd="8dp"
                 android:layout_marginTop="8dp"
                 android:background="@android:color/darker_gray"
                 card_view:layout_constraintEnd_toEndOf="@+id/lineSeparator"
-                card_view:layout_constraintStart_toStartOf="@+id/viewNamesFrom"
+                card_view:layout_constraintStart_toEndOf="@+id/labelFrom"
                 card_view:layout_constraintTop_toBottomOf="@+id/viewNamesFrom" />
 
             <TextView
@@ -142,11 +141,12 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
+                android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
                 android:text="Zegna"
                 card_view:layout_constraintBottom_toBottomOf="parent"
                 card_view:layout_constraintEnd_toEndOf="@+id/lineSeparator"
-                card_view:layout_constraintStart_toStartOf="@+id/lineSeparator2"
+                card_view:layout_constraintStart_toEndOf="@+id/labelFrom"
                 card_view:layout_constraintTop_toBottomOf="@+id/lineSeparator2" />
 
         </android.support.constraint.ConstraintLayout>

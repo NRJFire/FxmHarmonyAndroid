@@ -1,14 +1,27 @@
 package com.sofac.fxmharmony.util;
 
 import android.webkit.MimeTypeMap;
+
+import com.sofac.fxmharmony.dto.FileDTO;
+
 import java.util.ArrayList;
+import java.util.Arrays;
+
 
 public class TypeFiles {
 
-    private String[] files;
+    private ArrayList<String> files;
 
     public TypeFiles(String[] allFiles) {
-        this.files = allFiles;
+        this.files = new ArrayList<>(Arrays.asList(allFiles));
+    }
+
+    public TypeFiles(ArrayList<FileDTO> allFiles) {
+        ArrayList<String> listNameFiles = new ArrayList<>();
+        for(FileDTO file : allFiles) {
+            listNameFiles.add(file.getName());
+        }
+        this.files = listNameFiles;
     }
 
     public ArrayList<String> getImages() {

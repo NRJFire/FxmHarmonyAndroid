@@ -57,8 +57,6 @@ public class SenderContainerDTO {
         this.body = body;
     }
 
-    // addToss {"dataTransferObject":{"user_id":"12", "title":"test title", "date_end":"2017-12-07 13:14:15", "managers":{"0":11,"1":103}, "body":"test toss from postman"}, "requestType":"addToss"}
-
     public String getToss_message_id() {
         return toss_message_id;
     }

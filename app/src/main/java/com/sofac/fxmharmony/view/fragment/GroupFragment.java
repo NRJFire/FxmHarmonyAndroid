@@ -134,7 +134,6 @@ public class GroupFragment extends BaseFragment implements SwipeRefreshLayout.On
                 updateRecyclerView(typeStaffGroup);
                 selectStaffButton();
                 break;
-            //TODO button disabled, no need change text color, fix it
         }
     }
 

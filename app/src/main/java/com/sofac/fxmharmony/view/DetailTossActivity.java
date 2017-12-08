@@ -3,6 +3,7 @@ package com.sofac.fxmharmony.view;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.LinearLayoutManager;
@@ -15,7 +16,10 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.mancj.slideup.SlideUp;
@@ -24,22 +28,31 @@ import com.sofac.fxmharmony.Constants;
 import com.sofac.fxmharmony.R;
 import com.sofac.fxmharmony.adapter.AdapterTossComments;
 import com.sofac.fxmharmony.adapter.AdapterTossMessages;
-import com.sofac.fxmharmony.dto.CommentDTO;
 import com.sofac.fxmharmony.dto.ResponsibleUserDTO;
 import com.sofac.fxmharmony.dto.SenderContainerDTO;
 import com.sofac.fxmharmony.dto.TossCommentDTO;
 import com.sofac.fxmharmony.dto.TossDTO;
 import com.sofac.fxmharmony.dto.TossMessageDTO;
 import com.sofac.fxmharmony.server.Connection;
+import com.sofac.fxmharmony.util.FileLoadingListener;
+import com.sofac.fxmharmony.util.FileLoadingTask;
 
+import java.io.File;
 import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import jp.wasabeef.glide.transformations.CropCircleTransformation;
+import timber.log.Timber;
 
 import static com.sofac.fxmharmony.Constants.BASE_URL;
+import static com.sofac.fxmharmony.Constants.LINK_IMAGE;
+import static com.sofac.fxmharmony.Constants.LINK_VIDEO;
+import static com.sofac.fxmharmony.Constants.NAME_IMAGE;
+import static com.sofac.fxmharmony.Constants.NAME_VIDEO;
+import static com.sofac.fxmharmony.Constants.PART_POST;
+import static com.sofac.fxmharmony.Constants.PART_TOSS;
 import static com.sofac.fxmharmony.Constants.TOSS_ID;
 
 public class DetailTossActivity extends BaseActivity {
@@ -62,8 +75,10 @@ public class DetailTossActivity extends BaseActivity {
     ConstraintLayout slideView;
     @BindView(R.id.dim)
     FrameLayout dim;
-    @BindView(R.id.filesConstraintLayout)
-    ConstraintLayout filesConstraintLayout;
+
+    @BindView(R.id.filesListContainer)
+    LinearLayout filesConstraintLayout;
+
     @BindView(R.id.commentsConstraintLayout)
     ConstraintLayout commentsConstraintLayout;
     @BindView(R.id.textViewBodyMessage)
@@ -80,8 +95,14 @@ public class DetailTossActivity extends BaseActivity {
     Button buttonSendComment;
     @BindView(R.id.editTextComment)
     EditText editTextComment;
+    @BindView(R.id.idListPhotos)
+    LinearLayout linearLayoutPhotos;
+    @BindView(R.id.idListVideos)
+    LinearLayout linearLayoutVideos;
+    @BindView(R.id.idListFiles)
+    LinearLayout linearLayoutFiles;
 
-    private String idMessageToSend = "1";
+    private String idMessage = "1";
     private TossDTO tossDTO;
     private AdapterTossMessages adapterTossMessages;
     private SlideUp slideUp;
@@ -150,12 +171,12 @@ public class DetailTossActivity extends BaseActivity {
     private void setListMessagesInView(ArrayList<TossMessageDTO> tossMessageDTOS) {
         adapterTossMessages = new AdapterTossMessages(tossMessageDTOS);
         adapterTossMessages.setItemClickListener((view, position) -> {
+            idMessage = tossMessageDTOS.get(position).getId();
             switch (view.getId()) {
                 case R.id.buttonFiles:
                     createViewFiles(tossMessageDTOS.get(position));
                     break;
                 case R.id.buttonComments:
-                    idMessageToSend = tossMessageDTOS.get(position).getId();
                     createViewComments(tossMessageDTOS.get(position));
                     break;
             }
@@ -167,7 +188,7 @@ public class DetailTossActivity extends BaseActivity {
     public void createViewFiles(TossMessageDTO tossMessageDTO) {
         showSlideUpFiles();
         setMessageInHeaderSlideUp(tossMessageDTO);
-
+        fillingFiles(tossMessageDTO);
     }
 
     public void createViewComments(TossMessageDTO tossMessageDTO) {
@@ -259,6 +280,9 @@ public class DetailTossActivity extends BaseActivity {
         switch (view.getId()) {
             case R.id.buttonCloseSlide:
                 slideUp.hide();
+                linearLayoutPhotos.removeAllViews();
+                linearLayoutVideos.removeAllViews();
+                linearLayoutFiles.removeAllViews();
                 break;
             case R.id.buttonSendComment:
                 requestNewComment();
@@ -272,7 +296,7 @@ public class DetailTossActivity extends BaseActivity {
             new Connection<TossCommentDTO>().addTossComment(
                     new SenderContainerDTO(
                             appPreference.getID(),
-                            idMessageToSend,
+                            idMessage,
                             editTextComment.getText().toString(),
                             tossDTO.getId()),
                     (isSuccess, answerServerResponse) -> {
@@ -284,5 +308,111 @@ public class DetailTossActivity extends BaseActivity {
                         }
                     });
         }
+    }
+
+    public void fillingFiles(TossMessageDTO messageDTO) {
+
+        Timber.e(messageDTO.getImages().toString());
+        Timber.e(messageDTO.getMovies().toString());
+        Timber.e(messageDTO.getDocs().toString());
+
+        // START LIST IMAGE
+        if (messageDTO.getImages().size() > 0) {
+            for (final String imageName : messageDTO.getImages()) {
+
+                View photoItemView = getLayoutInflater().inflate(R.layout.item_detail_post_photo, null);
+                ImageView imageView = (ImageView) photoItemView.findViewById(R.id.idItemPhoto);
+
+                Glide.with(this)
+                        .load(BASE_URL + PART_TOSS + imageName)
+                        .error(R.drawable.no_image)
+                        .placeholder(R.drawable.no_image)
+                        .into(imageView);
+                linearLayoutPhotos.addView(photoItemView);
+                photoItemView.setOnClickListener(v13 -> {
+                    Intent intentPhoto = new Intent(DetailTossActivity.this, PreviewPhotoActivity.class);
+                    intentPhoto.putExtra(LINK_IMAGE, ("" + BASE_URL + PART_TOSS + imageName));
+                    intentPhoto.putExtra(NAME_IMAGE, ("" + imageName));
+                    startActivity(intentPhoto);
+                });
+            }
+
+        } else {
+            linearLayoutPhotos.setVisibility(View.INVISIBLE);
+        }
+        // START LIST IMAGE
+
+
+        // START VIDEO
+        if (messageDTO.getMovies().size() > 0) {
+            for (final String videoName : messageDTO.getMovies()) {
+
+                View videoItemView = getLayoutInflater().inflate(R.layout.item_detail_post_video, null);
+                ImageView imageVideoView = (ImageView) videoItemView.findViewById(R.id.idItemVideo);
+
+                Uri uriVideo = Uri.parse(BASE_URL + PART_TOSS + videoName + ".png");
+                Glide.with(this)
+                        .load(uriVideo)
+                        .error(R.drawable.no_video)
+                        .placeholder(R.drawable.no_video)
+                        .into(imageVideoView);
+                linearLayoutVideos.addView(videoItemView);
+
+                videoItemView.setOnClickListener(v12 -> {
+                    Intent intentVideo = new Intent(DetailTossActivity.this, PreviewVideoActivity.class);
+                    intentVideo.putExtra(LINK_VIDEO, ("" + BASE_URL + PART_TOSS + videoName));
+                    intentVideo.putExtra(NAME_VIDEO, ("" + videoName));
+                    startActivity(intentVideo);
+                });
+            }
+
+        } else {
+            linearLayoutVideos.setVisibility(View.INVISIBLE);
+        }
+        // END VIDEO
+
+
+        // START FILES
+        if (messageDTO.getDocs().size() > 0) {
+            for (final String fileName : messageDTO.getDocs()) {
+                View fileItemView = getLayoutInflater().inflate(R.layout.item_detail_post_file, null);
+                TextView textView = (TextView) fileItemView.findViewById(R.id.idNameFile);
+                textView.setText(fileName);
+
+                fileItemView.setOnClickListener(v1 -> {
+                    if (isStoragePermissionGranted()) {
+                        new FileLoadingTask(
+                                BASE_URL + PART_TOSS + fileName,
+                                new File(Environment.getExternalStorageDirectory() + "/Download/" + fileName),
+                                new FileLoadingListener() {
+                                    @Override
+                                    public void onBegin() {
+                                        Toast.makeText(DetailTossActivity.this, "Begin download", Toast.LENGTH_SHORT).show();
+                                    }
+
+                                    @Override
+                                    public void onSuccess() {
+                                        Toast.makeText(DetailTossActivity.this, "Successful download", Toast.LENGTH_SHORT).show();
+                                    }
+
+                                    @Override
+                                    public void onFailure(Throwable cause) {
+                                        Toast.makeText(DetailTossActivity.this, "Error download", Toast.LENGTH_SHORT).show();
+                                    }
+
+                                    @Override
+                                    public void onEnd() {
+
+                                    }
+                                }).execute();
+                    }
+                });
+                linearLayoutFiles.addView(fileItemView);
+            }
+        } else {
+            linearLayoutFiles.setVisibility(View.INVISIBLE);
+        }
+
+        // END FILES
     }
 }

@@ -120,6 +120,9 @@ public class CreateTossActivity extends BaseActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                return true;
             case R.id.send_post_button:
                 if (!editTextBody.getText().toString().equals("") && !editTextTitle.getText().toString().isEmpty()) {
                     requestCreateToss();

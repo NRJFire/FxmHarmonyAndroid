@@ -97,6 +97,10 @@ public class AdapterTossMessages extends RecyclerView.Adapter<AdapterTossMessage
                 buttonComments.setText(String.format("Comment (%s)", messageDTO.getComments().size()));
             }
 
+            if(messageDTO.getFiles()!=null){
+                buttonFiles.setText(String.format("Files (%s)", messageDTO.getFiles().size()));
+            }
+
             Glide.with(view.getContext())
                     .load(uri)
                     .override(150, 150)
