@@ -26,15 +26,15 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
+                android:padding="5dp"
                 android:background="#ffffff"
                 android:gravity="top"
                 android:hint="Title..."
                 android:inputType="text"
                 android:maxLines="2"
                 android:minLines="1"
-                android:padding="5dp"
                 android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textSize="14sp"/>
+                android:textSize="14sp" />
 
             <View
                 android:layout_width="match_parent"
@@ -45,58 +45,98 @@
                 android:background="@color/lineViewFiles" />
 
             <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <com.pchmn.materialchips.ChipsInput
-                    android:id="@+id/chips_input"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:textSize="14sp"
-                    app:hint="Enter a name..." />
-
-                <android.support.design.widget.FloatingActionButton
-                    android:id="@+id/buttonAddManager"
-                    android:layout_width="wrap_content"
-                    android:layout_height="30dp"
-                    android:clickable="true"
-                    android:contentDescription="111"
-                    app:fabSize="mini"
-                    fab:srcCompat="@drawable/fab_add" />
-            </LinearLayout>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="0.5dp"
-                android:layout_marginLeft="0dp"
-                android:layout_marginRight="0dp"
-                android:layout_marginTop="0dp"
-                android:background="@color/lineViewFiles" />
-
-            <LinearLayout
+                android:padding="5dp"
+                android:layout_gravity="center_vertical|center_horizontal"
+                android:gravity="center_horizontal|center_vertical"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
                 <TextView
-                    android:layout_marginTop="5dp"
-                    android:layout_marginStart="5dp"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="End date:" />
-
-                <com.github.florent37.singledateandtimepicker.SingleDateAndTimePicker
+                    android:textStyle="bold"
                     android:layout_width="wrap_content"
-                    android:layout_height="230dp"
-                    app:picker_curved="true"
-                    app:picker_cyclic="true"
-                    app:picker_canBeOnPast="false"
-                    app:picker_visibleItemCount="7" />
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:text="To:" />
+
+                <View
+                    android:id="@+id/choicedUsers"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content" />
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/custom_button"
+                    android:drawableStart="@drawable/fab_add"
+                    android:maxHeight="30dp"
+                    android:minHeight="30dp"
+                    android:paddingEnd="5dp"
+                    android:paddingStart="5dp"
+                    android:text="User"
+                    android:textColor="@color/colorWhite" />
 
             </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:layout_marginLeft="0dp"
+                android:layout_marginRight="0dp"
+                android:layout_marginTop="0dp"
+                android:background="@color/lineViewFiles" />
+
+            <LinearLayout
+                android:padding="5dp"
+                android:layout_gravity="center_vertical|center_horizontal"
+                android:gravity="center_horizontal|center_vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:text="Date end:"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/textViewChoiceDate"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:layout_weight="1"
+                    android:text="Choosing date end..." />
+
+                <ImageButton
+                    android:id="@+id/buttonChoiceDate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="10dp"
+                    android:background="@drawable/custom_button"
+                    app:srcCompat="@drawable/calendar_clock" />
+
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:layout_marginLeft="0dp"
+                android:layout_marginRight="0dp"
+                android:layout_marginTop="0dp"
+                android:background="@color/lineViewFiles" />
+
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:text="STATUS"
+                android:gravity="center_horizontal"/>
+
 
             <View
                 android:layout_width="match_parent"
