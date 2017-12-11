@@ -38,7 +38,9 @@
     <color name="ColorGrey">#848484</color>
     <color name="ColorGreyDark">#434343</color>
 
-
+    <!--Segmented button color-->
+    <color name="radio_button_selected_color">@color/colorPrimary</color>
+    <color name="radio_button_unselected_color">@android:color/transparent</color>
 
     <!--Transparent progressbar-->
     <color name="transparent">#00000000</color>

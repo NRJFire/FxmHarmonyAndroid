@@ -119,6 +119,13 @@ dependencies {
     //SlideUp
     compile "com.github.mancj:SlideUp-Android:2.2.7.1"
 
+    //MDate/Time Pickers
+    compile("com.github.pwiniars:SlideDateTimePicker:v1.0.8")
+
+    //Segmented-button-control
+    compile 'info.hoang8f:android-segmented:1.0.6'
+
+
     testCompile 'junit:junit:4.12'
 }
 

@@ -1,7 +1,9 @@
 package com.sofac.fxmharmony.view;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.ActivityNotFoundException;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -13,26 +15,32 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
+import com.github.jjobes.slidedatetimepicker.SlideDateTimeListener;
+import com.github.jjobes.slidedatetimepicker.SlideDateTimePicker;
 import com.sofac.fxmharmony.R;
 import com.sofac.fxmharmony.adapter.AdapterCreatePostMovies;
 import com.sofac.fxmharmony.adapter.AdapterCreatePostPhotos;
+import com.sofac.fxmharmony.dto.ManagerDTO;
+import com.sofac.fxmharmony.dto.ResponsibleUserDTO;
 import com.sofac.fxmharmony.dto.SenderContainerDTO;
 import com.sofac.fxmharmony.server.Connection;
 
 import org.apache.commons.io.FilenameUtils;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import timber.log.Timber;
 
 import static com.sofac.fxmharmony.Constants.REQUEST_TAKE_FILE;
 import static com.sofac.fxmharmony.Constants.REQUEST_TAKE_GALLERY_VIDEO;
@@ -60,13 +68,18 @@ public class CreateTossActivity extends BaseActivity {
     RecyclerView idListPhotos;
     @BindView(R.id.idListMovies)
     RecyclerView idListMovies;
+    @BindView(R.id.textViewChoiceDate)
+    TextView textViewChoiceDate;
 
     public ArrayList<Uri> listPhoto = new ArrayList<>();
     public ArrayList<Uri> listMovies = new ArrayList<>();
     public ArrayList<Uri> listFiles = new ArrayList<>();
     public HashMap<String, Integer> managers = new HashMap<>();
+    ArrayList<ResponsibleUserDTO> responsibleUserDTOS = new ArrayList<>();
     AdapterCreatePostPhotos adapterCreatePostPhotos;
     AdapterCreatePostMovies adapterCreatePostMovies;
+    String statusToss = "";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -109,6 +122,15 @@ public class CreateTossActivity extends BaseActivity {
         idListMovies.setHasFixedSize(true);
         idListMovies.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
 
+        new Connection<ArrayList<ResponsibleUserDTO>>().getMannagers(appPreference.getID(), (isSuccess, answerServerResponse) -> {
+            if(isSuccess){
+                responsibleUserDTOS.clear();
+                responsibleUserDTOS.addAll(answerServerResponse.getDataTransferObject());
+            } else {
+                showToast("Error getting manager!");
+            }
+        });
+
     }
 
     @Override
@@ -124,7 +146,7 @@ public class CreateTossActivity extends BaseActivity {
                 finish();
                 return true;
             case R.id.send_post_button:
-                if (!editTextBody.getText().toString().equals("") && !editTextTitle.getText().toString().isEmpty()) {
+                if (!editTextBody.getText().toString().equals("") && !editTextTitle.getText().toString().isEmpty() && !"".equals(statusToss)) {
                     requestCreateToss();
                 } else {
                     showToast("Please input text in all fields");
@@ -142,18 +164,27 @@ public class CreateTossActivity extends BaseActivity {
         arrayListAll.addAll(listMovies);
         arrayListAll.addAll(listFiles);
 
-        managers.put("0",11);
+        managers.put("0", 11);
 
-        new Connection<String>().addToss(this, new SenderContainerDTO(appPreference.getID(), editTextTitle.getText().toString(), "", managers , editTextBody.getText().toString()), arrayListAll, (isSuccess, answerServerResponse) -> {
-            if (isSuccess) {
-                Intent intent = new Intent(this, NavigationActivity.class);
-                setResult(2, intent);
-                finish();
-            } else {
-                showToast("Some problem with creating post!");
-            }
-            progressBar.dismissView();
-        });
+        new Connection<String>().addToss(
+                this,
+                new SenderContainerDTO(
+                        appPreference.getID(),
+                        editTextTitle.getText().toString(),
+                        textViewChoiceDate.toString(),
+                        managers,
+                        editTextBody.getText().toString()),
+                arrayListAll,
+                (isSuccess, answerServerResponse) -> {
+                    if (isSuccess) {
+                        Intent intent = new Intent(this, NavigationActivity.class);
+                        setResult(2, intent);
+                        finish();
+                    } else {
+                        showToast("Some problem with creating post!");
+                    }
+                    progressBar.dismissView();
+                });
     }
 
     @Override
@@ -209,23 +240,44 @@ public class CreateTossActivity extends BaseActivity {
     }
 
 
-    @OnClick({R.id.buttonAddFiles, R.id.buttonAddMovies, R.id.buttonAddPhotos})
+    @OnClick({R.id.buttonAddFiles, R.id.buttonAddMovies, R.id.buttonAddPhotos, R.id.buttonChoiceDate, R.id.buttonChoiceManagers})
     public void onViewClicked(View view) {
         if (isStoragePermissionGranted()) {
             switch (view.getId()) {
                 case R.id.buttonAddFiles:
                     choiceFiles();
+                    idMenuButton.toggle(true);
+                    break;
+                case R.id.buttonChoiceManagers:
+                    Toast.makeText(this, "Choice manager!", Toast.LENGTH_SHORT).show();
+                    //choiceManagers();
+                    idMenuButton.toggle(true);
                     break;
                 case R.id.buttonAddMovies:
                     choiceMovies();
+                    idMenuButton.toggle(true);
                     break;
                 case R.id.buttonAddPhotos:
                     choicePhotos();
+                    idMenuButton.toggle(true);
+                    break;
+                case R.id.buttonChoiceDate:
+                    new SlideDateTimePicker.Builder(getSupportFragmentManager())
+                            .setListener(listener)
+                            .setInitialDate(new Date())
+                            //.setMinDate(minDate)
+                            //.setMaxDate(maxDate)
+                            //.setIs24HourTime(true)
+                            //.setTheme(SlideDateTimePicker.HOLO_DARK)
+                            .setIndicatorColor(getResources().getColor(R.color.colorPrimary))
+                            .build()
+                            .show();
                     break;
             }
-            idMenuButton.toggle(true);
+
         }
     }
+
 
     public void choicePhotos() {
         Intent takePhotoIntent = new Intent(Intent.ACTION_GET_CONTENT);
@@ -239,6 +291,53 @@ public class CreateTossActivity extends BaseActivity {
         takeVideoIntent.setAction(Intent.ACTION_GET_CONTENT);
         startActivityForResult(Intent.createChooser(takeVideoIntent, "Select Video"), REQUEST_TAKE_GALLERY_VIDEO);
     }
+
+    AlertDialog filterDialog;
+
+//    public void choiceManagers() {
+//
+//        String[] namesManagers = new String[responsibleUserDTOS.size()];
+//        for (int i = 0; i < responsibleUserDTOS.size(); i++){
+//            namesManagers[i] = responsibleUserDTOS.get(i).getName();
+//        }
+//
+//        boolean[] checkedItems = new boolean[namesManagers.length];
+//
+//        for (int i = 0; i < namesManagers.length; i++) {
+//            if (selectedItems.contains(i)) {
+//                checkedItems[i] = true;
+//            } else {
+//                checkedItems[i] = false;
+//            }
+//        }
+//
+//        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+//        builder.setMultiChoiceItems(namesManagers, checkedItems, new DialogInterface.OnMultiChoiceClickListener() {
+//            @Override
+//            public void onClick(DialogInterface dialog, int indexSelected, boolean isChecked) {
+//                if (isChecked) {
+//                    selectedItems.add(indexSelected);
+//                }
+//                else if (selectedItems.contains(indexSelected)) {
+//                    selectedItems.remove(Integer.valueOf(indexSelected));
+//                }
+//            }
+//        }).setPositiveButton("OK", new DialogInterface.OnClickListener() {
+//            @Override
+//            public void onClick(DialogInterface dialog, int id) {
+//                // TODO
+//            }
+//        }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+//            @Override
+//            public void onClick(DialogInterface dialog, int id) {
+//                filterDialog.dismiss();
+//            }
+//        });
+//
+//        filterDialog = builder.create();
+//        filterDialog.show(); // only works when I show the dialog first, but I want every option to be selected without showing first
+//
+//    }
 
     public void choiceFiles() {
         Intent takeFileIntent = new Intent(Intent.ACTION_GET_CONTENT);
@@ -270,7 +369,36 @@ public class CreateTossActivity extends BaseActivity {
         }
     }
 
+    private SlideDateTimeListener listener = new SlideDateTimeListener() {
+        @Override
+        public void onDateTimeSet(Date date) {
+            textViewChoiceDate.setText(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH).format(date));
+        }
 
+        @Override
+        public void onDateTimeCancel() {
+
+        }
+    };
+
+
+//    @OnClick({R.id.buttonStatusOpen, R.id.buttonStatusClosed, R.id.buttonStatusPause, R.id.buttonStatusProcess})
+//    public void onClicked(View view) {
+//        switch (view.getId()) {
+//            case R.id.buttonStatusOpen:
+//                statusToss = "open";
+//                break;
+//            case R.id.buttonStatusClosed:
+//                statusToss = "closed";
+//                break;
+//            case R.id.buttonStatusPause:
+//                statusToss = "pause";
+//                break;
+//            case R.id.buttonStatusProcess:
+//                statusToss = "process";
+//                break;
+//        }
+//    }
 }
 
 

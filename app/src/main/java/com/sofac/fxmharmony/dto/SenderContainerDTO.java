@@ -17,7 +17,7 @@ public class SenderContainerDTO {
     private String toss_id;
     private String title;
     private String date_end;
-    private HashMap<String,Integer> managers;
+    private HashMap<String, Integer> managers;
 
 
     /**
@@ -49,12 +49,23 @@ public class SenderContainerDTO {
     /**
      * constructor for sending "addToss"
      */
-    public SenderContainerDTO(Long user_id, String title, String date_end, HashMap<String,Integer> managers, String body) {
+    public SenderContainerDTO(Long user_id, String title, String date_end, HashMap<String, Integer> managers, String body) {
         this.user_id = user_id;
         this.title = title;
         this.date_end = date_end;
         this.managers = managers;
         this.body = body;
+    }
+
+    /**
+     * constructor for sending "addTossMessage"
+     */
+    public SenderContainerDTO(String toss_id, Long user_id, HashMap<String, Integer> managers, String body, String status) {
+        this.toss_id = toss_id;
+        this.user_id = user_id;
+        this.managers = managers;
+        this.body = body;
+        this.status = status;
     }
 
     public String getToss_message_id() {

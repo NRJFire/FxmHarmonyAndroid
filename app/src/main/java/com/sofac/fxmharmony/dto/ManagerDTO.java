@@ -14,7 +14,6 @@ public class ManagerDTO implements Serializable {
     private String phone;
     private String access;
 
-
     public ManagerDTO(String name, String avatar, String email, String phone, String access) {
         this.name = name;
         this.avatar = avatar;
