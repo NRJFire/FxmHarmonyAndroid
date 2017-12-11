@@ -30,11 +30,12 @@
                 android:gravity="top"
                 android:hint="Title..."
                 android:inputType="text"
+                android:textStyle="bold"
                 android:maxLines="2"
                 android:minLines="1"
                 android:padding="5dp"
                 android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textSize="14sp" />
+                android:textSize="15sp" />
 
             <View
                 android:layout_width="match_parent"
@@ -47,21 +48,23 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical|center_horizontal"
-                android:gravity="center_horizontal|center_vertical"
+                android:layout_gravity="top"
                 android:orientation="horizontal"
                 android:padding="5dp">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_margin="5dp"
+                    android:padding="5dp"
+                    android:layout_gravity="top"
+                    android:gravity="top"
                     android:text="To:"
                     android:textStyle="bold" />
 
-                <View
-                    android:id="@+id/choicedUsers"
+                <TextView
+                    android:id="@+id/choosedUsers"
                     android:layout_width="0dp"
+                    android:padding="5dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1" />
 
@@ -75,7 +78,7 @@
                     android:minHeight="30dp"
                     android:paddingEnd="5dp"
                     android:paddingStart="5dp"
-                    android:text="User"
+                    android:text="Users"
                     android:textColor="@color/colorWhite" />
 
             </LinearLayout>

@@ -37,10 +37,12 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
+import java.util.Timer;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import timber.log.Timber;
 
 import static com.sofac.fxmharmony.Constants.REQUEST_TAKE_FILE;
 import static com.sofac.fxmharmony.Constants.REQUEST_TAKE_GALLERY_VIDEO;
@@ -71,10 +73,12 @@ public class CreateTossActivity extends BaseActivity {
     @BindView(R.id.textViewChoiceDate)
     TextView textViewChoiceDate;
 
+    @BindView(R.id.choosedUsers)
+    TextView choosedUsers;
+
     public ArrayList<Uri> listPhoto = new ArrayList<>();
     public ArrayList<Uri> listMovies = new ArrayList<>();
     public ArrayList<Uri> listFiles = new ArrayList<>();
-    public HashMap<String, Integer> managers = new HashMap<>();
     ArrayList<ResponsibleUserDTO> responsibleUserDTOS = new ArrayList<>();
     AdapterCreatePostPhotos adapterCreatePostPhotos;
     AdapterCreatePostMovies adapterCreatePostMovies;
@@ -86,7 +90,7 @@ public class CreateTossActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_toss);
         ButterKnife.bind(this);
-        setTitle("Create new toss");
+        setTitle("Creating new toss");
 
         ActionBar actionBar = getSupportActionBar();
         actionBar.setHomeButtonEnabled(true);
@@ -123,7 +127,7 @@ public class CreateTossActivity extends BaseActivity {
         idListMovies.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
 
         new Connection<ArrayList<ResponsibleUserDTO>>().getMannagers(appPreference.getID(), (isSuccess, answerServerResponse) -> {
-            if(isSuccess){
+            if (isSuccess) {
                 responsibleUserDTOS.clear();
                 responsibleUserDTOS.addAll(answerServerResponse.getDataTransferObject());
             } else {
@@ -146,7 +150,7 @@ public class CreateTossActivity extends BaseActivity {
                 finish();
                 return true;
             case R.id.send_post_button:
-                if (!editTextBody.getText().toString().equals("") && !editTextTitle.getText().toString().isEmpty() && !"".equals(statusToss)) {
+                if (!editTextBody.getText().toString().equals("") && !editTextTitle.getText().toString().isEmpty() /*&& !"".equals(statusToss)*/) {
                     requestCreateToss();
                 } else {
                     showToast("Please input text in all fields");
@@ -158,14 +162,21 @@ public class CreateTossActivity extends BaseActivity {
     }
 
     public void requestCreateToss() {
-        progressBar.showView();
+
         ArrayList<Uri> arrayListAll = new ArrayList<>();
         arrayListAll.addAll(listPhoto);
         arrayListAll.addAll(listMovies);
         arrayListAll.addAll(listFiles);
 
-        managers.put("0", 11);
+        HashMap<String, Integer> managers = new HashMap<>();
+        for (int i = 0; i < selectedManagers.size(); i++) {
+            Integer selectedListID = selectedManagers.get(i);
+            ResponsibleUserDTO responsibleUserDTO = responsibleUserDTOS.get(selectedListID);
+            Integer id = Integer.parseInt(responsibleUserDTO.getId());
+            managers.put(String.valueOf(i), id);
+        }
 
+        progressBar.showView();
         new Connection<String>().addToss(
                 this,
                 new SenderContainerDTO(
@@ -242,42 +253,44 @@ public class CreateTossActivity extends BaseActivity {
 
     @OnClick({R.id.buttonAddFiles, R.id.buttonAddMovies, R.id.buttonAddPhotos, R.id.buttonChoiceDate, R.id.buttonChoiceManagers})
     public void onViewClicked(View view) {
-        if (isStoragePermissionGranted()) {
-            switch (view.getId()) {
-                case R.id.buttonAddFiles:
+
+        switch (view.getId()) {
+            case R.id.buttonAddFiles:
+                if (isStoragePermissionGranted()) {
                     choiceFiles();
-                    idMenuButton.toggle(true);
-                    break;
-                case R.id.buttonChoiceManagers:
-                    Toast.makeText(this, "Choice manager!", Toast.LENGTH_SHORT).show();
-                    //choiceManagers();
-                    idMenuButton.toggle(true);
-                    break;
-                case R.id.buttonAddMovies:
+                }
+                idMenuButton.toggle(true);
+                break;
+            case R.id.buttonChoiceManagers:
+                choiceManagers();
+                break;
+            case R.id.buttonAddMovies:
+                if (isStoragePermissionGranted()) {
                     choiceMovies();
-                    idMenuButton.toggle(true);
-                    break;
-                case R.id.buttonAddPhotos:
+                }
+                idMenuButton.toggle(true);
+                break;
+            case R.id.buttonAddPhotos:
+                if (isStoragePermissionGranted()) {
                     choicePhotos();
-                    idMenuButton.toggle(true);
-                    break;
-                case R.id.buttonChoiceDate:
-                    new SlideDateTimePicker.Builder(getSupportFragmentManager())
-                            .setListener(listener)
-                            .setInitialDate(new Date())
-                            //.setMinDate(minDate)
-                            //.setMaxDate(maxDate)
-                            //.setIs24HourTime(true)
-                            //.setTheme(SlideDateTimePicker.HOLO_DARK)
-                            .setIndicatorColor(getResources().getColor(R.color.colorPrimary))
-                            .build()
-                            .show();
-                    break;
-            }
-
+                }
+                idMenuButton.toggle(true);
+                break;
+            case R.id.buttonChoiceDate:
+                new SlideDateTimePicker.Builder(getSupportFragmentManager())
+                        .setListener(listener)
+                        .setInitialDate(new Date())
+                        //.setMinDate(minDate)
+                        //.setMaxDate(maxDate)
+                        //.setIs24HourTime(true)
+                        //.setTheme(SlideDateTimePicker.HOLO_DARK)
+                        .setIndicatorColor(getResources().getColor(R.color.colorPrimary))
+                        .build()
+                        .show();
+                break;
         }
-    }
 
+    }
 
     public void choicePhotos() {
         Intent takePhotoIntent = new Intent(Intent.ACTION_GET_CONTENT);
@@ -294,50 +307,44 @@ public class CreateTossActivity extends BaseActivity {
 
     AlertDialog filterDialog;
 
-//    public void choiceManagers() {
-//
-//        String[] namesManagers = new String[responsibleUserDTOS.size()];
-//        for (int i = 0; i < responsibleUserDTOS.size(); i++){
-//            namesManagers[i] = responsibleUserDTOS.get(i).getName();
-//        }
-//
-//        boolean[] checkedItems = new boolean[namesManagers.length];
-//
-//        for (int i = 0; i < namesManagers.length; i++) {
-//            if (selectedItems.contains(i)) {
-//                checkedItems[i] = true;
-//            } else {
-//                checkedItems[i] = false;
-//            }
-//        }
-//
-//        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-//        builder.setMultiChoiceItems(namesManagers, checkedItems, new DialogInterface.OnMultiChoiceClickListener() {
-//            @Override
-//            public void onClick(DialogInterface dialog, int indexSelected, boolean isChecked) {
-//                if (isChecked) {
-//                    selectedItems.add(indexSelected);
-//                }
-//                else if (selectedItems.contains(indexSelected)) {
-//                    selectedItems.remove(Integer.valueOf(indexSelected));
-//                }
-//            }
-//        }).setPositiveButton("OK", new DialogInterface.OnClickListener() {
-//            @Override
-//            public void onClick(DialogInterface dialog, int id) {
-//                // TODO
-//            }
-//        }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-//            @Override
-//            public void onClick(DialogInterface dialog, int id) {
-//                filterDialog.dismiss();
-//            }
-//        });
-//
-//        filterDialog = builder.create();
-//        filterDialog.show(); // only works when I show the dialog first, but I want every option to be selected without showing first
-//
-//    }
+    ArrayList<Integer> selectedManagers = new ArrayList<>();
+
+    public void choiceManagers() {
+
+        String[] namesManagers = new String[responsibleUserDTOS.size()];
+        for (int i = 0; i < responsibleUserDTOS.size(); i++) {
+            namesManagers[i] = responsibleUserDTOS.get(i).getName();
+        }
+
+        boolean[] checkedItems = new boolean[namesManagers.length];
+
+        for (int i = 0; i < namesManagers.length; i++) {
+            if (selectedManagers.contains(i)) {
+                checkedItems[i] = true;
+            } else {
+                checkedItems[i] = false;
+            }
+        }
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMultiChoiceItems(namesManagers, checkedItems, (dialog, indexSelected, isChecked) -> {
+            if (isChecked) {
+                selectedManagers.add(indexSelected);
+            } else if (selectedManagers.contains(indexSelected)) {
+                selectedManagers.remove(Integer.valueOf(indexSelected));
+            }
+        }).setPositiveButton("OK", (dialog, id) -> {
+            StringBuilder stringBuilder = new StringBuilder();
+            for (int i = 0; i < selectedManagers.size(); i++) {
+                stringBuilder.append(String.format("%s, ", responsibleUserDTOS.get(selectedManagers.get(i)).getName()));
+            }stringBuilder.delete(stringBuilder.length()-2,stringBuilder.length());
+            choosedUsers.setText(stringBuilder.toString());
+        }).setNegativeButton("Cancel", (dialog, id) -> filterDialog.dismiss());
+
+        filterDialog = builder.create();
+        filterDialog.show(); // only works when I show the dialog first, but I want every option to be selected without showing first
+
+    }
 
     public void choiceFiles() {
         Intent takeFileIntent = new Intent(Intent.ACTION_GET_CONTENT);

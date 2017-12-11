@@ -64,7 +64,7 @@ public class CreateTossMessageActivity extends BaseActivity implements View.OnCl
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_toss_message);
-        setTitle("Create new message in toss");
+        setTitle("Creating new message in the toss");
 
         ActionBar actionBar = getSupportActionBar();
         actionBar.setHomeButtonEnabled(true);
