@@ -84,7 +84,6 @@ public class CreateTossActivity extends BaseActivity {
     AdapterCreatePostMovies adapterCreatePostMovies;
 
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -134,6 +133,9 @@ public class CreateTossActivity extends BaseActivity {
                 showToast("Error getting manager!");
             }
         });
+
+        choosedUsers.setText("No responsible users");
+
 
     }
 
@@ -334,11 +336,16 @@ public class CreateTossActivity extends BaseActivity {
                 selectedManagers.remove(Integer.valueOf(indexSelected));
             }
         }).setPositiveButton("OK", (dialog, id) -> {
-            StringBuilder stringBuilder = new StringBuilder();
-            for (int i = 0; i < selectedManagers.size(); i++) {
-                stringBuilder.append(String.format("%s, ", responsibleUserDTOS.get(selectedManagers.get(i)).getName()));
-            }stringBuilder.delete(stringBuilder.length()-2,stringBuilder.length());
-            choosedUsers.setText(stringBuilder.toString());
+            if (!selectedManagers.isEmpty()) {
+                StringBuilder stringBuilder = new StringBuilder();
+                for (int i = 0; i < selectedManagers.size(); i++) {
+                    stringBuilder.append(String.format("%s, ", responsibleUserDTOS.get(selectedManagers.get(i)).getName()));
+                }
+                stringBuilder.delete(stringBuilder.length() - 2, stringBuilder.length());
+                choosedUsers.setText(stringBuilder.toString());
+            } else {
+                choosedUsers.setText("No responsible users");
+            }
         }).setNegativeButton("Cancel", (dialog, id) -> filterDialog.dismiss());
 
         filterDialog = builder.create();

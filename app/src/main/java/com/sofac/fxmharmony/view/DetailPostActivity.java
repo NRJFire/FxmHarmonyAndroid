@@ -200,7 +200,7 @@ public class DetailPostActivity extends BaseActivity {
     }
 
     public View createHeaderPost() {
-        headerView = createPostView(postDTO.getName(), new SimpleDateFormat("d MMM yyyy HH:mm:ss", Locale.GERMAN).format(postDTO.getDate()), postDTO.getBody_original());
+        headerView = createPostView(postDTO.getName(), new SimpleDateFormat("dd MMM yyyy HH:mm:ss").format(postDTO.getDate()), postDTO.getBody_original());
         Spinner spinnerLanguage = (Spinner) headerView.findViewById(R.id.spinner_language);
 
         ArrayList<String> stringsSpinnerLanguage = new ArrayList<>();

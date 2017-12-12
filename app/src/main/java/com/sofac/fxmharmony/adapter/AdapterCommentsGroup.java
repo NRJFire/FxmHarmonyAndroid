@@ -76,7 +76,7 @@ public class AdapterCommentsGroup extends BaseAdapter {
 
         //String postComment = commentDTO.getCommentText().replaceAll("<(.*?)>", "");
         ((TextView) view.findViewById(R.id.idNameUserComment)).setText(commentDTO.getName());
-        ((TextView) view.findViewById(R.id.idDateComment)).setText(new SimpleDateFormat("d MMM yyyy HH:mm", Locale.GERMAN).format(commentDTO.getDate())); //"d MMM yyyy HH:mm:ss"
+        ((TextView) view.findViewById(R.id.idDateComment)).setText(new SimpleDateFormat("dd MMM yyyy HH:mm").format(commentDTO.getDate())); //"d MMM yyyy HH:mm:ss"
         ((TextView) view.findViewById(R.id.idMessageItemComment)).setText(commentDTO.getBody().replaceAll("<(.*?)>", ""));//postDTO.getPostTextOriginal().replaceAll("<(.*?)>"," ")  translation.getTranslatedText()
 
         final LinearLayout linearLayout = (LinearLayout) view.findViewById(R.id.commentLiner);

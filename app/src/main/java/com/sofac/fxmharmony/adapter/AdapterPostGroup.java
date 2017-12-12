@@ -70,7 +70,7 @@ public class AdapterPostGroup extends RecyclerView.Adapter<AdapterPostGroup.View
 
         view.titleItemPost.setText(postDTO.getName());
         view.dateItemPost.setText(postDTO.getDate().toString());
-        view.dateItemPost.setText(new SimpleDateFormat("d MMM yyyy", Locale.GERMAN).format(postDTO.getDate())); //"d MMM yyyy HH:mm:ss"
+        view.dateItemPost.setText(new SimpleDateFormat("dd MMM yyyy").format(postDTO.getDate())); //"d MMM yyyy HH:mm:ss"
         if (postDTO.getBody_original() != null)
             view.messageItemPost.setText(ConverterHTML.fromHTML(postDTO.getBody_original()));
 

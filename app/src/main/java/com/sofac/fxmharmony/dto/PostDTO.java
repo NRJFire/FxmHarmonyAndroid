@@ -66,7 +66,7 @@ public class PostDTO implements Serializable {
     }
 
     public Date getDate() {
-        SimpleDateFormat dateParser = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ITALIAN);
+        SimpleDateFormat dateParser = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         try {
             return dateParser.parse(this.date);
         } catch (ParseException e) {
