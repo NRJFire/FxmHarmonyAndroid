@@ -82,7 +82,7 @@ public class CreateTossActivity extends BaseActivity {
     ArrayList<ResponsibleUserDTO> responsibleUserDTOS = new ArrayList<>();
     AdapterCreatePostPhotos adapterCreatePostPhotos;
     AdapterCreatePostMovies adapterCreatePostMovies;
-    String statusToss = "";
+
 
 
     @Override
@@ -388,24 +388,6 @@ public class CreateTossActivity extends BaseActivity {
         }
     };
 
-
-//    @OnClick({R.id.buttonStatusOpen, R.id.buttonStatusClosed, R.id.buttonStatusPause, R.id.buttonStatusProcess})
-//    public void onClicked(View view) {
-//        switch (view.getId()) {
-//            case R.id.buttonStatusOpen:
-//                statusToss = "open";
-//                break;
-//            case R.id.buttonStatusClosed:
-//                statusToss = "closed";
-//                break;
-//            case R.id.buttonStatusPause:
-//                statusToss = "pause";
-//                break;
-//            case R.id.buttonStatusProcess:
-//                statusToss = "process";
-//                break;
-//        }
-//    }
 }
 
 

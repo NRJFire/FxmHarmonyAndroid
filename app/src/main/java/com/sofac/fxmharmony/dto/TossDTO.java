@@ -21,6 +21,9 @@ public class TossDTO implements Serializable {
     private ResponsibleUserDTO[] responsible;
     private ArrayList<TossMessageDTO> messages;
 
+    public TossDTO() {
+    }
+
     public TossDTO(String id, String user_id, String title, String date, String date_end, String now, String name, String status, ResponsibleUserDTO[] responsible, ArrayList<TossMessageDTO> messages) {
         this.id = id;
         this.user_id = user_id;

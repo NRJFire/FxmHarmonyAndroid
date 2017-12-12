@@ -95,7 +95,6 @@ public class TossFragment extends BaseFragment implements SwipeRefreshLayout.OnR
 
     @Override
     public void onResume() {
-
         updateRecyclerView(status);
         super.onResume();
     }
@@ -191,13 +190,10 @@ public class TossFragment extends BaseFragment implements SwipeRefreshLayout.OnR
     }
 
     @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-    }
-
-    @Override
     public void onRefresh() {
         swipeRefreshLayout.setRefreshing(true);
         updateRecyclerView(status);
     }
+
+
 }

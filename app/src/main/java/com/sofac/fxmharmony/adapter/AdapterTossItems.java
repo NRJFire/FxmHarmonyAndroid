@@ -75,12 +75,17 @@ public class AdapterTossItems extends RecyclerView.Adapter<AdapterTossItems.Toss
         }
 
         private String getNamesResponsible(ResponsibleUserDTO[] listUsers) {
-            StringBuilder stringBuilder = new StringBuilder();
-            for (ResponsibleUserDTO responsibleUser : listUsers) {
-                stringBuilder.append(String.format("%s, ", responsibleUser.getName()));
+            if (listUsers.length > 0) {
+                StringBuilder stringBuilder = new StringBuilder();
+                for (ResponsibleUserDTO responsibleUser : listUsers) {
+                    stringBuilder.append(String.format("%s, ", responsibleUser.getName()));
+                }
+                stringBuilder.delete(stringBuilder.length() - 2, stringBuilder.length());
+
+                return stringBuilder.toString();
+            } else {
+                return "No responsible users";
             }
-            stringBuilder.delete(stringBuilder.length() - 2, stringBuilder.length());
-            return stringBuilder.toString();
         }
 
         private void changeStatus(String statusToss) {

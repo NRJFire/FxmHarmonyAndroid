@@ -119,10 +119,10 @@ public class DetailTossActivity extends BaseActivity {
         actionBar.setHomeButtonEnabled(true);
         actionBar.setDisplayHomeAsUpEnabled(true);
 
-        loadingFilesFromServer();
+        loadingTossFromServer();
     }
 
-    public void loadingFilesFromServer() {
+    public void loadingTossFromServer() {
         progressBar.showView();
         new Connection<TossDTO>().getToss(getIntent().getStringExtra(TOSS_ID), (isSuccess, answerServerResponse) -> {
             if (isSuccess) {
@@ -239,19 +239,25 @@ public class DetailTossActivity extends BaseActivity {
                 finish();
                 break;
             case R.id.createNewMessage:
-                startActivityForResult(new Intent(this, CreateTossMessageActivity.class), 1);
+                startActivityForResult(new Intent(this, CreateTossMessageActivity.class).putExtra(TOSS_ID, tossDTO.getId()), 1);
                 break;
         }
         return true;
     }
 
+
     private String getNamesResponsible(ResponsibleUserDTO[] listUsers) {
-        StringBuilder stringBuilder = new StringBuilder();
-        for (ResponsibleUserDTO responsibleUser : listUsers) {
-            stringBuilder.append(String.format("%s, ", responsibleUser.getName()));
+        if (listUsers.length > 0) {
+            StringBuilder stringBuilder = new StringBuilder();
+            for (ResponsibleUserDTO responsibleUser : listUsers) {
+                stringBuilder.append(String.format("%s, ", responsibleUser.getName()));
+            }
+            stringBuilder.delete(stringBuilder.length() - 2, stringBuilder.length());
+
+            return stringBuilder.toString();
+        } else {
+            return "No responsible users";
         }
-        stringBuilder.delete(stringBuilder.length() - 2, stringBuilder.length());
-        return stringBuilder.toString();
     }
 
     private void changeStatus(String statusToss) {
@@ -302,10 +308,12 @@ public class DetailTossActivity extends BaseActivity {
                     (isSuccess, answerServerResponse) -> {
                         if (isSuccess) {
                             slideUp.hide();
-                            loadingFilesFromServer();
+                            editTextComment.setText("");
+                            loadingTossFromServer();
                         } else {
                             showToast(getResources().getString(R.string.errorServerConnection));
                         }
+                        progressBar.dismissView();
                     });
         }
     }
@@ -414,5 +422,13 @@ public class DetailTossActivity extends BaseActivity {
         }
 
         // END FILES
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == 2) {
+            loadingTossFromServer();
+        }
+        super.onActivityResult(requestCode, resultCode, data);
     }
 }

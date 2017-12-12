@@ -10,211 +10,374 @@ android:focusableInTouchMode="true"
 android:orientation="vertical"
 tools:context="com.sofac.fxmharmony.view.CreateTossMessageActivity">
 
-
-<ScrollView
-    android:id="@+id/idScrollViewEditPost"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
-    <LinearLayout
+    <ScrollView
+        android:id="@+id/idScrollViewEditPost"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
-
-        <EditText
-            android:id="@+id/post_text_input"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="5dp"
-            android:background="#ffffff"
-            android:gravity="top"
-            android:hint="Tap here to write a toss..."
-            android:inputType="textMultiLine"
-            android:maxLines="99999"
-            android:minLines="6"
-            android:padding="5dp"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:textSize="14sp">
-
-        </EditText>
+        android:layout_height="match_parent">
 
         <LinearLayout
-            android:id="@+id/idLayoutPhotos"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:visibility="gone">
+            android:orientation="vertical">
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="0.5dp"
-                android:layout_marginLeft="0dp"
-                android:layout_marginRight="0dp"
-                android:layout_marginTop="0dp"
-                android:background="@color/lineViewFiles" />
+            <!--<EditText-->
+                <!--android:id="@+id/editTextTitle"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_margin="5dp"-->
+                <!--android:background="#ffffff"-->
+                <!--android:gravity="top"-->
+                <!--android:hint="Title..."-->
+                <!--android:inputType="text"-->
+                <!--android:textStyle="bold"-->
+                <!--android:maxLines="2"-->
+                <!--android:minLines="1"-->
+                <!--android:padding="5dp"-->
+                <!--android:textAppearance="?android:attr/textAppearanceMedium"-->
+                <!--android:textSize="15sp" />-->
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="10dp"
-                android:text="Photo(s)"
-                android:textSize="13sp" />
-
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/idListPhotos"
-                android:layout_width="match_parent"
-                android:layout_height="80dp"
-                android:layout_marginBottom="10dp"
-                android:orientation="horizontal"
-                android:paddingEnd="10dp"
-                android:paddingStart="10dp" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/idLayoutMovies"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:visibility="gone">
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="0.5dp"
-                android:layout_marginLeft="0dp"
-                android:layout_marginRight="0dp"
-                android:layout_marginTop="0dp"
-                android:background="@color/lineViewFiles" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="10dp"
-                android:text="Movie(s)"
-                android:textSize="13sp" />
-
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/idListMovies"
-                android:layout_width="match_parent"
-                android:layout_height="80dp"
-                android:layout_marginBottom="10dp"
-                android:orientation="horizontal"
-                android:paddingEnd="10dp"
-                android:paddingStart="10dp" />
-
-        </LinearLayout>
-
-
-        <LinearLayout
-            android:id="@+id/idLayoutFiles"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:visibility="gone">
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="0.5dp"
-                android:layout_marginLeft="0dp"
-                android:layout_marginRight="0dp"
-                android:layout_marginTop="0dp"
-                android:background="@color/lineViewFiles" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="10dp"
-                android:text="File(s)"
-                android:textSize="13sp" />
+            <!--<View-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="1dp"-->
+                <!--android:layout_marginLeft="0dp"-->
+                <!--android:layout_marginRight="0dp"-->
+                <!--android:layout_marginTop="0dp"-->
+                <!--android:background="@color/lineViewFiles" />-->
 
             <LinearLayout
-                android:id="@+id/idListFiles"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp"
-                android:orientation="horizontal" />
+                android:layout_gravity="top"
+                android:orientation="horizontal"
+                android:padding="5dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="5dp"
+                    android:layout_gravity="top"
+                    android:gravity="top"
+                    android:text="To:"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/choosedUsers"
+                    android:layout_width="0dp"
+                    android:padding="5dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" />
+
+                <Button
+                    android:id="@+id/buttonChoiceManagers"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/custom_button"
+                    android:drawableStart="@drawable/fab_add"
+                    android:maxHeight="30dp"
+                    android:minHeight="30dp"
+                    android:paddingEnd="5dp"
+                    android:paddingStart="5dp"
+                    android:text="Users"
+                    android:textColor="@color/colorWhite" />
+
+            </LinearLayout>
+
+            <!--<View-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="1dp"-->
+                <!--android:layout_marginLeft="0dp"-->
+                <!--android:layout_marginRight="0dp"-->
+                <!--android:layout_marginTop="0dp"-->
+                <!--android:background="@color/lineViewFiles" />-->
+
+            <!--<LinearLayout-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_gravity="center_vertical|center_horizontal"-->
+                <!--android:gravity="center_horizontal|center_vertical"-->
+                <!--android:orientation="horizontal"-->
+                <!--android:padding="5dp">-->
+
+                <!--<TextView-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_margin="5dp"-->
+                    <!--android:text="Date end:"-->
+                    <!--android:textStyle="bold" />-->
+
+                <!--<TextView-->
+                    <!--android:id="@+id/textViewChoiceDate"-->
+                    <!--android:layout_width="0dp"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_margin="5dp"-->
+                    <!--android:layout_weight="1"-->
+                    <!--android:text="Choosing date end..." />-->
+
+                <!--<ImageButton-->
+                    <!--android:id="@+id/buttonChoiceDate"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:background="@drawable/custom_button"-->
+                    <!--android:padding="10dp"-->
+                    <!--app:srcCompat="@drawable/calendar_clock" />-->
+
+
+            <!--</LinearLayout>-->
+
+            <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:layout_marginLeft="0dp"
+            android:layout_marginRight="0dp"
+            android:layout_marginTop="0dp"
+            android:background="@color/lineViewFiles" />
+
+
+            <info.hoang8f.android.segmented.SegmentedGroup xmlns:segmentedgroup="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/segmentedGroupButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:orientation="horizontal"
+            segmentedgroup:sc_border_width="2dp"
+            segmentedgroup:sc_corner_radius="15dp">
+
+            <RadioButton
+            android:id="@+id/buttonStatusOpen"
+            style="@style/RadioButton"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Open" />
+
+            <RadioButton
+            android:id="@+id/buttonStatusClosed"
+            style="@style/RadioButton"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Closed" />
+
+            <RadioButton
+            android:id="@+id/buttonStatusPause"
+            style="@style/RadioButton"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Pause" />
+
+            <RadioButton
+            android:id="@+id/buttonStatusProcess"
+            style="@style/RadioButton"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Process" />
+            </info.hoang8f.android.segmented.SegmentedGroup>
+
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginLeft="0dp"
+                android:layout_marginRight="0dp"
+                android:layout_marginTop="0dp"
+                android:background="@color/lineViewFiles" />
+
+            <EditText
+                android:id="@+id/editTextBody"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:background="#ffffff"
+                android:gravity="top"
+                android:hint="Tap here to write a body toss..."
+                android:inputType="textMultiLine"
+                android:maxLines="99999"
+                android:minLines="6"
+                android:padding="5dp"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textSize="14sp">
+
+            </EditText>
+
+            <LinearLayout
+                android:id="@+id/idLayoutPhotos"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
+                    android:layout_marginLeft="0dp"
+                    android:layout_marginRight="0dp"
+                    android:layout_marginTop="0dp"
+                    android:background="@color/lineViewFiles" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:text="Photo(s)"
+                    android:textSize="13sp" />
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/idListPhotos"
+                    android:layout_width="match_parent"
+                    android:layout_height="80dp"
+                    android:layout_marginBottom="10dp"
+                    android:orientation="horizontal"
+                    android:paddingEnd="10dp"
+                    android:paddingStart="10dp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/idLayoutMovies"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
+                    android:layout_marginLeft="0dp"
+                    android:layout_marginRight="0dp"
+                    android:layout_marginTop="0dp"
+                    android:background="@color/lineViewFiles" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:text="Movie(s)"
+                    android:textSize="13sp" />
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/idListMovies"
+                    android:layout_width="match_parent"
+                    android:layout_height="80dp"
+                    android:layout_marginBottom="10dp"
+                    android:orientation="horizontal"
+                    android:paddingEnd="10dp"
+                    android:paddingStart="10dp" />
+
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:id="@+id/idLayoutFiles"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
+                    android:layout_marginLeft="0dp"
+                    android:layout_marginRight="0dp"
+                    android:layout_marginTop="0dp"
+                    android:background="@color/lineViewFiles" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:text="File(s)"
+                    android:textSize="13sp" />
+
+                <LinearLayout
+                    android:id="@+id/idListFiles"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:orientation="horizontal" />
+
+            </LinearLayout>
+
 
         </LinearLayout>
 
+    </ScrollView>
 
-    </LinearLayout>
-
-</ScrollView>
-
-<com.github.clans.fab.FloatingActionMenu
-    android:id="@+id/idMenuButton"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_gravity="bottom|end"
-    android:layout_marginBottom="0dp"
-    android:layout_marginEnd="5dp"
-    android:layout_marginStart="11dp"
-    fab:menu_animationDelayPerItem="55"
-    fab:menu_backgroundColor="@android:color/transparent"
-    fab:menu_buttonSpacing="0dp"
-    fab:menu_colorNormal="@color/colorPrimary"
-    fab:menu_colorPressed="#157789"
-    fab:menu_colorRipple="#99d4d4d4"
-
-    fab:menu_fab_size="normal"
-    fab:menu_icon="@drawable/fab_add"
-    fab:menu_labels_colorNormal="#333"
-    fab:menu_labels_colorPressed="#444"
-    fab:menu_labels_colorRipple="#66efecec"
-    fab:menu_labels_cornerRadius="3dp"
-    fab:menu_labels_ellipsize="none"
-    fab:menu_labels_hideAnimation="@anim/fab_slide_out_to_right"
-    fab:menu_labels_margin="0dp"
-    fab:menu_labels_maxLines="-1"
-    fab:menu_labels_padding="8dp"
-    fab:menu_labels_position="left"
-    fab:menu_labels_showAnimation="@anim/fab_slide_in_from_right"
-    fab:menu_labels_showShadow="true"
-    fab:menu_labels_singleLine="false"
-    fab:menu_labels_textColor="#e6e6e6"
-    fab:menu_labels_textSize="13sp"
-    fab:menu_openDirection="up"
-    fab:menu_shadowColor="#77686868"
-    fab:menu_shadowRadius="4dp"
-    fab:menu_shadowXOffset="1dp"
-    fab:menu_shadowYOffset="4dp"
-    fab:menu_showShadow="true">
-
-    <!--fab:menu_fab_label="Floating Action Menu"-->
-
-    <com.github.clans.fab.FloatingActionButton
-        android:id="@+id/buttonAddFiles"
+    <com.github.clans.fab.FloatingActionMenu
+        android:id="@+id/idMenuButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/ic_file_white_18dp"
-        fab:fab_colorNormal="@color/colorPrimary"
-        fab:fab_colorPressed="#157789"
-        fab:fab_colorRipple="#99d4d4d4"
-        fab:fab_label="Add files"
-        fab:fab_size="mini" />
+        android:layout_gravity="bottom|end"
+        android:layout_marginBottom="0dp"
+        android:layout_marginEnd="5dp"
+        android:layout_marginStart="11dp"
+        fab:menu_animationDelayPerItem="55"
+        fab:menu_backgroundColor="@android:color/transparent"
+        fab:menu_buttonSpacing="0dp"
+        fab:menu_colorNormal="@color/colorPrimary"
+        fab:menu_colorPressed="#157789"
+        fab:menu_colorRipple="#99d4d4d4"
 
-    <com.github.clans.fab.FloatingActionButton
-        android:id="@+id/buttonAddMovies"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/ic_video_white_18dp"
-        fab:fab_colorNormal="@color/colorPrimary"
-        fab:fab_colorPressed="#157789"
-        fab:fab_colorRipple="#99d4d4d4"
-        fab:fab_label="Add movies"
-        fab:fab_size="mini" />
+        fab:menu_fab_size="normal"
+        fab:menu_icon="@drawable/fab_add"
+        fab:menu_labels_colorNormal="#333"
+        fab:menu_labels_colorPressed="#444"
+        fab:menu_labels_colorRipple="#66efecec"
+        fab:menu_labels_cornerRadius="3dp"
+        fab:menu_labels_ellipsize="none"
+        fab:menu_labels_hideAnimation="@anim/fab_slide_out_to_right"
+        fab:menu_labels_margin="0dp"
+        fab:menu_labels_maxLines="-1"
+        fab:menu_labels_padding="8dp"
+        fab:menu_labels_position="left"
+        fab:menu_labels_showAnimation="@anim/fab_slide_in_from_right"
+        fab:menu_labels_showShadow="true"
+        fab:menu_labels_singleLine="false"
+        fab:menu_labels_textColor="#e6e6e6"
+        fab:menu_labels_textSize="13sp"
+        fab:menu_openDirection="up"
+        fab:menu_shadowColor="#77686868"
+        fab:menu_shadowRadius="4dp"
+        fab:menu_shadowXOffset="1dp"
+        fab:menu_shadowYOffset="4dp"
+        fab:menu_showShadow="true">
 
-    <com.github.clans.fab.FloatingActionButton
-        android:id="@+id/buttonAddPhotos"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/ic_image_white_18dp"
-        fab:fab_colorNormal="@color/colorPrimary"
-        fab:fab_colorPressed="#157789"
-        fab:fab_colorRipple="#99d4d4d4"
-        fab:fab_label="Add photos"
-        fab:fab_size="mini" />
-</com.github.clans.fab.FloatingActionMenu>
+        <!--fab:menu_fab_label="Floating Action Menu"-->
+
+        <com.github.clans.fab.FloatingActionButton
+            android:id="@+id/buttonAddFiles"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_file_white_18dp"
+            fab:fab_colorNormal="@color/colorPrimary"
+            fab:fab_colorPressed="#157789"
+            fab:fab_colorRipple="#99d4d4d4"
+            fab:fab_label="Add files"
+            fab:fab_size="mini" />
+
+        <com.github.clans.fab.FloatingActionButton
+            android:id="@+id/buttonAddMovies"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_video_white_18dp"
+            fab:fab_colorNormal="@color/colorPrimary"
+            fab:fab_colorPressed="#157789"
+            fab:fab_colorRipple="#99d4d4d4"
+            fab:fab_label="Add movies"
+            fab:fab_size="mini" />
+
+        <com.github.clans.fab.FloatingActionButton
+            android:id="@+id/buttonAddPhotos"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_image_white_18dp"
+            fab:fab_colorNormal="@color/colorPrimary"
+            fab:fab_colorPressed="#157789"
+            fab:fab_colorRipple="#99d4d4d4"
+            fab:fab_label="Add photos"
+            fab:fab_size="mini" />
+    </com.github.clans.fab.FloatingActionMenu>
 
 
 </android.support.design.widget.CoordinatorLayout>
