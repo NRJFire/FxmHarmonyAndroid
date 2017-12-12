@@ -10,8 +10,8 @@ android {
         applicationId "com.sofac.fxmharmony"
         minSdkVersion 17
         targetSdkVersion 26
-        versionCode 13
-        versionName "2.7.2"
+        versionCode 14
+        versionName "2.8.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
         multiDexEnabled true

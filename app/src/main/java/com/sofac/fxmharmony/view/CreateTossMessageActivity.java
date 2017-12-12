@@ -35,6 +35,7 @@ import org.apache.commons.io.FilenameUtils;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
@@ -128,11 +129,31 @@ public class CreateTossMessageActivity extends BaseActivity {
         progressBar.showView();
         new Connection<ArrayList<ResponsibleUserDTO>>().getMannagers(appPreference.getID(), (isSuccess, answerServerResponse) -> {
             if (isSuccess) {
+
                 responsibleUserDTOS.clear();
                 responsibleUserDTOS.addAll(answerServerResponse.getDataTransferObject());
+
                 new Connection<TossDTO>().getToss(getIntent().getStringExtra(TOSS_ID), (isSuccess1, answerServerResponse1) -> {
                     if (isSuccess1) {
                         tossDTO = answerServerResponse1.getDataTransferObject();
+
+                        for (int i = 0; i < responsibleUserDTOS.size(); i++) {
+                            for (int k = 0; k < tossDTO.getResponsible().length; k++) {
+                                if (responsibleUserDTOS.get(i).getId().equals(tossDTO.getResponsible()[k].getUser_id())) {
+                                    selectedManagers.add(i);
+                                }
+                            }
+                        }
+
+                        if (tossDTO.getResponsible().length > 0) {
+                            StringBuilder stringBuilder = new StringBuilder();
+                            for (int i = 0; i < tossDTO.getResponsible().length; i++) {
+                                stringBuilder.append(String.format("%s, ", tossDTO.getResponsible()[i].getName()));
+                            }
+                            stringBuilder.delete(stringBuilder.length() - 2, stringBuilder.length());
+                            choosedUsers.setText(stringBuilder.toString());
+                        }
+
                     } else {
                         showToast("Error getting toss info!");
                     }
